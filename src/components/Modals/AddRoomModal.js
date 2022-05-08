@@ -1,33 +1,42 @@
-import React, { useContext } from 'react';
-import { Form, Modal, Input } from 'antd';
-import { AppContext } from '../../Context/AppProvider';
-import { addDocument } from '../../firebase/services';
-import { AuthContext } from '../../Context/AuthProvider';
+import React, { useContext } from 'react'
+import { Form, Modal, Input } from 'antd'
+import { AppContext } from '../../Context/AppProvider'
+import { addDocument } from '../../firebase/services'
+import { AuthContext } from '../../Context/AuthProvider'
+import { serverTimestamp } from 'firebase/firestore'
 
 export default function AddRoomModal() {
-  const { isAddRoomVisible, setIsAddRoomVisible } = useContext(AppContext);
+  const { isAddRoomVisible, setIsAddRoomVisible } = useContext(AppContext)
   const {
     user: { uid },
-  } = useContext(AuthContext);
-  const [form] = Form.useForm();
+  } = useContext(AuthContext)
+  const [form] = Form.useForm()
 
   const handleOk = () => {
     // handle logic
     // add new room to firestore
-    addDocument('rooms', { ...form.getFieldsValue(), members: [uid] });
+    addDocument('rooms', {
+      ...form.getFieldsValue(),
+      members: [uid],
+      typying: {
+        isTypying: false,
+        typyingAt: null,
+        user: { uid: null, name: null },
+      },
+    })
 
     // reset form value
-    form.resetFields();
+    form.resetFields()
 
-    setIsAddRoomVisible(false);
-  };
+    setIsAddRoomVisible(false)
+  }
 
   const handleCancel = () => {
     // reset form value
-    form.resetFields();
+    form.resetFields()
 
-    setIsAddRoomVisible(false);
-  };
+    setIsAddRoomVisible(false)
+  }
 
   return (
     <div>
@@ -35,8 +44,7 @@ export default function AddRoomModal() {
         title='Tạo phòng'
         visible={isAddRoomVisible}
         onOk={handleOk}
-        onCancel={handleCancel}
-      >
+        onCancel={handleCancel}>
         <Form form={form} layout='vertical'>
           <Form.Item label='Tên phòng' name='name'>
             <Input placeholder='Nhập tên phòng' />
@@ -47,5 +55,5 @@ export default function AddRoomModal() {
         </Form>
       </Modal>
     </div>
-  );
+  )
 }

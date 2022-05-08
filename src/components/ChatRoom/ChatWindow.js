@@ -68,7 +68,6 @@ const FormStyled = styled(Form)`
 const MessageListStyled = styled.div`
   max-height: 100%;
   overflow-y: auto;
-  
 `
 
 export default function ChatWindow() {
@@ -127,6 +126,8 @@ export default function ChatWindow() {
         messageListRef.current.scrollHeight + 50
     }
   }, [messages])
+
+  useEffect(() => {}, [inputRef])
 
   return (
     <WrapperStyled>
