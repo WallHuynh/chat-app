@@ -1,12 +1,15 @@
 import { UserAddOutlined } from '@ant-design/icons'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { Button, Tooltip, Avatar, Form, Input, Alert } from 'antd'
+import { Button, Tooltip, Avatar, Form, Input, Alert, Typography } from 'antd'
 import Message from './Message'
 import { AppContext } from '../../Context/AppProvider'
-import { addDocument } from '../../firebase/services'
+import { addDocument, updateDocument } from '../../firebase/services'
 import { AuthContext } from '../../Context/AuthProvider'
 import useFirestore from '../../hooks/useFirestore'
+import { serverTimestamp } from 'firebase/firestore'
+
+const { Text } = Typography
 
 const HeaderStyled = styled.div`
   display: flex;
@@ -127,7 +130,24 @@ export default function ChatWindow() {
     }
   }, [messages])
 
-  useEffect(() => {}, [inputRef])
+  useEffect(() => {
+    if (inputRef?.current) {
+      updateDocument('rooms', selectedRoom.id, {
+        'typing.isTyping': true,
+        'typing.typingAt': serverTimestamp(),
+        'typing.user.uid': uid,
+        'typing.user.name': displayName,
+      })
+    } else {
+      updateDocument('rooms', selectedRoom.id, {
+        typing: {
+          isTyping: false,
+          typingAt: null,
+          user: { uid: null, name: null },
+        },
+      })
+    }
+  }, [inputRef])
 
   return (
     <WrapperStyled>
@@ -174,6 +194,11 @@ export default function ChatWindow() {
                 />
               ))}
             </MessageListStyled>
+
+            {/* {selectedRoom.typing.isTyping && selectedRoom.typing.user.uid !== uid} */}
+            {true ? (
+              <Text type='success'>{`${selectedRoom.typing.user.name} is tyiping...`}</Text>
+            ) : null}
 
             <FormStyled form={form}>
               <Form.Item name='message'>

@@ -3,7 +3,6 @@ import { Form, Modal, Input } from 'antd'
 import { AppContext } from '../../Context/AppProvider'
 import { addDocument } from '../../firebase/services'
 import { AuthContext } from '../../Context/AuthProvider'
-import { serverTimestamp } from 'firebase/firestore'
 
 export default function AddRoomModal() {
   const { isAddRoomVisible, setIsAddRoomVisible } = useContext(AppContext)
@@ -18,9 +17,9 @@ export default function AddRoomModal() {
     addDocument('rooms', {
       ...form.getFieldsValue(),
       members: [uid],
-      typying: {
-        isTypying: false,
-        typyingAt: null,
+      typing: {
+        isTyping: false,
+        typingAt: null,
         user: { uid: null, name: null },
       },
     })

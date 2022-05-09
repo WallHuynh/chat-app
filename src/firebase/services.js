@@ -8,21 +8,27 @@ import {
   query,
   doc,
   setDoc,
+  updateDoc,
 } from 'firebase/firestore'
 
-export const addDocument = (oneCollection, data) => {
+export const updateDocument = async (oneCollection, docId, data) => {
+  const docRef = doc(db, oneCollection, docId)
+  await updateDoc(docRef, data)
+}
+
+export const addDocument = async (oneCollection, data) => {
   let docRef
   switch (oneCollection) {
     case 'users':
       docRef = doc(db, oneCollection, `user-${data.uid}`)
-      setDoc(docRef, {
+      await setDoc(docRef, {
         ...data,
         createdAt: serverTimestamp(),
       })
       break
     default:
       docRef = collection(db, oneCollection)
-      addDoc(docRef, {
+      await addDoc(docRef, {
         ...data,
         createdAt: serverTimestamp(),
       })
@@ -45,6 +51,7 @@ export const userRegister = async user => {
       email: user.email,
       photoURL: user.photoURL,
       uid: user.uid,
+      friends: [],
       providerId: user.providerData[0].providerId,
       keywords: generateKeywords(user.displayName?.toLowerCase()),
     })
