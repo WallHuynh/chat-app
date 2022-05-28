@@ -1,55 +1,66 @@
 import React, { useContext } from 'react'
 import { Form, Modal, Input } from 'antd'
 import { AppContext } from '../../Context/AppProvider'
-import { addDocument } from '../../firebase/services'
+import { addDocument, updateDocument } from '../../firebase/services'
 import { AuthContext } from '../../Context/AuthProvider'
 
 export default function AddRoomModal() {
   const { isAddRoomVisible, setIsAddRoomVisible } = useContext(AppContext)
   const {
-    user: { uid },
+    user: { uid, displayName, photoURL },
   } = useContext(AuthContext)
+  const { selectedRoom, members } = useContext(AppContext)
   const [form] = Form.useForm()
 
   const handleOk = () => {
-    // handle logic
-    // add new room to firestore
-    addDocument('rooms', {
-      ...form.getFieldsValue(),
-      members: [uid],
-      typing: {
-        isTyping: false,
-        typingAt: null,
-        user: { uid: null, name: null },
-      },
-    })
-
-    // reset form value
-    form.resetFields()
-
-    setIsAddRoomVisible(false)
+    if (form?.getFieldsValue()?.name) {
+      addDocument('rooms', {
+        ...form.getFieldsValue(),
+        members: [uid],
+        isAGroup: true,
+        typing: {
+          user1: { uid: null, name: null, isTyping: false },
+          user2: { uid: null, name: null, isTyping: false },
+        },
+        newestMess: { createAt: null, displayName: null, text: null },
+        groupPhoto: null,
+        standByPhoto: {
+          lastThreeMembers: [
+            {
+              displayName: displayName,
+              photoURL: photoURL || null,
+            },
+          ],
+          groupLengthRest: null,
+        },
+      })
+      form.resetFields()
+      setIsAddRoomVisible(false)
+    } else {
+      return
+    }
   }
 
   const handleCancel = () => {
-    // reset form value
     form.resetFields()
-
     setIsAddRoomVisible(false)
   }
 
   return (
     <div>
       <Modal
-        title='Tạo phòng'
+        title='Create your chat room'
         visible={isAddRoomVisible}
         onOk={handleOk}
-        onCancel={handleCancel}>
+        onCancel={handleCancel}
+        width={400}
+        okText='Create'>
         <Form form={form} layout='vertical'>
-          <Form.Item label='Tên phòng' name='name'>
-            <Input placeholder='Nhập tên phòng' />
+          <Form.Item label='Name' name='name'>
+            <Input placeholder="What's your room's name" maxLength={40} />
           </Form.Item>
-          <Form.Item label='Mô tả' name='description'>
-            <Input.TextArea placeholder='Nhập mô tả' />
+          <Form.Item label='Discription' name='description' initialValue={''}>
+            <Input.TextArea placeholder="What's your room's description" maxLength={300} />
           </Form.Item>
         </Form>
       </Modal>

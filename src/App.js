@@ -5,9 +5,10 @@ import AuthProvider from './Context/AuthProvider'
 import AppProvider from './Context/AppProvider'
 import Login from './components/Login'
 import Register from './components/Modals/Register'
-import Shop from './components/Shop'
 import AddRoomModal from './components/Modals/AddRoomModal'
 import InviteMemberModal from './components/Modals/InviteMemberModal'
+import UserInfoModal from './components/Modals/UserInfoModal'
+import AddFriendModal from './components/Modals/AddFriendModal'
 
 function App() {
   return (
@@ -17,10 +18,11 @@ function App() {
           <Routes>
             <Route path='/' element={<ChatRoom />} />
             <Route path='/login' element={<Login />} />
-            <Route path='/shop' element={<Shop />} />
           </Routes>
           <AddRoomModal />
           <Register />
+          <AddFriendModal />
+          <UserInfoModal />
           <InviteMemberModal />
         </AppProvider>
       </AuthProvider>

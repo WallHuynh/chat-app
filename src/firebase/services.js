@@ -20,7 +20,7 @@ export const addDocument = async (oneCollection, data) => {
   let docRef
   switch (oneCollection) {
     case 'users':
-      docRef = doc(db, oneCollection, `user-${data.uid}`)
+      docRef = doc(db, oneCollection, data.uid)
       await setDoc(docRef, {
         ...data,
         createdAt: serverTimestamp(),

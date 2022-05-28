@@ -31,10 +31,12 @@ export default function Register() {
   }
 
   const onFinish = values => {
+    if (err.isSuccess) {
+      return
+    }
     setErr(errInitState)
 
-    const { email, firstname, lastname, password, confirm } =
-      values
+    const { email, firstname, lastname, password, confirm } = values
 
     let flatIsErr = false
     if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {

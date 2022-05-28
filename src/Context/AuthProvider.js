@@ -9,7 +9,7 @@ export default function AuthProvider({ children }) {
   const [user, setUser] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const navigate = useNavigate()
-
+  
   useEffect(() => {
     const unsubscibed = auth.onAuthStateChanged(user => {
       if (user) {

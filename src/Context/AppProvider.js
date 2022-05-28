@@ -9,9 +9,12 @@ export default function AppProvider({ children }) {
   const [isAddRoomVisible, setIsAddRoomVisible] = useState(false)
   const [isInviteMemberVisible, setIsInviteMemberVisible] = useState(false)
   const [selectedRoomId, setSelectedRoomId] = useState('')
+  const [userInfoVisible, setUserInfoVisible] = useState(false)
+  const [selectedUser, setSelectedUser] = useState({})
+  const [isAddFriendVisible, setIsAddFriendVisible] = useState(false)
 
   const {
-    user: { displayName, email, uid, photoURL },
+    user: { uid },
   } = useContext(AuthContext)
 
   const roomsCondition = useMemo(() => {
@@ -41,11 +44,21 @@ export default function AppProvider({ children }) {
     setSelectedRoomId('')
     setIsAddRoomVisible(false)
     setIsInviteMemberVisible(false)
+    setUserInfoVisible(false)
+    setSelectedUser({})
   }
+
   return (
     <AppContext.Provider
       value={{
-        isRegisterVisible, setIsRegisterVisible,
+        isAddFriendVisible,
+        setIsAddFriendVisible,
+        selectedUser,
+        setSelectedUser,
+        userInfoVisible,
+        setUserInfoVisible,
+        isRegisterVisible,
+        setIsRegisterVisible,
         rooms,
         members,
         selectedRoom,

@@ -10,9 +10,8 @@ import {
   getDocs,
   orderBy,
   limit,
-  updateDoc,
-  doc,
 } from 'firebase/firestore'
+import { updateDocument } from '../../firebase/services'
 
 function DebounceSelect({
   fetchOptions,
@@ -94,17 +93,13 @@ export default function InviteMemberModal() {
   const [value, setValue] = useState([])
   const [form] = Form.useForm()
 
-  const handleOk = async () => {
-    // reset form value
+  const handleOk = () => {
     form.resetFields()
     setValue([])
     // update members in current room
-    const roomRef = doc(db, 'rooms', selectedRoomId)
-
-    await updateDoc(roomRef, {
+    updateDocument('rooms', selectedRoomId, {
       members: [...selectedRoom.members, ...value.map(val => val.value)],
     })
-
     setIsInviteMemberVisible(false)
   }
 
@@ -118,7 +113,8 @@ export default function InviteMemberModal() {
   return (
     <div>
       <Modal
-        title='Mời thêm thành viên'
+        okText='Invite'
+        title='Invite members'
         visible={isInviteMemberVisible}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -127,9 +123,8 @@ export default function InviteMemberModal() {
           <DebounceSelect
             mode='multiple'
             name='search-user'
-            label='Tên các thành viên'
             value={value}
-            placeholder='Nhập tên thành viên'
+            placeholder="Member's name"
             fetchOptions={fetchUserList}
             onChange={newValue => setValue(newValue)}
             style={{ width: '100%' }}
