@@ -4,6 +4,8 @@ import { AppContext } from '../../Context/AppProvider'
 import { AuthContext } from '../../Context/AuthProvider'
 import styled from 'styled-components'
 import { UserDeleteOutlined } from '@ant-design/icons'
+import { updateProfile } from 'firebase/auth'
+import { auth } from '../../firebase/config'
 
 const ModalStyled = styled(Modal)`
   .ant-avatar-lg {
@@ -71,49 +73,44 @@ const ModalStyled = styled(Modal)`
   }
 `
 
-export default function UserInfoModal() {
-  const { userInfoVisible, setUserInfoVisible, selectedUser, setSelectedUser } =
-    useContext(AppContext)
+export default function UserAccountModal() {
+  const { userAccountVisible, setUserAccountVisible } = useContext(AppContext)
   const {
-    user: { uid, displayName, photoURL },
+    user: { email, displayName, photoURL },
   } = useContext(AuthContext)
 
   const handleCancel = () => {
-    setUserInfoVisible(false)
-    setSelectedUser({})
+    setUserAccountVisible(false)
   }
+  const handleOk = () => {}
+
   return (
     <div>
       <ModalStyled
+        onOk={handleOk}
         bodyStyle={{ padding: '0' }}
         width={350}
-        footer={
-          <button className='unfriend-btn'>
-            <UserDeleteOutlined /> Unfriend
-          </button>
-        }
-        title='User info'
-        visible={userInfoVisible}
+        title='User account setting'
+        visible={userAccountVisible}
         onCancel={handleCancel}>
         <div className='cover-photo'>
-          {selectedUser.photoURL ? (
-            <Image
-              src={selectedUser.photoURL}
-              size='large'
-              className='avatar'
-            />
+          {photoURL ? (
+            <Image src={photoURL} size='large' className='avatar' />
           ) : (
             <Avatar size='large' className='avatar'>
-              selectedUser.displayName?.charAt(0)?.toUpperCase()
+              displayName?.charAt(0)?.toUpperCase()
             </Avatar>
           )}
         </div>
         <div className='info'>
-          <p className='name'>{selectedUser.displayName}</p>
-          <p className='email'>
-            <span className='tag'>Email: </span>
-            {selectedUser.email}
-          </p>
+          <Form form={form} layout='vertical'>
+            <Form.Item className='name' label='Name' name='name'>
+              <Input maxLength={40} value={displayName} />
+            </Form.Item>
+            <Form.Item className='email' label='Email' name='email'>
+              <Input value={email} disabled />
+            </Form.Item>
+          </Form>
         </div>
       </ModalStyled>
     </div>

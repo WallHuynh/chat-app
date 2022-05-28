@@ -12,6 +12,7 @@ export default function AppProvider({ children }) {
   const [userInfoVisible, setUserInfoVisible] = useState(false)
   const [selectedUser, setSelectedUser] = useState({})
   const [isAddFriendVisible, setIsAddFriendVisible] = useState(false)
+  const [userAccountVisible, setUserAccountVisible] = useState(false)
 
   const {
     user: { uid },
@@ -51,6 +52,8 @@ export default function AppProvider({ children }) {
   return (
     <AppContext.Provider
       value={{
+        userAccountVisible,
+        setUserAccountVisible,
         isAddFriendVisible,
         setIsAddFriendVisible,
         selectedUser,

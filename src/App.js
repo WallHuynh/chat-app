@@ -8,6 +8,7 @@ import Register from './components/Modals/Register'
 import AddRoomModal from './components/Modals/AddRoomModal'
 import InviteMemberModal from './components/Modals/InviteMemberModal'
 import UserInfoModal from './components/Modals/UserInfoModal'
+import UserAccountModal from './components/Modals/UserAccountModal'
 import AddFriendModal from './components/Modals/AddFriendModal'
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Register />
           <AddFriendModal />
           <UserInfoModal />
+          <UserAccountModal />
           <InviteMemberModal />
         </AppProvider>
       </AuthProvider>
