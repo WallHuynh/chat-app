@@ -1,15 +1,15 @@
 import { Avatar, Button, Dropdown, Menu, Tooltip, Typography } from 'antd'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { AppContext } from '../../../Context/AppProvider'
 import { AuthContext } from '../../../Context/AuthProvider'
-import { auth } from '../../../firebase/config'
 import {
   LogoutOutlined,
   UserAddOutlined,
   UsergroupAddOutlined,
   UserOutlined,
 } from '@ant-design/icons'
+import { auth } from '../../../firebase/config'
 
 const DivStyled = styled.div`
   display: flex;
@@ -22,7 +22,6 @@ const DivStyled = styled.div`
     display: flex;
     .username {
       max-width: 80%;
-      color: white;
       margin: 0 5px 0 5px;
       text-overflow: ellipsis;
       overflow-x: hidden;
@@ -39,6 +38,10 @@ const DivStyled = styled.div`
     }
   }
 `
+const AvatarStyled = styled(Avatar)`
+.ant-avatar-string {
+  font-size: 20px;
+`
 
 const DropdownStyled = styled(Dropdown)`
   text-align: center;
@@ -47,11 +50,16 @@ const DropdownStyled = styled(Dropdown)`
 
 export default function User() {
   const {
-    user: { displayName, photoURL, uid },
-  } = useContext(AuthContext)
+    clearState,
+    setIsAddRoomVisible,
+    setIsAddFriendVisible,
+    userAccountVisible,
+    setUserAccountVisible,
+  } = React.useContext(AppContext)
 
-  const { clearState, setIsAddRoomVisible, setIsAddFriendVisible } =
-    React.useContext(AppContext)
+  const {
+    user: { email, displayName, photoURL, uid },
+  } = useContext(AuthContext)
 
   const handleAddRoom = () => {
     setIsAddRoomVisible(true)
@@ -59,12 +67,18 @@ export default function User() {
   const handleAddFriend = () => {
     setIsAddFriendVisible(true)
   }
+  const handleUserAccountVisible = () => {
+    setUserAccountVisible(true)
+  }
   const menu = (
     <Menu
       items={[
         {
           label: (
-            <Button icon={<UserOutlined />} type='text'>
+            <Button
+              icon={<UserOutlined />}
+              type='text'
+              onClick={handleUserAccountVisible}>
               User
             </Button>
           ),
@@ -94,13 +108,11 @@ export default function User() {
     <DivStyled className='noselect'>
       <div className='avt-name'>
         <DropdownStyled overlay={menu} trigger={['click']}>
-          <Avatar src={photoURL} size='large'>
+          <AvatarStyled src={photoURL} size='large'>
             {photoURL ? '' : displayName?.charAt(0)?.toUpperCase()}
-          </Avatar>
+          </AvatarStyled>
         </DropdownStyled>
-        <p className='username'>
-          {displayName !== null ? displayName : 'Your name'}
-        </p>
+        <p className='username'>{displayName}</p>
       </div>
       <div className='btns'>
         <Tooltip

@@ -17,7 +17,6 @@ export default function useFirestore(someCollection, someCondition) {
     let collectionRef
     if (someCondition) {
       if (!someCondition.compareValue || !someCondition.compareValue.length) {
-        // reset documents data
         setDocuments([])
         return
       }

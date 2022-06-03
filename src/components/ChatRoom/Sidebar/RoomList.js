@@ -25,14 +25,12 @@ const RoomListStyled = styled.div`
 const RoomStyled = styled.div`
   max-height: 75px;
   min-height: 75px;
-  background-color: #ccffff;
   width: 100%;
   height: 60px;
   padding: 7px 0 10px 0;
-  border-bottom: 1px solid gray;
   cursor: pointer;
   :hover {
-    background-color: #99ffcc;
+    background-color: rgba(224, 235, 235, 0.5);
   }
   .avatar-group {
     margin-left: 15px;
@@ -71,7 +69,7 @@ const RoomStyled = styled.div`
       text-align: center;
       .ant-avatar-string {
         top: 10%;
-        font-size: 25px;
+        font-size: 30px;
       }
     }
   }

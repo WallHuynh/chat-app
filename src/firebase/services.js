@@ -5,11 +5,17 @@ import {
   serverTimestamp,
   where,
   getDocs,
+  getDoc,
   query,
   doc,
   setDoc,
   updateDoc,
 } from 'firebase/firestore'
+
+export const getDocument = async (oneCollection, oneDocument) => {
+  const docRef = doc(db, oneCollection, oneDocument)
+  return await getDoc(docRef)
+}
 
 export const updateDocument = async (oneCollection, docId, data) => {
   const docRef = doc(db, oneCollection, docId)

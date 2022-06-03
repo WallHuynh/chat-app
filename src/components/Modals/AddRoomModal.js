@@ -60,7 +60,10 @@ export default function AddRoomModal() {
             <Input placeholder="What's your room's name" maxLength={40} />
           </Form.Item>
           <Form.Item label='Discription' name='description' initialValue={''}>
-            <Input.TextArea placeholder="What's your room's description" maxLength={300} />
+            <Input.TextArea
+              placeholder="What's your room's description"
+              maxLength={300}
+            />
           </Form.Item>
         </Form>
       </Modal>

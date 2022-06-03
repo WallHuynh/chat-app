@@ -41,11 +41,22 @@ const ModalStyled = styled(Modal)`
     background-color: lightpink;
     height: 150px;
     position: relative;
-    .avatar {
+    .avatar,
+    .ant-image {
       position: absolute;
       bottom: 0;
       left: 50%;
       transform: translate(-40px, 40px);
+    }
+    .ant-image,
+    .ant-image-mask {
+      border-radius: 50%;
+      overflow: hidden;
+      perspective: 1px;
+    }
+    .avatar > .ant-avatar-string {
+      font-size:  40px;
+      top: 25%;
     }
   }
   .info {
@@ -97,14 +108,10 @@ export default function UserInfoModal() {
         onCancel={handleCancel}>
         <div className='cover-photo'>
           {selectedUser.photoURL ? (
-            <Image
-              src={selectedUser.photoURL}
-              size='large'
-              className='avatar'
-            />
+            <Image src={selectedUser.photoURL} width={80} />
           ) : (
             <Avatar size='large' className='avatar'>
-              selectedUser.displayName?.charAt(0)?.toUpperCase()
+              {selectedUser.displayName?.charAt(0)?.toUpperCase()}
             </Avatar>
           )}
         </div>

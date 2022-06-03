@@ -14,13 +14,11 @@ const app = initializeApp({
 })
 getAnalytics(app)
 const db = getFirestore(app)
-// connectFirestoreEmulator(db, 'localhost', 8080)
 const auth = getAuth(app)
-// connectAuthEmulator(auth, url)
 
-if (window.location.hostname === 'localhost') {
-  connectAuthEmulator(auth, 'http://localhost:9099')
-  connectFirestoreEmulator(db, 'localhost', 8080)
-}
+// if (window.location.hostname === 'localhost') {
+//   connectAuthEmulator(auth, 'http://localhost:9099')
+//   connectFirestoreEmulator(db, 'localhost', 8080)
+// }
 
 export { db, auth }

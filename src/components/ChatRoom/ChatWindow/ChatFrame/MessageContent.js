@@ -3,60 +3,12 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { Button, Tooltip, Avatar, Form, Input, Alert, Typography } from 'antd'
 import Message from './Message'
-import { AppContext } from '../../../Context/AppProvider'
-import { addDocument, updateDocument } from '../../../firebase/services'
-import { AuthContext } from '../../../Context/AuthProvider'
-import useFirestore from '../../../hooks/useFirestore'
+import { AppContext } from '../../../../Context/AppProvider'
+import { addDocument, updateDocument } from '../../../../firebase/services'
+import { AuthContext } from '../../../../Context/AuthProvider'
+import useFirestore from '../../../../hooks/useFirestore'
 import { serverTimestamp } from 'firebase/firestore'
-
-const { Text } = Typography
-
-const WrapperStyled = styled.div`
-  height: 100vh;
-  border-right: 1px solid rgb(230, 230, 230);
-`
-const HeaderStyled = styled.div`
-  display: flex;
-  justify-content: space-between;
-  height: 56px;
-  padding: 0 16px;
-  align-items: center;
-  border-bottom: 1px solid rgb(230, 230, 230);
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
-    rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
-
-  .avt-group {
-    flex-grow: 1;
-    cursor: pointer;
-  }
-  .info {
-    flex-grow: 3;
-    flex-basis: 70%;
-    text-overflow: ellipsis;
-    overflow-x: hidden;
-    white-space: nowrap;
-    padding: 10px 10px 15px 0;
-
-    .title {
-      margin: 0;
-      font-weight: bold;
-      font-size: 20px;
-    }
-
-    .description {
-      font-size: 12px;
-    }
-  }
-`
-const AvatarStyled = styled(Avatar)`
-  cursor: pointer;
-`
-
-const ButtonGroupStyled = styled.div`
-  display: flex;
-  align-items: center;
-  flex-grow: 1;
-`
+import Header from './Header'
 
 const ContentStyled = styled.div`
   font-family: 'Montserrat', sans-serif;
@@ -97,8 +49,8 @@ const MessageListStyled = styled.div`
     background: rgba(0, 0, 0, 0);
   }
   &::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, .8);
-    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .5);
+    border-radius: 2px;
   }
 
   .graper{
@@ -173,14 +125,8 @@ const TextStyled = styled(Text)`
   }
 `
 
-export default function ChatFrame() {
-  const {
-    selectedRoom,
-    members,
-    setIsInviteMemberVisible,
-    setUserInfoVisible,
-    setSelectedUser,
-  } = useContext(AppContext)
+export default function MessageContent() {
+  const { selectedRoom, members } = useContext(AppContext)
   const {
     user: { uid, photoURL, displayName },
   } = useContext(AuthContext)
@@ -309,14 +255,6 @@ export default function ChatFrame() {
   const messages = useFirestore('messages', condition)
 
   useEffect(() => {
-    // scroll to bottom after message changed
-    if (messageListRef?.current) {
-      messageListRef.current.scrollTop =
-        messageListRef.current.scrollHeight + 50
-    }
-  }, [messages])
-
-  useEffect(() => {
     setTimeout(() => {
       if (members.length > 3) {
         updateDocument('rooms', selectedRoom.id, {
@@ -384,113 +322,69 @@ export default function ChatFrame() {
     }, 500)
   }, [members])
 
+  useEffect(() => {
+    // scroll to bottom after message changed
+    if (messageListRef?.current) {
+      messageListRef.current.scrollTop =
+        messageListRef.current.scrollHeight + 50
+    }
+  }, [messages])
+
   return (
-    <WrapperStyled>
-      {selectedRoom.id ? (
-        <>
-          <HeaderStyled className='noselect'>
-            <div className='info'>
-              <p className='title'>{selectedRoom.name}</p>
-              {selectedRoom.isAGroup && (
-                <span className='description'>{`${selectedRoom.members.length} members`}</span>
-              )}
-            </div>
+    <ContentStyled>
+      <MessageListStyled ref={messageListRef}>
+        {messages.map(mes => (
+          <Message
+            key={mes.id}
+            id={mes.uid}
+            text={mes.text}
+            photoURL={mes.photoURL}
+            displayName={mes.displayName}
+            createdAt={mes.createdAt}
+          />
+        ))}
+      </MessageListStyled>
 
-            <ButtonGroupStyled>
-              <Tooltip
-                placement='bottom'
-                title='Invite more friends'
-                color='#ff0066'>
-                <Button
-                  icon={<PlusCircleOutlined />}
-                  type='text'
-                  onClick={() => setIsInviteMemberVisible(true)}></Button>
-              </Tooltip>
-            </ButtonGroupStyled>
+      <TypingStyled>
+        {selectedRoom.typing.user1.isTyping &&
+        selectedRoom.typing.user1.uid !== uid ? (
+          <TextStyled>
+            {`${selectedRoom.typing.user1.name} is tyiping...`}
+          </TextStyled>
+        ) : (
+          ''
+        )}
 
-            <Avatar.Group size='large' maxCount={2} className='avt-group'>
-              {members.map(member => (
-                <Tooltip title={member.displayName} key={member.id}>
-                  <AvatarStyled
-                    src={member.photoURL}
-                    onClick={() => {
-                      setUserInfoVisible(true)
-                      setSelectedUser(member)
-                    }}>
-                    {member.photoURL
-                      ? ''
-                      : member.displayName?.charAt(0)?.toUpperCase()}
-                  </AvatarStyled>
-                </Tooltip>
-              ))}
-            </Avatar.Group>
-          </HeaderStyled>
+        {selectedRoom.typing.user2.isTyping &&
+        selectedRoom.typing.user2.uid !== uid ? (
+          <TextStyled>
+            {`${selectedRoom.typing.user2.name} is tyiping...`}
+          </TextStyled>
+        ) : (
+          ''
+        )}
+      </TypingStyled>
 
-          <ContentStyled>
-            <MessageListStyled ref={messageListRef}>
-              {messages.map(mes => (
-                <Message
-                  key={mes.id}
-                  id={mes.uid}
-                  text={mes.text}
-                  photoURL={mes.photoURL}
-                  displayName={mes.displayName}
-                  createdAt={mes.createdAt}
-                />
-              ))}
-            </MessageListStyled>
-
-            <TypingStyled>
-              {selectedRoom.typing.user1.isTyping &&
-              selectedRoom.typing.user1.uid !== uid ? (
-                <TextStyled>
-                  {`${selectedRoom.typing.user1.name} is tyiping...`}
-                </TextStyled>
-              ) : (
-                ''
-              )}
-
-              {selectedRoom.typing.user2.isTyping &&
-              selectedRoom.typing.user2.uid !== uid ? (
-                <TextStyled>
-                  {`${selectedRoom.typing.user2.name} is tyiping...`}
-                </TextStyled>
-              ) : (
-                ''
-              )}
-            </TypingStyled>
-
-            <FormStyled form={form}>
-              <Form.Item name='message'>
-                <Input
-                  ref={inputRef}
-                  onChange={handleInputChange}
-                  onPressEnter={handleOnSubmit}
-                  onKeyDown={handleKey}
-                  placeholder='Type your message here...'
-                  bordered={false}
-                  autoComplete='off'
-                />
-              </Form.Item>
-              <Button
-                type='primary'
-                onClick={handleOnSubmit}
-                disabled={!inputValue}
-                icon={<SendOutlined />}>
-                Send
-              </Button>
-            </FormStyled>
-          </ContentStyled>
-        </>
-      ) : (
-        <Alert
-          message='Hãy chọn phòng'
-          type='info'
-          showIcon
-          style={{ top: '15px', left: '15px', width: '70%' }}
-          closable
-        />
-      )}
-    </WrapperStyled>
+      <FormStyled form={form}>
+        <Form.Item name='message'>
+          <Input
+            ref={inputRef}
+            onChange={handleInputChange}
+            onPressEnter={handleOnSubmit}
+            onKeyDown={handleKey}
+            placeholder='Type your message here...'
+            bordered={false}
+            autoComplete='off'
+          />
+        </Form.Item>
+        <Button
+          type='primary'
+          onClick={handleOnSubmit}
+          disabled={!inputValue}
+          icon={<SendOutlined />}>
+          Send
+        </Button>
+      </FormStyled>
+    </ContentStyled>
   )
 }

@@ -94,13 +94,17 @@ export default function InviteMemberModal() {
   const [form] = Form.useForm()
 
   const handleOk = () => {
-    form.resetFields()
-    setValue([])
-    // update members in current room
-    updateDocument('rooms', selectedRoomId, {
-      members: [...selectedRoom.members, ...value.map(val => val.value)],
-    })
-    setIsInviteMemberVisible(false)
+    if (value.length) {
+      form.resetFields()
+      setValue([])
+      // update members in current room
+      updateDocument('rooms', selectedRoomId, {
+        members: [...selectedRoom.members, ...value.map(val => val.value)],
+      })
+      setIsInviteMemberVisible(false)
+    } else {
+      return
+    }
   }
 
   const handleCancel = () => {

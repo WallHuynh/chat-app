@@ -2,8 +2,8 @@ import React, { useContext } from 'react'
 import { Avatar, Col, Row } from 'antd'
 import styled from 'styled-components'
 import { formatRelative } from 'date-fns/esm'
-import { AuthContext } from '../../../../Context/AuthProvider'
-import { AppContext } from '../../../../Context/AppProvider'
+import { AuthContext } from '../../../../../Context/AuthProvider'
+import { AppContext } from '../../../../../Context/AppProvider'
 
 const AvatarStyled = styled(Avatar)`
   margin: 0 8px 0 8px;
