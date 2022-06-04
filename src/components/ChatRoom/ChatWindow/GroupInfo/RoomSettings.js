@@ -1,35 +1,72 @@
-import { SplitCellsOutlined } from '@ant-design/icons'
-import React, { useState } from 'react'
-import { Button, Popconfirm } from 'antd'
+import {
+  ExclamationCircleFilled,
+  ExclamationCircleTwoTone,
+  SplitCellsOutlined,
+} from '@ant-design/icons'
+import React, { useContext, useState } from 'react'
+import { Button, Modal } from 'antd'
+import styled from 'styled-components'
+import { AppContext } from '../../../../Context/AppProvider'
+import { updateDocument } from '../../../../firebase/services'
+import { arrayRemove } from 'firebase/firestore'
+import { AuthContext } from '../../../../Context/AuthProvider'
+
+const ModalTyled = styled(Modal)`
+  .ant-modal-body {
+    display: none;
+  }
+`
 
 export default function RoomSettings() {
-  const [popConfirmVisivle, setPopConfirmVisible] = useState(false)
+  const [modalConfirmVisivle, setModalConfirmVisible] = useState(false)
+  const {
+    members,
+    selectedRoom,
+    setUserInfoVisible,
+    setSelectedUser,
+    setSelectedRoomId,
+  } = useContext(AppContext)
+
+  const {
+    user: { uid },
+  } = useContext(AuthContext)
 
   const handleLeaveRoom = () => {
-    popConfirmCancel()
-    console.log('leaving')
+    modalConfirmCancel()
+    setSelectedRoomId('')
+    updateDocument('rooms', selectedRoom.id, {
+      members: arrayRemove(uid),
+    })
   }
-  const openPopConfirm = () => {
-    setPopConfirmVisible(true)
+  const openModalConfirm = () => {
+    setModalConfirmVisible(true)
   }
-  const popConfirmCancel = () => {
-    setPopConfirmVisible(false)
+  const modalConfirmCancel = () => {
+    setModalConfirmVisible(false)
   }
   return (
-    <Popconfirm
-      visible={popConfirmVisivle}
-      placement='bottom'
-      title={'Are you sure to leave?'}
-      onConfirm={handleLeaveRoom}
-      okText='Yes'
-      cancelText='No'
-      onCancel={popConfirmCancel}>
-      <Button
-        type='text'
-        icon={<SplitCellsOutlined />}
-        onClick={openPopConfirm}>
-        Leave this group
-      </Button>
-    </Popconfirm>
+    <>
+      <div className='leave-btn' onClick={openModalConfirm}>
+        <Button type='text' icon={<SplitCellsOutlined />}>
+          Leave this room
+        </Button>
+      </div>
+      <ModalTyled
+        centered
+        visible={modalConfirmVisivle}
+        placement='bottom'
+        title={
+          <>
+            <ExclamationCircleTwoTone twoToneColor='#ff5500' />{' '}
+            {`Are you sure to leave ${selectedRoom.name}?`}
+          </>
+        }
+        width={300}
+        okText='Yes'
+        cancelText='No'
+        onOk={handleLeaveRoom}
+        onCancel={modalConfirmCancel}
+        closable={false}></ModalTyled>
+    </>
   )
 }

@@ -62,6 +62,7 @@ export default function Register() {
           userRegister(user)
           setErr(prevErr => ({ ...prevErr, isSuccess: true }))
         }
+        window.location.reload()
       })
       .catch(error => {
         const errorCode = error.code
@@ -77,6 +78,7 @@ export default function Register() {
   return (
     <div>
       <Modal
+        centered
         footer={null}
         title='Chat App Register'
         visible={isRegisterVisible}

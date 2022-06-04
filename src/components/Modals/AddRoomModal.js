@@ -49,6 +49,7 @@ export default function AddRoomModal() {
   return (
     <div>
       <Modal
+        centered
         title='Create your chat room'
         visible={isAddRoomVisible}
         onOk={handleOk}

@@ -55,7 +55,7 @@ const ModalStyled = styled(Modal)`
       perspective: 1px;
     }
     .avatar > .ant-avatar-string {
-      font-size:  40px;
+      font-size: 40px;
       top: 25%;
     }
   }
@@ -96,6 +96,7 @@ export default function UserInfoModal() {
   return (
     <div>
       <ModalStyled
+        centered
         bodyStyle={{ padding: '0' }}
         width={350}
         footer={

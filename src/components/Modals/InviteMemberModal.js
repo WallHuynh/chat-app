@@ -117,6 +117,7 @@ export default function InviteMemberModal() {
   return (
     <div>
       <Modal
+        centered
         okText='Invite'
         title='Invite members'
         visible={isInviteMemberVisible}

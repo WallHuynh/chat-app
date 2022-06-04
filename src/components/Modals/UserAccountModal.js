@@ -14,7 +14,11 @@ import {
 import { AppContext } from '../../Context/AppProvider'
 import { AuthContext } from '../../Context/AuthProvider'
 import styled from 'styled-components'
-import { CameraFilled, CheckOutlined } from '@ant-design/icons'
+import {
+  CameraFilled,
+  CheckOutlined,
+  ExclamationCircleTwoTone,
+} from '@ant-design/icons'
 import { updateProfile } from 'firebase/auth'
 import { auth } from '../../firebase/config'
 import ImgCrop from 'antd-img-crop'
@@ -146,6 +150,11 @@ const ModalStyled = styled(Modal)`
     }
   }
 `
+const ModalConfirmStyled = styled(Modal)`
+  .ant-modal-body {
+    display: none;
+  }
+`
 
 const beforeUpload = file => {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
@@ -207,9 +216,16 @@ export default function UserAccountModal() {
   const handleUpdateAccount = () => {
     setIsFieldChange(false)
     popConfirmCancel()
+    let flat = false
     if (form?.getFieldsValue()?.name) {
       const name = form?.getFieldsValue()?.name
-      console.log(name)
+      if (name.trim() !== displayName) {
+        console.log('changed')
+        updateProfile(auth.currentUser, {
+          displayName: name.trim(),
+        })
+        flat = true
+      }
     }
     if (photo.file) {
       const storageRef = getStorage()
@@ -250,11 +266,12 @@ export default function UserAccountModal() {
               photoURL: downloadURL,
             })
             openNotification('topLeft', 'Update complete!', '')
-            window.location.reload()
+            flat = true
           })
         }
       )
     }
+    flat && window.location.reload()
   }
 
   const popConfirmCancel = () => {
@@ -267,25 +284,15 @@ export default function UserAccountModal() {
   return (
     <div>
       <ModalStyled
+        centered
         footer={
           isFieldChange ? (
-            <>
-              <Popconfirm
-                visible={popConfirmVisivle}
-                placement='topLeft'
-                title={'Are you sure to update your profile?'}
-                onConfirm={handleUpdateAccount}
-                okText='Yes'
-                cancelText='No'
-                onCancel={popConfirmCancel}>
-                <Button
-                  className='confirm-btn noselect'
-                  disabled={!isFieldChange}
-                  onClick={showPopConfirm}>
-                  <CheckOutlined /> Update
-                </Button>
-              </Popconfirm>
-            </>
+            <Button
+              className='confirm-btn noselect'
+              disabled={!isFieldChange}
+              onClick={showPopConfirm}>
+              <CheckOutlined /> Update
+            </Button>
           ) : (
             <Button
               className={'disabled-btn'}
@@ -351,6 +358,22 @@ export default function UserAccountModal() {
             </Form.Item>
           </Form>
         </div>
+        <ModalConfirmStyled
+          visible={popConfirmVisivle}
+          placement='topLeft'
+          onOk={handleUpdateAccount}
+          onCancel={popConfirmCancel}
+          centered
+          title={
+            <>
+              <ExclamationCircleTwoTone twoToneColor='#ff5500' />{' '}
+              {'Are you sure to update your profile?'}
+            </>
+          }
+          width={300}
+          okText='Yes'
+          cancelText='No'
+          closable={false}></ModalConfirmStyled>
       </ModalStyled>
     </div>
   )

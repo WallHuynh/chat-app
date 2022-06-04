@@ -85,6 +85,17 @@ const BodyStyled = styled.div`
       }
     }
   }
+  .leave-btn {
+    .ant-btn-text {
+      background: transparent;
+      :hover {
+        background: transparent;
+      }
+    }
+    :hover {
+      background: rgba(230, 230, 230, 0.6);
+    }
+  }
 `
 
 export default function GroupInfo() {
@@ -106,7 +117,7 @@ export default function GroupInfo() {
         <Info />
         <Collapse
           bordered={false}
-          defaultActiveKey={['1']}
+          defaultActiveKey={['1', '2']}
           expandIcon={({ isActive }) => (
             <CaretRightOutlined rotate={isActive ? 90 : 0} />
           )}

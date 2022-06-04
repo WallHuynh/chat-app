@@ -21,6 +21,8 @@ const DivStyled = styled.div`
     width: 80%;
     display: flex;
     .username {
+      font-size: 17px;
+      font-weight: 500;
       max-width: 80%;
       margin: 0 5px 0 5px;
       text-overflow: ellipsis;

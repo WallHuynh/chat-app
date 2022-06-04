@@ -74,10 +74,16 @@ const RoomStyled = styled.div`
     }
   }
   .titles {
-    margin: 0 0 0 6px;
+    height: 100%;
+    padding-top: 7px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0px;
     .name {
       font-size: 13pt;
-      margin: 5px 0 0 0;
+      margin-bottom: 4px;
     }
     .text {
       font-size: 11px;
@@ -96,16 +102,30 @@ const RoomStyled = styled.div`
   }
 
   .time-stamp {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     width: 100%;
-    height: 80%;
-    padding-top: 10px;
+    height: 100%;
     p {
+      margin: 0;
       color: #515151;
       font-family: 'Open Sans', sans-serif;
       font-size: 10px;
     }
   }
 `
+
+const formatNSecondsToSevaralSeconds = timeLineSeconds => {
+  let formatTime = formatDistanceToNowStrict(new Date(timeLineSeconds * 1000))
+  if (formatTime?.includes('seconds') || formatTime?.includes('second')) {
+    formatTime = 'recently'
+  }
+  return formatTime
+}
 
 export default function RoomList() {
   const { rooms, setSelectedRoomId, selectedRoom } = useContext(AppContext)
@@ -211,8 +231,8 @@ export default function RoomList() {
               <div className='time-stamp'>
                 {room.newestMess.createAt && (
                   <p>
-                    {formatDistanceToNowStrict(
-                      new Date(room.newestMess.createAt.seconds * 1000)
+                    {formatNSecondsToSevaralSeconds(
+                      room.newestMess.createAt.seconds
                     )}
                   </p>
                 )}

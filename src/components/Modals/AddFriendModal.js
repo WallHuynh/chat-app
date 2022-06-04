@@ -73,6 +73,7 @@ export default function AddFriendModal() {
   return (
     <div>
       <ModalStyled
+        centered
         title='Add friend'
         visible={isAddFriendVisible}
         onOk={handleOk}
