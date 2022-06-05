@@ -1,6 +1,6 @@
 # About chat-app
 This project had been created by me, WallHuynh. 
-## What technologies and framework that I'm using in this project:
+## What technologies and framework that I'm using in this project?
 - create-react-app
 - firebase: firestore, authentication, storage, cloud functions
 - antd for building UI, styled-components for styling and modify UI
