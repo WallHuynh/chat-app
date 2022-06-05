@@ -9,10 +9,10 @@ import { db } from '../../firebase/config'
 
 const ModalStyled = styledComponents(Modal)``
 
-export default function AddFriendModal() {
+export default function FindFriendModal() {
   const {
-    isAddFriendVisible,
-    setIsAddFriendVisible,
+    isFindFriendVisible,
+    setIsFindFriendVisible,
     setSelectedUser,
     setUserInfoVisible,
   } = useContext(AppContext)
@@ -55,8 +55,8 @@ export default function AddFriendModal() {
           ...doc.data(),
           id: doc.id,
         }))[0]
-        setUserInfoVisible(true)
         setSelectedUser(documents)
+        setUserInfoVisible(true)
       } else {
         openNotification('bottom', 'User not found', '')
       }
@@ -67,22 +67,22 @@ export default function AddFriendModal() {
 
   const handleCancel = () => {
     form.resetFields()
-    setIsAddFriendVisible(false)
+    setIsFindFriendVisible(false)
   }
 
   return (
     <div>
       <ModalStyled
         centered
-        title='Add friend'
-        visible={isAddFriendVisible}
+        title='Find a friend'
+        visible={isFindFriendVisible}
         onOk={handleOk}
         onCancel={handleCancel}
         width={350}
         okText='Find'>
         <Form form={form} layout='vertical'>
           <Form.Item name='email'>
-            <Input placeholder="User's email" maxLength={40} />
+            <Input placeholder="Your friend's email" maxLength={40} />
           </Form.Item>
         </Form>
       </ModalStyled>

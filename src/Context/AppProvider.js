@@ -20,13 +20,11 @@ export default function AppProvider({ children }) {
   const [selectedRoomId, setSelectedRoomId] = useState('')
   const [userInfoVisible, setUserInfoVisible] = useState(false)
   const [selectedUser, setSelectedUser] = useState({})
-  const [isAddFriendVisible, setIsAddFriendVisible] = useState(false)
+  const [isFindFriendVisible, setIsFindFriendVisible] = useState(false)
   const [userAccountVisible, setUserAccountVisible] = useState(false)
   const {
     user: { uid },
   } = useContext(AuthContext)
-
- 
 
   // const userInfoCondition = useMemo(() => {
   //   return {
@@ -71,17 +69,16 @@ export default function AppProvider({ children }) {
     setIsRegisterVisible(false)
     setSelectedUser({})
     setUserAccountVisible(false)
-    setIsAddFriendVisible(false)
+    setIsFindFriendVisible(false)
   }
 
   return (
     <AppContext.Provider
       value={{
-        // userInfo,
         userAccountVisible,
         setUserAccountVisible,
-        isAddFriendVisible,
-        setIsAddFriendVisible,
+        isFindFriendVisible,
+        setIsFindFriendVisible,
         selectedUser,
         setSelectedUser,
         userInfoVisible,

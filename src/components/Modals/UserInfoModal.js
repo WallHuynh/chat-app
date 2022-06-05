@@ -1,9 +1,17 @@
-import React, { useContext } from 'react'
-import { Modal, Image, Avatar } from 'antd'
+import React, { useContext, memo, useState } from 'react'
+import { Modal, Image, Avatar, Form, Input } from 'antd'
 import { AppContext } from '../../Context/AppProvider'
 import { AuthContext } from '../../Context/AuthProvider'
 import styled from 'styled-components'
-import { UserDeleteOutlined } from '@ant-design/icons'
+import {
+  UserDeleteOutlined,
+  MessageOutlined,
+  UserAddOutlined,
+  SendOutlined,
+  ArrowLeftOutlined,
+  SettingOutlined,
+} from '@ant-design/icons'
+import { tuple } from 'antd/lib/_util/type'
 
 const ModalStyled = styled(Modal)`
   .ant-avatar-lg {
@@ -16,10 +24,26 @@ const ModalStyled = styled(Modal)`
       font-size: 30px;
     }
   }
+  .ant-modal-body {
+    max-height: 330px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    &::-webkit-scrollbar {
+      width: 2px;
+      background: rgba(0, 0, 0, 0);
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 0.2px;
+    }
+  }
   .ant-modal-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
     height: 50px;
-    text-align: center;
-    .unfriend-btn {
+    .friend-btn {
       border: 0.1px solid gray;
       background-color: white;
       font-weight: 600;
@@ -38,7 +62,7 @@ const ModalStyled = styled(Modal)`
     }
   }
   .cover-photo {
-    background-color: lightpink;
+    background-color: lightgray;
     height: 150px;
     position: relative;
     .avatar,
@@ -60,11 +84,9 @@ const ModalStyled = styled(Modal)`
     }
   }
   .info {
-    background-color: lightyellow;
     height: 180px;
     padding-top: 45px;
     .name {
-      background-color: lightgreen;
       font-size: 25px;
       text-align: center;
       padding: 0 40px 0 40px;
@@ -79,20 +101,51 @@ const ModalStyled = styled(Modal)`
         opacity: 0.7;
       }
     }
+    .input-send-request {
+      margin: 0 10px 0 10px;
+    }
   }
 `
 
-export default function UserInfoModal() {
-  const { userInfoVisible, setUserInfoVisible, selectedUser, setSelectedUser } =
-    useContext(AppContext)
+export default memo(function UserInfoModal() {
+  const [form] = Form.useForm()
+  const {
+    userInfoVisible,
+    setUserInfoVisible,
+    selectedUser,
+    setSelectedUser,
+    setUserAccountVisible,
+  } = useContext(AppContext)
   const {
     user: { uid, displayName, photoURL },
   } = useContext(AuthContext)
+  const [showSendRequest, setShowSendRequest] = useState(false)
 
   const handleCancel = () => {
     setUserInfoVisible(false)
     setSelectedUser({})
+    form.resetFields()
+    setShowSendRequest(false)
   }
+  const handleSendRequest = () => {
+    console.log('sent')
+  }
+
+  const handleShowSendRequest = () => {
+    setShowSendRequest(true)
+  }
+
+  const handleBackToPrevious = () => {
+    setShowSendRequest(false)
+  }
+
+  const handleOpenUserAccount = () => {
+    handleCancel()
+    setUserAccountVisible(true)
+  }
+
+  const isFriend = selectedUser?.friends?.some(id => id === uid)
+
   return (
     <div>
       <ModalStyled
@@ -100,9 +153,39 @@ export default function UserInfoModal() {
         bodyStyle={{ padding: '0' }}
         width={350}
         footer={
-          <button className='unfriend-btn'>
-            <UserDeleteOutlined /> Unfriend
-          </button>
+          <>
+            {selectedUser.uid === uid ? (
+              <button className='friend-btn' onClick={handleOpenUserAccount}>
+                <SettingOutlined /> Modify my account info
+              </button>
+            ) : showSendRequest ? (
+              <>
+                <button className='friend-btn' onClick={handleBackToPrevious}>
+                  <ArrowLeftOutlined /> Back
+                </button>
+                <button className='friend-btn' onClick={handleSendRequest}>
+                  <SendOutlined /> Send request
+                </button>
+              </>
+            ) : (
+              <>
+                <button className='friend-btn'>
+                  <MessageOutlined /> Send message
+                </button>
+                {isFriend ? (
+                  <button className='friend-btn'>
+                    <UserDeleteOutlined /> Unfriend
+                  </button>
+                ) : (
+                  <button
+                    className='friend-btn'
+                    onClick={handleShowSendRequest}>
+                    <UserAddOutlined /> Add friend
+                  </button>
+                )}
+              </>
+            )}
+          </>
         }
         title='User info'
         visible={userInfoVisible}
@@ -118,12 +201,27 @@ export default function UserInfoModal() {
         </div>
         <div className='info'>
           <p className='name'>{selectedUser.displayName}</p>
-          <p className='email'>
-            <span className='tag'>Email: </span>
-            {selectedUser.email}
-          </p>
+          {showSendRequest ? (
+            <Form form={form} layout='vertical'>
+              <Form.Item label='Name' name='name'>
+                <Input.TextArea
+                  size='small'
+                  autoSize={true}
+                  className='input-send-request'
+                  maxLength={300}
+                  showCount={true}
+                  defaultValue={`Hi, I am ${displayName}`}
+                />
+              </Form.Item>
+            </Form>
+          ) : (
+            <p className='email'>
+              <span className='tag'>Email: </span>
+              {selectedUser.email}
+            </p>
+          )}
         </div>
       </ModalStyled>
     </div>
   )
-}
+})

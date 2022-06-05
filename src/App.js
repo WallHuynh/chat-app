@@ -9,7 +9,7 @@ import AddRoomModal from './components/Modals/AddRoomModal'
 import InviteMemberModal from './components/Modals/InviteMemberModal'
 import UserInfoModal from './components/Modals/UserInfoModal'
 import UserAccountModal from './components/Modals/UserAccountModal'
-import AddFriendModal from './components/Modals/AddFriendModal'
+import FindFriendModal from './components/Modals/FindFriendModal'
 
 function App() {
   return (
@@ -22,7 +22,7 @@ function App() {
           </Routes>
           <AddRoomModal />
           <Register />
-          <AddFriendModal />
+          <FindFriendModal />
           <UserInfoModal />
           <UserAccountModal />
           <InviteMemberModal />

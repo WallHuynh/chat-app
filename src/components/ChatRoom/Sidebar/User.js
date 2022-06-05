@@ -54,7 +54,7 @@ export default function User() {
   const {
     clearState,
     setIsAddRoomVisible,
-    setIsAddFriendVisible,
+    setIsFindFriendVisible,
     userAccountVisible,
     setUserAccountVisible,
   } = React.useContext(AppContext)
@@ -67,7 +67,7 @@ export default function User() {
     setIsAddRoomVisible(true)
   }
   const handleAddFriend = () => {
-    setIsAddFriendVisible(true)
+    setIsFindFriendVisible(true)
   }
   const handleUserAccountVisible = () => {
     setUserAccountVisible(true)
