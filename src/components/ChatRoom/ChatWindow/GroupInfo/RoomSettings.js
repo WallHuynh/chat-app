@@ -1,8 +1,4 @@
-import {
-  ExclamationCircleFilled,
-  ExclamationCircleTwoTone,
-  SplitCellsOutlined,
-} from '@ant-design/icons'
+import { ExclamationCircleTwoTone, SplitCellsOutlined } from '@ant-design/icons'
 import React, { useContext, useState } from 'react'
 import { Button, Modal } from 'antd'
 import styled from 'styled-components'

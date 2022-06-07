@@ -8,8 +8,6 @@ import React, {
 } from 'react'
 import useFirestore from '../hooks/useFirestore'
 import { AuthContext } from './AuthProvider'
-import { getDocument } from '../firebase/services'
-import useUser from '../hooks/useUser'
 
 export const AppContext = createContext()
 
@@ -22,20 +20,10 @@ export default function AppProvider({ children }) {
   const [selectedUser, setSelectedUser] = useState({})
   const [isFindFriendVisible, setIsFindFriendVisible] = useState(false)
   const [userAccountVisible, setUserAccountVisible] = useState(false)
+  const [userStatusVisible, setUserStatusVisible] = useState(false)
   const {
     user: { uid },
   } = useContext(AuthContext)
-
-  // const userInfoCondition = useMemo(() => {
-  //   return {
-  //     fieldName: 'uid',
-  //     operator: '==',
-  //     compareValue: uid,
-  //   }
-  // }, [uid])
-  // const userRef = useFirestore('users', userInfoCondition)
-  // const userInfo = userRef[0]
-  // console.log('userinfo', userInfo)
 
   const roomsCondition = useMemo(() => {
     return {
@@ -75,6 +63,8 @@ export default function AppProvider({ children }) {
   return (
     <AppContext.Provider
       value={{
+        userStatusVisible,
+        setUserStatusVisible,
         userAccountVisible,
         setUserAccountVisible,
         isFindFriendVisible,

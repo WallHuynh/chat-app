@@ -8,7 +8,6 @@ import {
   Upload,
   notification,
   message,
-  Popconfirm,
   Button,
 } from 'antd'
 import { AppContext } from '../../Context/AppProvider'
@@ -24,10 +23,8 @@ import { auth } from '../../firebase/config'
 import ImgCrop from 'antd-img-crop'
 import {
   getDownloadURL,
-  getMetadata,
   getStorage,
   ref,
-  uploadBytes,
   uploadBytesResumable,
 } from 'firebase/storage'
 import { updateDocument } from '../../firebase/services'
@@ -213,20 +210,33 @@ export default function UserAccountModal() {
     setPhoto(prev => ({ ...prev, file: file }))
   }
 
-  const handleUpdateAccount = () => {
-    setIsFieldChange(false)
-    popConfirmCancel()
-    let flat = false
+  const changeUserName = () => {
     if (form?.getFieldsValue()?.name) {
       const name = form?.getFieldsValue()?.name
+      console.log(name)
       if (name.trim() !== displayName) {
-        console.log('changed')
-        updateProfile(auth.currentUser, {
-          displayName: name.trim(),
+        const newName = name.trim()
+        updateDocument('users', uid, {
+          displayName: newName,
         })
-        flat = true
+        updateProfile(auth.currentUser, {
+          displayName: newName,
+        })
+        openNotification(
+          'topLeft',
+          'Update name successfully',
+          `Your new name is ${newName}`
+        )
+        return ' change name successfully'
+      } else {
+        return
       }
+    } else {
+      return
     }
+  }
+
+  const changeUserAvt = () => {
     if (photo.file) {
       const storageRef = getStorage()
       const userAvatarRef = ref(
@@ -239,19 +249,7 @@ export default function UserAccountModal() {
         snapshot => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          openNotification(
-            'topLeft',
-            'Uploading...',
-            'Upload is ' + progress + '% done'
-          )
-          switch (snapshot.state) {
-            case 'paused':
-              console.log('Upload is paused')
-              break
-            case 'running':
-              console.log('Upload is running')
-              break
-          }
+          console.log('Upload is ' + progress + '% done')
         },
         error => {
           console.log(error)
@@ -266,12 +264,38 @@ export default function UserAccountModal() {
               photoURL: downloadURL,
             })
             openNotification('topLeft', 'Update complete!', '')
-            flat = true
+            return 'change avt successfully'
           })
         }
       )
+    } else {
+      return
     }
-    flat && window.location.reload()
+  }
+
+  const reloadPage = () => {
+    window.location.reload()
+  }
+
+  const handleUpdateAccount = () => {
+    setIsFieldChange(false)
+    popConfirmCancel()
+
+    new Promise(function (resolve, reject) {
+      setTimeout(() => resolve(changeUserAvt()))
+    })
+      .then(function (result) {
+        console.log(result)
+        return new Promise((resolve, reject) => {
+          setTimeout(() => resolve(changeUserName()))
+        })
+      })
+      .then(function (result) {
+        console.log(result)
+        return new Promise((resolve, reject) => {
+          setTimeout(() => resolve(reloadPage()), 4000)
+        })
+      })
   }
 
   const popConfirmCancel = () => {
@@ -346,15 +370,18 @@ export default function UserAccountModal() {
 
         <div className='info'>
           <Form form={form} layout='vertical'>
-            <Form.Item label='Name' name='name'>
+            <Form.Item label='Name' name='name' initialValue={displayName}>
               <Input
                 maxLength={40}
-                defaultValue={displayName}
+                // value={displayName}
                 onChange={() => setIsFieldChange(true)}
               />
             </Form.Item>
-            <Form.Item label='Email' name='email'>
-              <Input defaultValue={email} disabled />
+            <Form.Item label='Email' name='email' initialValue={email}>
+              <Input
+                //  value={email}
+                disabled
+              />
             </Form.Item>
           </Form>
         </div>

@@ -1,5 +1,5 @@
-import { Avatar, Button, Dropdown, Menu, Tooltip, Typography } from 'antd'
-import React, { useContext, useEffect, useState } from 'react'
+import { Avatar, Button, Dropdown, Menu, Tooltip } from 'antd'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { AppContext } from '../../../Context/AppProvider'
 import { AuthContext } from '../../../Context/AuthProvider'
@@ -55,53 +55,75 @@ export default function User() {
     clearState,
     setIsAddRoomVisible,
     setIsFindFriendVisible,
-    userAccountVisible,
     setUserAccountVisible,
+    setUserStatusVisible,
   } = React.useContext(AppContext)
 
   const {
-    user: { email, displayName, photoURL, uid },
+    user: { displayName, photoURL },
   } = useContext(AuthContext)
 
   const handleAddRoom = () => {
     setIsAddRoomVisible(true)
   }
+
   const handleAddFriend = () => {
     setIsFindFriendVisible(true)
   }
+
   const handleUserAccountVisible = () => {
     setUserAccountVisible(true)
   }
+
+  const handleUserStatusVisible = () => {
+    setUserStatusVisible(true)
+  }
+  const handleLogOut = () => {
+    clearState()
+    auth.signOut()
+  }
+
+  const onClick = ({ key }) => {
+    if (key === '0') {
+      handleUserAccountVisible()
+    }
+    if (key === '1') {
+      handleUserStatusVisible()
+    }
+    if (key === '2') {
+      handleLogOut()
+    }
+  }
   const menu = (
     <Menu
+      onClick={onClick}
       items={[
         {
           label: (
-            <Button
-              icon={<UserOutlined />}
-              type='text'
-              onClick={handleUserAccountVisible}>
+            <Button icon={<UserOutlined />} type='text'>
               User
             </Button>
           ),
           key: '0',
         },
         {
+          label: (
+            <Button icon={<UserOutlined />} type='text'>
+              Status
+            </Button>
+          ),
+          key: '1',
+        },
+        {
           type: 'divider',
         },
         {
           label: (
-            <Button
-              icon={<LogoutOutlined />}
-              type='text'
-              onClick={() => {
-                clearState()
-                auth.signOut()
-              }}>
+            <Button icon={<LogoutOutlined />} type='text'>
               Log Out
             </Button>
           ),
-          key: '3',
+          key: '2',
         },
       ]}
     />
@@ -109,7 +131,10 @@ export default function User() {
   return (
     <DivStyled className='noselect'>
       <div className='avt-name'>
-        <DropdownStyled overlay={menu} trigger={['click']}>
+        <DropdownStyled
+          className='dropdown-list'
+          overlay={menu}
+          trigger={['click']}>
           <AvatarStyled src={photoURL} size='large'>
             {photoURL ? '' : displayName?.charAt(0)?.toUpperCase()}
           </AvatarStyled>

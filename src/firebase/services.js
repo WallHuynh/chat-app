@@ -14,7 +14,8 @@ import {
 
 export const getDocument = async (oneCollection, oneDocument) => {
   const docRef = doc(db, oneCollection, oneDocument)
-  return await getDoc(docRef)
+  const docValue = await getDoc(docRef)
+  return docValue
 }
 
 export const updateDocument = async (oneCollection, docId, data) => {
@@ -27,6 +28,13 @@ export const addDocument = async (oneCollection, data) => {
   switch (oneCollection) {
     case 'users':
       docRef = doc(db, oneCollection, data.uid)
+      await setDoc(docRef, {
+        ...data,
+        createdAt: serverTimestamp(),
+      })
+      break
+    case 'friend-requests':
+      docRef = doc(db, oneCollection, data.receiveUid)
       await setDoc(docRef, {
         ...data,
         createdAt: serverTimestamp(),
@@ -57,7 +65,7 @@ export const userRegister = async user => {
       email: user.email,
       photoURL: user.photoURL,
       uid: user.uid,
-      friends: [],
+      friends: new Map(),
       providerId: user.providerData[0].providerId,
       keywords: generateKeywords(user.displayName?.toLowerCase()),
     })

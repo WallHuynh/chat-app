@@ -86,14 +86,14 @@ const BodyStyled = styled.div`
     }
   }
   .leave-btn {
+    :hover {
+      background: rgba(230, 230, 230, 0.6);
+    }
     .ant-btn-text {
       background: transparent;
       :hover {
         background: transparent;
       }
-    }
-    :hover {
-      background: rgba(230, 230, 230, 0.6);
     }
   }
 `

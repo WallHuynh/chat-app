@@ -1,5 +1,5 @@
-import React, { useContext, memo, useState } from 'react'
-import { Modal, Image, Avatar, Form, Input } from 'antd'
+import React, { useContext, memo, useState, useEffect } from 'react'
+import { Modal, Image, Avatar, Form, Input, Button } from 'antd'
 import { AppContext } from '../../Context/AppProvider'
 import { AuthContext } from '../../Context/AuthProvider'
 import styled from 'styled-components'
@@ -11,7 +11,8 @@ import {
   ArrowLeftOutlined,
   SettingOutlined,
 } from '@ant-design/icons'
-import { tuple } from 'antd/lib/_util/type'
+import { addDocument, updateDocument } from '../../firebase/services'
+import { arrayUnion } from 'firebase/firestore'
 
 const ModalStyled = styled(Modal)`
   .ant-avatar-lg {
@@ -47,17 +48,11 @@ const ModalStyled = styled(Modal)`
       border: 0.1px solid gray;
       background-color: white;
       font-weight: 600;
+      color: black;
       :hover {
         font-weight: 600;
         border: solid 1px green;
         color: green;
-      }
-      :active {
-        box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px,
-          rgba(6, 24, 44, 0.65) 0px 4px 6px -1px,
-          rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
-        transform: translateY(-0.5px);
-        transition: 200ms;
       }
     }
   }
@@ -102,7 +97,7 @@ const ModalStyled = styled(Modal)`
       }
     }
     .input-send-request {
-      margin: 0 10px 0 10px;
+      margin: 0 15px 0 15px;
     }
   }
 `
@@ -117,18 +112,37 @@ export default memo(function UserInfoModal() {
     setUserAccountVisible,
   } = useContext(AppContext)
   const {
-    user: { uid, displayName, photoURL },
+    user: { uid, displayName, userInfo },
   } = useContext(AuthContext)
+  const initialIsRequested = userInfo?.requestedTo?.includes(selectedUser.uid)
   const [showSendRequest, setShowSendRequest] = useState(false)
+  const [isRequested, setIsRequested] = useState(initialIsRequested)
+
+  useEffect(() => {
+    setIsRequested(initialIsRequested)
+  }, [initialIsRequested, selectedUser])
 
   const handleCancel = () => {
     setUserInfoVisible(false)
     setSelectedUser({})
     form.resetFields()
     setShowSendRequest(false)
+    setIsRequested(false)
   }
+
   const handleSendRequest = () => {
-    console.log('sent')
+    const caption = form.getFieldValue().caption.trim()
+    console.log(caption)
+    addDocument('friend-requests', {
+      receiveUid: selectedUser.uid,
+      requestUid: uid,
+      caption: caption,
+    })
+    updateDocument('users', uid, {
+      requestedTo: arrayUnion(selectedUser.uid),
+    })
+    setIsRequested(true)
+    setShowSendRequest(false)
   }
 
   const handleShowSendRequest = () => {
@@ -144,44 +158,59 @@ export default memo(function UserInfoModal() {
     setUserAccountVisible(true)
   }
 
-  const isFriend = selectedUser?.friends?.some(id => id === uid)
+  const isFriend = userInfo?.friends?.hasOwnProperty(selectedUser.uid)
 
   return (
     <div>
       <ModalStyled
+        className='noselect'
         centered
         bodyStyle={{ padding: '0' }}
         width={350}
         footer={
           <>
             {selectedUser.uid === uid ? (
-              <button className='friend-btn' onClick={handleOpenUserAccount}>
-                <SettingOutlined /> Modify my account info
-              </button>
+              <Button
+                icon={<SettingOutlined />}
+                className='friend-btn'
+                onClick={handleOpenUserAccount}>
+                Modify my account info
+              </Button>
             ) : showSendRequest ? (
               <>
-                <button className='friend-btn' onClick={handleBackToPrevious}>
-                  <ArrowLeftOutlined /> Back
-                </button>
-                <button className='friend-btn' onClick={handleSendRequest}>
-                  <SendOutlined /> Send request
-                </button>
+                <Button
+                  icon={<ArrowLeftOutlined />}
+                  className='friend-btn'
+                  onClick={handleBackToPrevious}>
+                  Back
+                </Button>
+                <Button
+                  icon={<SendOutlined />}
+                  className='friend-btn'
+                  onClick={handleSendRequest}>
+                  Send request
+                </Button>
               </>
             ) : (
               <>
-                <button className='friend-btn'>
-                  <MessageOutlined /> Send message
-                </button>
+                <Button icon={<MessageOutlined />} className='friend-btn'>
+                  Send message
+                </Button>
                 {isFriend ? (
-                  <button className='friend-btn'>
-                    <UserDeleteOutlined /> Unfriend
-                  </button>
+                  <Button icon={<UserDeleteOutlined />} className='friend-btn'>
+                    Unfriend
+                  </Button>
+                ) : isRequested ? (
+                  <Button icon={<SendOutlined />} disabled>
+                    Request was sent
+                  </Button>
                 ) : (
-                  <button
+                  <Button
+                    icon={<UserAddOutlined />}
                     className='friend-btn'
                     onClick={handleShowSendRequest}>
-                    <UserAddOutlined /> Add friend
-                  </button>
+                    Add friend
+                  </Button>
                 )}
               </>
             )}
@@ -203,14 +232,16 @@ export default memo(function UserInfoModal() {
           <p className='name'>{selectedUser.displayName}</p>
           {showSendRequest ? (
             <Form form={form} layout='vertical'>
-              <Form.Item label='Name' name='name'>
+              <Form.Item
+                name='caption'
+                initialValue={`Hi, I am ${displayName}`}>
                 <Input.TextArea
                   size='small'
                   autoSize={true}
                   className='input-send-request'
                   maxLength={300}
                   showCount={true}
-                  defaultValue={`Hi, I am ${displayName}`}
+                  value={`Hi, I am ${displayName}`}
                 />
               </Form.Item>
             </Form>

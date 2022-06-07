@@ -5,11 +5,11 @@ import { addDocument, updateDocument } from '../../firebase/services'
 import { AuthContext } from '../../Context/AuthProvider'
 
 export default function AddRoomModal() {
-  const { isAddRoomVisible, setIsAddRoomVisible } = useContext(AppContext)
+  const { isAddRoomVisible, setIsAddRoomVisible, selectedRoom, members } =
+    useContext(AppContext)
   const {
     user: { uid, displayName, photoURL },
   } = useContext(AuthContext)
-  const { selectedRoom, members } = useContext(AppContext)
   const [form] = Form.useForm()
 
   const handleOk = () => {
