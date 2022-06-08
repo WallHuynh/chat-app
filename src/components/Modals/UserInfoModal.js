@@ -112,7 +112,7 @@ export default memo(function UserInfoModal() {
     setUserAccountVisible,
   } = useContext(AppContext)
   const {
-    user: { uid, displayName, userInfo },
+    user: { uid, displayName, photoURL, userInfo },
   } = useContext(AuthContext)
   const initialIsRequested = userInfo?.requestedTo?.includes(selectedUser.uid)
   const [showSendRequest, setShowSendRequest] = useState(false)
@@ -133,10 +133,12 @@ export default memo(function UserInfoModal() {
   const handleSendRequest = () => {
     const caption = form.getFieldValue().caption.trim()
     console.log(caption)
-    addDocument('friend-requests', {
+    addDocument('status', {
+      type: 'friend-request',
       receiveUid: selectedUser.uid,
-      requestUid: uid,
+      requestUser: { photoURL: photoURL, displayName: displayName, uid: uid },
       caption: caption,
+      seen: false,
     })
     updateDocument('users', uid, {
       requestedTo: arrayUnion(selectedUser.uid),

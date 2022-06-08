@@ -49,8 +49,11 @@ const MessageListStyled = styled.div`
     background: rgba(0, 0, 0, 0);
   }
   &::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, .5);
-    border-radius: 2px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    :hover {
+      background-color: rgba(0, 0, 0, 0.6);
+    }
   }
 
   .graper{

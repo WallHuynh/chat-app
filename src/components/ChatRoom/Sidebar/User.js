@@ -1,9 +1,10 @@
-import { Avatar, Button, Dropdown, Menu, Tooltip } from 'antd'
+import { Avatar, Badge, Button, Dropdown, Menu, Tooltip } from 'antd'
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { AppContext } from '../../../Context/AppProvider'
 import { AuthContext } from '../../../Context/AuthProvider'
 import {
+  BellOutlined,
   LogoutOutlined,
   UserAddOutlined,
   UsergroupAddOutlined,
@@ -56,7 +57,8 @@ export default function User() {
     setIsAddRoomVisible,
     setIsFindFriendVisible,
     setUserAccountVisible,
-    setUserStatusVisible,
+    setShowUserStatus,
+    status,
   } = React.useContext(AppContext)
 
   const {
@@ -74,9 +76,8 @@ export default function User() {
   const handleUserAccountVisible = () => {
     setUserAccountVisible(true)
   }
-
-  const handleUserStatusVisible = () => {
-    setUserStatusVisible(true)
+  const handleShowStatus = () => {
+    setShowUserStatus(true)
   }
   const handleLogOut = () => {
     clearState()
@@ -88,7 +89,7 @@ export default function User() {
       handleUserAccountVisible()
     }
     if (key === '1') {
-      handleUserStatusVisible()
+      handleShowStatus()
     }
     if (key === '2') {
       handleLogOut()
@@ -108,9 +109,11 @@ export default function User() {
         },
         {
           label: (
-            <Button icon={<UserOutlined />} type='text'>
-              Status
-            </Button>
+            <Badge size='default' dot={true} color='cyan' count={status.length}>
+              <Button icon={<BellOutlined />} type='text'>
+                Status
+              </Button>
+            </Badge>
           ),
           key: '1',
         },
@@ -135,9 +138,11 @@ export default function User() {
           className='dropdown-list'
           overlay={menu}
           trigger={['click']}>
-          <AvatarStyled src={photoURL} size='large'>
-            {photoURL ? '' : displayName?.charAt(0)?.toUpperCase()}
-          </AvatarStyled>
+          <Badge size='small' color='cyan' count={status.length}>
+            <AvatarStyled src={photoURL} size='large'>
+              {photoURL ? '' : displayName?.charAt(0)?.toUpperCase()}
+            </AvatarStyled>
+          </Badge>
         </DropdownStyled>
         <p className='username'>{displayName}</p>
       </div>
@@ -146,7 +151,7 @@ export default function User() {
           className='addfriend'
           placement='bottom'
           title='Add friend'
-          color='#ff0066'>
+          color='#b8a3f5'>
           <Button
             type='text'
             icon={<UserAddOutlined />}
@@ -157,7 +162,7 @@ export default function User() {
           className='addroom'
           placement='bottom'
           title='Create a chat room'
-          color='#ff0066'>
+          color='#b8a3f5'>
           <Button
             type='text'
             icon={<UsergroupAddOutlined />}

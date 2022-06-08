@@ -13,12 +13,15 @@ const RoomListStyled = styled.div`
   display: flex;
   flex-direction: column;
   &::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
     background: rgba(0, 0, 0, 0);
   }
   &::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.3);
     border-radius: 4px;
+    :hover {
+      background-color: rgba(0, 0, 0, 0.6);
+    }
   }
 `
 
@@ -26,7 +29,6 @@ const RoomStyled = styled.div`
   max-height: 75px;
   min-height: 75px;
   width: 100%;
-  height: 60px;
   padding: 7px 0 10px 0;
   cursor: pointer;
   :hover {

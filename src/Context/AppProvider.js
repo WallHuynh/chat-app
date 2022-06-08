@@ -20,10 +20,20 @@ export default function AppProvider({ children }) {
   const [selectedUser, setSelectedUser] = useState({})
   const [isFindFriendVisible, setIsFindFriendVisible] = useState(false)
   const [userAccountVisible, setUserAccountVisible] = useState(false)
-  const [userStatusVisible, setUserStatusVisible] = useState(false)
+  const [showUserStatus, setShowUserStatus] = useState(false)
   const {
     user: { uid },
   } = useContext(AuthContext)
+
+  const requestCondition = useMemo(() => {
+    return {
+      fieldName: 'receiveUid',
+      operator: '==',
+      compareValue: uid,
+    }
+  }, [uid])
+  const status = useFirestore('status', requestCondition)
+  console.log('status', status)
 
   const roomsCondition = useMemo(() => {
     return {
@@ -63,8 +73,8 @@ export default function AppProvider({ children }) {
   return (
     <AppContext.Provider
       value={{
-        userStatusVisible,
-        setUserStatusVisible,
+        showUserStatus,
+        setShowUserStatus,
         userAccountVisible,
         setUserAccountVisible,
         isFindFriendVisible,
@@ -75,6 +85,7 @@ export default function AppProvider({ children }) {
         setUserInfoVisible,
         isRegisterVisible,
         setIsRegisterVisible,
+        status,
         rooms,
         members,
         selectedRoom,
