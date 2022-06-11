@@ -110,17 +110,37 @@ export default memo(function UserInfoModal() {
     selectedUser,
     setSelectedUser,
     setUserAccountVisible,
+    members,
   } = useContext(AppContext)
   const {
     user: { uid, displayName, photoURL, userInfo },
   } = useContext(AuthContext)
-  const initialIsRequested = userInfo?.requestedTo?.includes(selectedUser.uid)
+
+  const [userInfoRef, setUserInfoRef] = useState(userInfo)
   const [showSendRequest, setShowSendRequest] = useState(false)
+  const initialIsRequested = userInfoRef?.requestedTo?.includes(
+    selectedUser.uid
+  )
   const [isRequested, setIsRequested] = useState(initialIsRequested)
+  const initialIsFriend = userInfoRef?.friends?.includes(selectedUser.uid)
+  const [isFriend, setIsFriend] = useState(initialIsFriend)
+
+  console.log('isrequest', isRequested)
+  console.log('isfriend', isFriend)
+  console.log('userInfo', userInfoRef)
+
+  useEffect(() => {
+    const userRef = members.filter(member => member.uid === uid)[0]
+    setUserInfoRef(userRef)
+  }, [selectedUser])
 
   useEffect(() => {
     setIsRequested(initialIsRequested)
   }, [initialIsRequested, selectedUser])
+
+  useEffect(() => {
+    setIsFriend(initialIsFriend)
+  }, [initialIsFriend, selectedUser])
 
   const handleCancel = () => {
     setUserInfoVisible(false)
@@ -160,7 +180,7 @@ export default memo(function UserInfoModal() {
     setUserAccountVisible(true)
   }
 
-  const isFriend = userInfo?.friends?.hasOwnProperty(selectedUser.uid)
+  // const isFriend = selectedUser?.friends?.some(id => id === uid)
 
   return (
     <div>

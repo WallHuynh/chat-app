@@ -32,13 +32,9 @@ import { updateDocument } from '../../firebase/services'
 const ModalStyled = styled(Modal)`
   .ant-avatar-lg {
     cursor: pointer;
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     text-align: center;
-    .ant-avatar-string {
-      top: 23%;
-      font-size: 30px;
-    }
   }
   .ant-modal-body {
     max-height: 330px;
@@ -88,14 +84,21 @@ const ModalStyled = styled(Modal)`
     height: 150px;
     position: relative;
     .cover-avt {
-      width: 80px;
-      height: 80px;
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
       position: absolute;
       bottom: 0;
       left: 50%;
-      transform: translate(-40px, 40px);
+      transform: translate(-50%, 50%);
+      :hover {
+        .ant-upload {
+          display: flex;
+        }
+      }
       .avatar,
-      .ant-image {
+      .image-avt {
+        border: 3px solid white;
       }
       .ant-image,
       .ant-image-mask {
@@ -104,24 +107,29 @@ const ModalStyled = styled(Modal)`
         perspective: 1px;
       }
       .avatar > .ant-avatar-string {
-        font-size: 40px;
-        top: 25%;
+        font-size: 50px;
+        top: 28%;
       }
       .ant-upload {
+        display: none;
         z-index: 1200;
-        width: 30px;
-        height: 30px;
-        border-radius: 15px;
+        width: 25px;
+        height: 25px;
+        background-color: lightgreen;
+        border-radius: 50%;
         position: relative;
-        bottom: 25px;
-        left: 60px;
+        bottom: 30px;
+        left: 70px;
+        :hover {
+          display: flex;
+        }
       }
       .ant-upload.ant-upload-select-picture-card > .ant-upload {
-        transform: translate(-60px, 25px);
+        transform: translate(-70px, 29px);
       }
       .ant-image-mask-info {
         opacity: 0.5;
-        font-size: 10px;
+        font-size: 8px;
       }
     }
   }
@@ -334,12 +342,16 @@ export default function UserAccountModal() {
         <div className='cover-photo'>
           {photo.photoURL ? (
             <div className='cover-avt'>
-              <Image src={photo.photoURL} width={80} className='noselect' />
+              <Image
+                src={photo.photoURL}
+                width={100}
+                rootClassName='image-avt'
+                className='noselect'
+              />
               <ImgCrop rotate onModalOk={handleCropOk}>
                 <Upload
                   name='avatar'
                   listType='picture-card'
-                  className='avatar-uploader'
                   showUploadList={false}
                   beforeUpload={beforeUpload}
                   onChange={handleChange}>
@@ -357,7 +369,6 @@ export default function UserAccountModal() {
                 <Upload
                   name='avatar'
                   listType='picture-card'
-                  className='avatar-uploader'
                   showUploadList={false}
                   beforeUpload={beforeUpload}
                   onChange={handleChange}>

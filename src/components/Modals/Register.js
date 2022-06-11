@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Form, Modal, Input, Button, Alert } from 'antd'
 import { AppContext } from '../../Context/AppProvider'
 import styled from 'styled-components'
@@ -12,7 +12,12 @@ const AlertStyled = styled(Alert)`
 `
 
 export default function Register() {
-  const { isRegisterVisible, setIsRegisterVisible } = useContext(AppContext)
+  const {
+    isRegisterVisible,
+    setIsRegisterVisible,
+    emailRegister,
+    setEmailRegister,
+  } = useContext(AppContext)
   const errInitState = {
     email: '',
     passwords: '',
@@ -25,9 +30,20 @@ export default function Register() {
   const [form] = Form.useForm()
 
   const handleCancel = () => {
-    form.resetFields()
-    setIsRegisterVisible(false)
-    setErr(errInitState)
+    if (err.isSuccess) {
+      setEmailRegister('')
+      form.resetFields()
+      setErr(errInitState)
+      setIsRegisterVisible(false)
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000)
+    } else {
+      setEmailRegister('')
+      form.resetFields()
+      setErr(errInitState)
+      setIsRegisterVisible(false)
+    }
   }
 
   const onFinish = values => {
@@ -62,7 +78,6 @@ export default function Register() {
           userRegister(user)
           setErr(prevErr => ({ ...prevErr, isSuccess: true }))
         }
-        window.location.reload()
       })
       .catch(error => {
         const errorCode = error.code
@@ -112,14 +127,14 @@ export default function Register() {
               closable
             />
           )}
-          {err.errorMessage !== null && (
+          {/* {err.errorMessage !== null && (
             <AlertStyled
               message={err.errorMessage}
               type='error'
               showIcon
               closable
             />
-          )}
+          )} */}
           {err.isSuccess && (
             <AlertStyled
               message='Sign up successfully! Now you can close this tab'
@@ -131,6 +146,7 @@ export default function Register() {
 
           <Form.Item
             name='email'
+            initialValue={emailRegister}
             rules={[
               {
                 required: true,
@@ -209,12 +225,17 @@ export default function Register() {
               placeholder='Confirm Password'
             />
           </Form.Item>
-          <Button
-            style={{ display: 'block', margin: '5px auto' }}
-            type='primary'
-            htmlType='submit'>
-            Sign Up
-          </Button>
+
+          {err.isSuccess ? (
+            <Button onClick={handleCancel}>Close this tab</Button>
+          ) : (
+            <Button
+              style={{ display: 'block', margin: '5px auto' }}
+              type='primary'
+              htmlType='submit'>
+              Sign Up
+            </Button>
+          )}
         </Form>
       </Modal>
     </div>

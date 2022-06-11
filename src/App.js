@@ -10,6 +10,7 @@ import InviteMemberModal from './components/Modals/InviteMemberModal'
 import UserInfoModal from './components/Modals/UserInfoModal'
 import UserAccountModal from './components/Modals/UserAccountModal'
 import FindFriendModal from './components/Modals/FindFriendModal'
+import ForgotPasswordModal from './components/Modals/ForgotPasswordModal'
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <UserInfoModal />
           <UserAccountModal />
           <InviteMemberModal />
+          <ForgotPasswordModal />
         </AppProvider>
       </AuthProvider>
     </BrowserRouter>

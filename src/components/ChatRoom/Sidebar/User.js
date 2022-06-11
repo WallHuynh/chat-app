@@ -17,7 +17,8 @@ const DivStyled = styled.div`
   height: 70px;
   padding: 14px 16px;
   border-bottom: 1px solid rgb(230, 230, 230);
-
+  background-color: white;
+  color: rgba(0, 0, 0, 0.8);
   .avt-name {
     width: 80%;
     display: flex;

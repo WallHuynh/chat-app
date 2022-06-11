@@ -1,18 +1,18 @@
-import { PlusCircleOutlined, SendOutlined } from '@ant-design/icons'
+import { SendOutlined } from '@ant-design/icons'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { Button, Tooltip, Avatar, Form, Input, Alert, Typography } from 'antd'
+import { Button, Form, Input, Typography } from 'antd'
 import Message from './Message'
 import { AppContext } from '../../../../Context/AppProvider'
 import { addDocument, updateDocument } from '../../../../firebase/services'
 import { AuthContext } from '../../../../Context/AuthProvider'
 import useFirestore from '../../../../hooks/useFirestore'
 import { serverTimestamp } from 'firebase/firestore'
-import Header from './Header'
+
+const { Text } = Typography
 
 const ContentStyled = styled.div`
   font-family: 'Montserrat', sans-serif;
-  background-color: #e6f2ff;
   height: calc(100% - 56px);
   display: flex;
   flex-direction: column;
@@ -85,7 +85,7 @@ const MessageListStyled = styled.div`
       }
     }
     .right{
-      background-color: rgba(25,147,147,0.2);
+      background-color: #f0fff0;
       float: right;
     }
     .left {
@@ -196,6 +196,31 @@ export default function MessageContent() {
       }
     }
   }
+
+  useEffect(() => {
+    if (selectedRoom.typing.user1.isTyping) {
+      setTimeout(() => {
+        updateDocument('rooms', selectedRoom.id, {
+          'typing.user1.isTyping': false,
+          'typing.user1.uid': null,
+          'typing.user1.name': null,
+        })
+      }, 6000)
+    }
+    if (selectedRoom.typing.user2.isTyping) {
+      setTimeout(() => {
+        updateDocument('rooms', selectedRoom.id, {
+          'typing.user2.isTyping': false,
+          'typing.user2.uid': null,
+          'typing.user2.name': null,
+        })
+      }, 6000)
+    }
+  }, [
+    selectedRoom.typing.user1.isTyping,
+    selectedRoom.typing.user2.isTyping,
+    selectedRoom.id,
+  ])
 
   const handleInputChange = e => {
     setInputValue(e.target.value)

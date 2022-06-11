@@ -25,8 +25,9 @@ import {
   GoogleAuthProvider,
   FacebookAuthProvider,
   signInWithEmailAndPassword,
+  setPersistence,
+  browserSessionPersistence,
 } from 'firebase/auth'
-import { Link } from 'react-router-dom'
 import { AppContext } from '../../Context/AppProvider'
 
 const { Title } = Typography
@@ -38,6 +39,11 @@ const ColStyled = styled(Col)`
   padding: 30px 40px 30px 40px;
   margin-top: 35px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  .ant-btn:hover,
+  .ant-btn:focus {
+    background: #f6f9fe;
+    color: #174ea6;
+  }
 `
 const TitleStyled = styled(Title)`
   margin-top: 35px;
@@ -46,7 +52,9 @@ const AlertStyled = styled(Alert)`
   margin-bottom: 10px;
 `
 export default function Login() {
-  const { setIsRegisterVisible } = useContext(AppContext)
+  const [form] = Form.useForm()
+  const { setIsRegisterVisible, setEmailRegister, setIsForgotPassVisible } =
+    useContext(AppContext)
   const errInitState = {
     errorCode: null,
     errorMessage: null,
@@ -61,6 +69,12 @@ export default function Login() {
 
   const handleRegister = () => {
     setIsRegisterVisible(true)
+    setEmailRegister(form.getFieldValue().email)
+  }
+
+  const handleForgotPassword = () => {
+    setIsForgotPassVisible(true)
+    setEmailRegister(form.getFieldValue().email)
   }
 
   const onFinish = values => {
@@ -69,21 +83,28 @@ export default function Login() {
       setErr(prevErr => ({ ...prevErr, email: 'Invalid email' }))
       return
     }
-    signInWithEmailAndPassword(auth, values.email, values.password)
-      .then(userCredential => {
-        // Signed in
-        const user = userCredential.user
-        // ...
+    if (values.remember) {
+      signInWithEmailAndPassword(auth, values.email, values.password)
+        .then(userCredential => {
+          // Signed in
+          const user = userCredential.user
+          window.location.reload()
+          // ...
+        })
+        .catch(error => {
+          const errorCode = error.code
+          const errorMessage = error.message
+          setErr(prevErr => ({
+            ...prevErr,
+            errorCode: errorCode,
+            errorMessage: errorMessage,
+          }))
+        })
+    } else {
+      setPersistence(auth, browserSessionPersistence).then(() => {
+        return signInWithEmailAndPassword(auth, values.email, values.password)
       })
-      .catch(error => {
-        const errorCode = error.code
-        const errorMessage = error.message
-        setErr(prevErr => ({
-          ...prevErr,
-          errorCode: errorCode,
-          errorMessage: errorMessage,
-        }))
-      })
+    }
   }
 
   return (
@@ -96,6 +117,7 @@ export default function Login() {
       <Row justify='center'>
         <ColStyled span={9}>
           <Form
+            form={form}
             style={{ textAlign: 'center' }}
             name='normal_login'
             className='login-form'
@@ -114,14 +136,14 @@ export default function Login() {
             {err.email !== '' && (
               <AlertStyled message={err.email} type='error' showIcon closable />
             )}
-            {err.errorMessage !== null && (
+            {/* {err.errorMessage !== null && (
               <AlertStyled
                 message={err.errorMessage}
                 type='error'
                 showIcon
                 closable
               />
-            )}
+            )} */}
             <Form.Item
               name='email'
               rules={[
@@ -154,37 +176,45 @@ export default function Login() {
                 <Checkbox>Remember me</Checkbox>
               </Form.Item>
 
-              <Link className='login-form-forgot' to={'#'}>
+              <Button
+                className='login-form-forgot'
+                type='text'
+                onClick={handleForgotPassword}>
                 Forgot password
-              </Link>
+              </Button>
             </Form.Item>
 
             <Form.Item>
-              <Button
+              <button
+                className='button-82-pushable'
+                role='button'
                 style={{ display: 'block', margin: '5px auto' }}
                 type='primary'
-                htmlType='submit'
-                className='login-form-button'
-                icon={<LoginOutlined />}>
-                Log in
-              </Button>
+                htmlType='submit'>
+                <span className='button-82-shadow'></span>
+                <span className='button-82-edge'></span>
+                <span className='button-82-front text'>
+                  {<LoginOutlined />} Log in
+                </span>
+              </button>
               Don't have account?
               <Button
                 type='text'
                 icon={<FormOutlined />}
-                className=''
                 onClick={handleRegister}>
-                register now!
+                Register now!
               </Button>
             </Form.Item>
 
             <Button
+              className='button-83'
               icon={<GoogleSquareFilled />}
-              style={{ width: '70%', marginBottom: 5 }}
+              style={{ width: '70%', marginBottom: '5px' }}
               onClick={() => handleLoginWithProvider(googleProvider)}>
               Login with Google account
             </Button>
             <Button
+              className='button-83'
               icon={<FacebookFilled />}
               style={{ width: '70%' }}
               onClick={() => handleLoginWithProvider(fbProvider)}>

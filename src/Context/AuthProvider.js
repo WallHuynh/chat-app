@@ -13,22 +13,21 @@ export default function AuthProvider({ children }) {
 
   useEffect(() => {
     const unsubscibed = auth.onAuthStateChanged(user => {
+      console.log('user', user)
       if (user) {
         const { uid, photoURL, displayName, email } = user
-        async function fetchUserData() {
-          const userSnap = await getDocument('users', uid)
-          if (userSnap.exists()) {
-            const userInfo = userSnap.data()
-            setUser({
-              uid,
-              photoURL,
-              displayName,
-              email,
-              userInfo,
-            })
-          }
+        const userRef = getDocument('users', uid)
+        const fetchData = async () => {
+          const userInfo = await userRef
+          setUser({
+            uid,
+            photoURL,
+            displayName,
+            email,
+            userInfo,
+          })
         }
-        fetchUserData()
+        fetchData()
         setIsLoading(false)
         navigate('/')
         return

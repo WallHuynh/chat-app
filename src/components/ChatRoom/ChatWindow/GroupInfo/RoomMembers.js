@@ -17,7 +17,11 @@ export default function RoomMembers() {
             setUserInfoVisible(true)
             setSelectedUser(member)
           }}>
-          <Avatar className='avt' size='large' src={member.photoURL}></Avatar>
+          <Avatar className='avt' size='large' src={member.photoURL}>
+            {member.photoURL
+              ? ''
+              : member?.displayName?.charAt(0)?.toUpperCase()}
+          </Avatar>
           <p className='name'>{member.displayName}</p>
         </div>
       ))}

@@ -1,12 +1,16 @@
 import { CheckOutlined, DeleteOutlined, LeftOutlined } from '@ant-design/icons'
 import { Avatar, Button, Col, Row, Tooltip } from 'antd'
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { AppContext } from '../../../Context/AppProvider'
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict'
+import { deleteDocument, updateDocument } from '../../../firebase/services'
+import { AuthContext } from '../../../Context/AuthProvider'
+import { arrayRemove, arrayUnion, doc } from 'firebase/firestore'
 
 const UserStatusStyled = styled.div`
   height: calc(100% - 70px);
+  background-color: white;
 `
 const HeaderStyled = styled.div`
   display: flex;
@@ -69,7 +73,7 @@ const StatusStyled = styled.div`
       height: 64px;
       text-align: center;
       .ant-avatar-string {
-        top: 10%;
+        top: 15%;
         font-size: 30px;
       }
     }
@@ -142,9 +146,47 @@ const formatNSecondsToSevaralSeconds = timeLineSeconds => {
 
 export default function UserStatus() {
   const { setShowUserStatus, status } = React.useContext(AppContext)
+  const {
+    user: { uid },
+  } = useContext(AuthContext)
 
   const handleCancelStatus = () => {
     setShowUserStatus(false)
+  }
+
+  const handleConfirmFriendRequest = eachStatus => {
+    updateDocument('users', uid, {
+      friends: arrayUnion(eachStatus.requestUser.uid),
+    })
+
+    //Cloud Functions without credit card below :(
+    // const userRequestRef = db.collection('users').doc(newFriend)
+    // userRequestRef
+    //   .update({
+    //     requestedTo: admin.firestore.FieldValue.arrayRemove(uid),
+    //     friends: admin.firestore.FieldValue.arrayUnion(uid),
+    //   })
+    //   .then(() => console.log(`User ${newFriend} was updated`))
+    //   .catch(error => console.log(`Update error:`, error))
+    updateDocument('users', eachStatus.requestUser.uid, {
+      requestedTo: arrayRemove(uid),
+      friends: arrayUnion(uid),
+    })
+
+    // const statusRef = db.collection('status').doc(newFriend)
+    // statusRef
+    //   .delete()
+    //   .then(() => console.log(`Status ${newFriend} was deleted`))
+    //   .catch(error => console.error('Error removing document: ', error))
+    deleteDocument('status', eachStatus.requestUser.uid)
+  }
+
+  const handleDeleteFriendRequest = eachStatus => {
+    deleteDocument('status', eachStatus.requestUser.uid)
+    //Cloud Functions without credit card below :(
+    updateDocument('users', eachStatus.requestUser.uid, {
+      requestedTo: arrayRemove(uid),
+    })
   }
   return (
     <UserStatusStyled className='noselect'>
@@ -186,12 +228,14 @@ export default function UserStatus() {
                   </p>
                   <Tooltip placement='left' title='Confirm' color='#b8a3f5'>
                     <Button
+                      onClick={() => handleConfirmFriendRequest(eachStatus)}
                       className='status-btn'
                       icon={<CheckOutlined />}
                       type='text'></Button>
                   </Tooltip>
                   <Tooltip placement='left' title='Delete' color='#b8a3f5'>
                     <Button
+                      onClick={() => handleDeleteFriendRequest(eachStatus)}
                       className='status-btn'
                       icon={<DeleteOutlined />}
                       type='text'></Button>

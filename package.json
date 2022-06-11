@@ -10,6 +10,7 @@
     "antd": "^4.20.0",
     "antd-img-crop": "^4.2.3",
     "firebase": "^9.6.11",
+    "firebase-functions": "^3.21.2",
     "lodash": "^4.17.21",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",

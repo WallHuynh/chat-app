@@ -10,12 +10,24 @@ import {
   doc,
   setDoc,
   updateDoc,
+  deleteDoc,
+  onSnapshot,
 } from 'firebase/firestore'
+
+export const deleteDocument = async (oneCollection, oneDocument) => {
+  const docRef = doc(db, oneCollection, oneDocument)
+  await deleteDoc(docRef)
+}
 
 export const getDocument = async (oneCollection, oneDocument) => {
   const docRef = doc(db, oneCollection, oneDocument)
-  const docValue = await getDoc(docRef)
-  return docValue
+  const docSnap = await getDoc(docRef)
+  if (docSnap.exists()) {
+    console.log('Document data:', docSnap.data())
+    return docSnap.data()
+  } else {
+    console.log('No such document!')
+  }
 }
 
 export const updateDocument = async (oneCollection, docId, data) => {
@@ -33,8 +45,8 @@ export const addDocument = async (oneCollection, data) => {
         createdAt: serverTimestamp(),
       })
       break
-    case 'friend-requests':
-      docRef = doc(db, oneCollection, data.receiveUid)
+    case 'status':
+      docRef = doc(db, oneCollection, data.requestUser.uid)
       await setDoc(docRef, {
         ...data,
         createdAt: serverTimestamp(),
@@ -50,6 +62,7 @@ export const addDocument = async (oneCollection, data) => {
 }
 
 export const userRegister = async user => {
+  console.log('register', user)
   const queryUser = query(
     collection(db, 'users'),
     where('email', '==', user.email)
@@ -65,7 +78,8 @@ export const userRegister = async user => {
       email: user.email,
       photoURL: user.photoURL,
       uid: user.uid,
-      friends: new Map(),
+      friends: [],
+      requestedTo: [],
       providerId: user.providerData[0].providerId,
       keywords: generateKeywords(user.displayName?.toLowerCase()),
     })

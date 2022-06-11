@@ -6,7 +6,6 @@ import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict'
 import { AuthContext } from '../../../Context/AuthProvider'
 
 const RoomListStyled = styled.div`
-  max-height: calc(100% - 70px);
   min-height: calc(100% - 70px);
   overflow-y: scroll;
   overflow-x: hidden;
@@ -32,7 +31,7 @@ const RoomStyled = styled.div`
   padding: 7px 0 10px 0;
   cursor: pointer;
   :hover {
-    background-color: rgba(224, 235, 235, 0.5);
+    background-color: rgba(224, 235, 235, 0.7);
   }
   .avatar-group {
     margin-left: 15px;
@@ -77,7 +76,6 @@ const RoomStyled = styled.div`
   }
   .titles {
     height: 100%;
-    padding-top: 7px;
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -85,18 +83,17 @@ const RoomStyled = styled.div`
     gap: 0px;
     .name {
       font-size: 13pt;
-      margin-bottom: 4px;
+      font-weight: 500;
     }
     .text {
-      font-size: 11px;
-      marrgin: 0;
+      font-size: 12px;
     }
     .name,
     .text {
+      margin: 0;
+      padding: 0;
       width: fit-content;
       max-width: 100%;
-      font-family: 'Montserrat', sans-serif;
-      color: #515151;
       text-overflow: ellipsis;
       overflow-x: hidden;
       white-space: nowrap;
@@ -114,7 +111,6 @@ const RoomStyled = styled.div`
     height: 100%;
     p {
       margin: 0;
-      color: #515151;
       font-family: 'Open Sans', sans-serif;
       font-size: 10px;
     }
@@ -139,7 +135,9 @@ export default function RoomList() {
       {rooms.map(room => (
         <RoomStyled
           style={
-            room.id === selectedRoom.id ? { backgroundColor: '#ccffcc' } : null
+            room.id === selectedRoom.id
+              ? { backgroundColor: '#4682B4', color: 'white' }
+              : null
           }
           key={room.id}
           roomMembers={room.members}

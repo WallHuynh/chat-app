@@ -21,7 +21,7 @@ export default function ChatWindow() {
         </>
       ) : (
         <Alert
-          message='Hãy chọn phòng'
+          message='chose your room'
           type='info'
           showIcon
           style={{ top: '15px', left: '15px', width: '70%' }}
