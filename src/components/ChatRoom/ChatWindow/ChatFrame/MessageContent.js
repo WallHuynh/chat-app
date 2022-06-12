@@ -1,6 +1,5 @@
 import { SendOutlined } from '@ant-design/icons'
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
 import { Button, Form, Input, Typography } from 'antd'
 import Message from './Message'
 import { AppContext } from '../../../../Context/AppProvider'
@@ -10,123 +9,6 @@ import useFirestore from '../../../../hooks/useFirestore'
 import { serverTimestamp } from 'firebase/firestore'
 
 const { Text } = Typography
-
-const ContentStyled = styled.div`
-  font-family: 'Montserrat', sans-serif;
-  height: calc(100% - 56px);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  position: relative;
-`
-
-const FormStyled = styled(Form)`
-  background-color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2px 2px 2px 0;
-  border: 1px solid rgb(230, 230, 230);
-  border-radius: 2px;
-  font-family: 'Montserrat', sans-serif;
-
-  .ant-form-item {
-    flex: 1;
-    margin-bottom: 0;
-  }
-`
-
-const MessageListStyled = styled.div`
-  font-family:'Montserrat', sans-serif;
-  max-height: calc(100%-30px)
-  min-height: calc(100%-30px)
-  overflow-y: scroll;
-  overflow-x: hidden;
-  padding: 0 0 20px 0;
-
-  &::-webkit-scrollbar {
-    width: 8px;
-    background: rgba(0, 0, 0, 0);
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    :hover {
-      background-color: rgba(0, 0, 0, 0.6);
-    }
-  }
-
-  .graper{
-    max-width: 100%;
-    min-width: 100%;
-    margin: 10px 0 5px 0;
-    padding: 5px;
-    .contents {
-      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-      width: fit-content;
-      max-width: 70%;
-      height: auto;
-      border-radius: 7px;
-      padding: 10px 12px 10px 12px;
-      word-wrap: break-word;
-      .name{
-        color: gray;
-        font-size: 12px;
-      }
-      .message{
-        font-size: 14px;
-        color: black;
-        font-weight: 400;
-        margin-bottom: 0;
-      }
-      .time-stamp{
-        font-size: 10px;
-        color: gray;
-      }
-    }
-    .right{
-      background-color: #f0fff0;
-      float: right;
-    }
-    .left {
-      background-color: white;
-    }
-  }
-`
-const TypingStyled = styled.div`
-  height: 20px;
-  width: auto;
-  margin-left: 15px;
-  position: absolute;
-  bottom: 40px;
-  background-color: white;
-  opacity: 0.8;
-`
-const TextStyled = styled(Text)`
-  margin-right: 10px;
-  background-image: linear-gradient(
-    to right,
-    #095fab 10%,
-    #25abe8 50%,
-    #57d75b 60%
-  );
-  background-size: auto auto;
-  background-clip: border-box;
-  background-size: 200% auto;
-  color: #fff;
-  background-clip: text;
-  text-fill-color: transparent;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: textclip 2s linear infinite;
-  display: inline-block;
-
-  @keyframes textclip {
-    to {
-      background-position: 200% center;
-    }
-  }
-`
 
 export default function MessageContent() {
   const { selectedRoom, members } = useContext(AppContext)
@@ -359,8 +241,8 @@ export default function MessageContent() {
   }, [messages])
 
   return (
-    <ContentStyled>
-      <MessageListStyled ref={messageListRef}>
+    <div className='messages-content'>
+      <div className='messages-list' ref={messageListRef}>
         {messages.map(mes => (
           <Message
             key={mes.id}
@@ -371,29 +253,29 @@ export default function MessageContent() {
             createdAt={mes.createdAt}
           />
         ))}
-      </MessageListStyled>
+      </div>
 
-      <TypingStyled>
+      <div className='typing'>
         {selectedRoom.typing.user1.isTyping &&
         selectedRoom.typing.user1.uid !== uid ? (
-          <TextStyled>
+          <Text className='typing-text'>
             {`${selectedRoom.typing.user1.name} is tyiping...`}
-          </TextStyled>
+          </Text>
         ) : (
           ''
         )}
 
         {selectedRoom.typing.user2.isTyping &&
         selectedRoom.typing.user2.uid !== uid ? (
-          <TextStyled>
+          <Text className='typing-text'>
             {`${selectedRoom.typing.user2.name} is tyiping...`}
-          </TextStyled>
+          </Text>
         ) : (
           ''
         )}
-      </TypingStyled>
+      </div>
 
-      <FormStyled form={form}>
+      <Form className='form-send-messages' form={form}>
         <Form.Item name='message'>
           <Input
             ref={inputRef}
@@ -412,7 +294,7 @@ export default function MessageContent() {
           icon={<SendOutlined />}>
           Send
         </Button>
-      </FormStyled>
-    </ContentStyled>
+      </Form>
+    </div>
   )
 }

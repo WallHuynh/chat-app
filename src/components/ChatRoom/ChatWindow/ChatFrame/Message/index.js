@@ -1,14 +1,8 @@
 import React, { useContext } from 'react'
 import { Avatar, Col, Row } from 'antd'
-import styled from 'styled-components'
 import { formatRelative } from 'date-fns/esm'
 import { AuthContext } from '../../../../../Context/AuthProvider'
 import { AppContext } from '../../../../../Context/AppProvider'
-
-const AvatarStyled = styled(Avatar)`
-  margin: 0 8px 0 8px;
-  cursor: pointer;
-`
 
 function formatDate(seconds) {
   let formattedDate = ''
@@ -51,7 +45,7 @@ export default function Message({
               </div>
             </Col>
             <Col span={2}>
-              <AvatarStyled
+              <Avatar
                 size='large'
                 src={photoURL}
                 className='mess-avt noselect'
@@ -60,7 +54,7 @@ export default function Message({
                   setSelectedUser(member)
                 }}>
                 {photoURL ? '' : displayName?.charAt(0)?.toUpperCase()}
-              </AvatarStyled>
+              </Avatar>
             </Col>
           </Row>
         </div>
@@ -68,7 +62,7 @@ export default function Message({
         <div className='graper'>
           <Row>
             <Col span={2}>
-              <AvatarStyled
+              <Avatar
                 size='large'
                 src={photoURL}
                 className='mess-avt noselect'
@@ -77,7 +71,7 @@ export default function Message({
                   setSelectedUser(member)
                 }}>
                 {photoURL ? '' : displayName?.charAt(0)?.toUpperCase()}
-              </AvatarStyled>
+              </Avatar>
             </Col>
             <Col span={22}>
               <div className='contents left'>

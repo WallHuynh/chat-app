@@ -1,0 +1,168 @@
+.chat-frame-wraper {
+  height: 100vh;
+  border-right: 1px solid rgb(230, 230, 230);
+  .header-graper {
+    display: flex;
+    justify-content: space-between;
+    height: 56px;
+    padding: 0 16px;
+    align-items: center;
+    border-bottom: 1px solid rgb(230, 230, 230);
+    background-color: #4682b4;
+    color: white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
+      rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+    .avt-group {
+      flex-grow: 1;
+      cursor: pointer;
+      .avt {
+        cursor: pointer;
+        .ant-avatar-string {
+          font-size: 20px;
+        }
+      }
+    }
+    .info {
+      flex-grow: 3;
+      flex-basis: 70%;
+      text-overflow: ellipsis;
+      overflow-x: hidden;
+      white-space: nowrap;
+      padding: 10px 10px 15px 0;
+
+      .title {
+        margin: 0;
+        font-weight: bold;
+        font-size: 20px;
+      }
+
+      .description {
+        font-size: 12px;
+      }
+    }
+
+    .add-member-btn {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+    }
+  }
+
+  .messages-content {
+    font-family: 'Montserrat', sans-serif;
+    height: calc(100% - 56px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    // justify-content: flex-start;
+    position: relative;
+    .messages-list {
+      // min-height: calc(100% - 40px);
+      font-family: 'Montserrat', sans-serif;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      padding: 0 0 20px 0;
+
+      &::-webkit-scrollbar {
+        width: 8px;
+        background: rgba(0, 0, 0, 0);
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 4px;
+        :hover {
+          background-color: rgba(0, 0, 0, 0.6);
+        }
+      }
+
+      .graper {
+        max-width: 100%;
+        min-width: 100%;
+        margin: 10px 0 5px 0;
+        padding: 5px;
+        .mess-avt {
+          margin: 0 8px 0 8px;
+          cursor: pointer;
+        }
+        .contents {
+          box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+          width: fit-content;
+          max-width: 70%;
+          height: auto;
+          border-radius: 7px;
+          padding: 10px 12px 10px 12px;
+          word-wrap: break-word;
+          .name {
+            color: gray;
+            font-size: 12px;
+          }
+          .message {
+            font-size: 14px;
+            color: black;
+            font-weight: 400;
+            margin-bottom: 0;
+          }
+          .time-stamp {
+            font-size: 10px;
+            color: gray;
+          }
+        }
+        .right {
+          background-color: #f0fff0;
+          float: right;
+        }
+        .left {
+          background-color: white;
+        }
+      }
+    }
+    .typing {
+      height: 20px;
+      width: auto;
+      margin-left: 15px;
+      position: absolute;
+      bottom: 40px;
+      background-color: white;
+      opacity: 0.8;
+      .typing-text {
+        margin-right: 10px;
+        background-image: linear-gradient(
+          to right,
+          #095fab 10%,
+          #25abe8 50%,
+          #57d75b 60%
+        );
+        background-size: auto auto;
+        background-clip: border-box;
+        background-size: 200% auto;
+        color: #fff;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: textclip 2s linear infinite;
+        display: inline-block;
+
+        @keyframes textclip {
+          to {
+            background-position: 200% center;
+          }
+        }
+      }
+    }
+    .form-send-messages {
+      background-color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2px 2px 2px 0;
+      border: 1px solid rgb(230, 230, 230);
+      border-radius: 2px;
+      font-family: 'Montserrat', sans-serif;
+
+      .ant-form-item {
+        flex: 1;
+        margin-bottom: 0;
+      }
+    }
+  }
+}

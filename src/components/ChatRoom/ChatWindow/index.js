@@ -1,8 +1,8 @@
 import { Row, Col, Alert } from 'antd'
 import React, { useContext } from 'react'
 import { AppContext } from '../../../Context/AppProvider'
-import ChatFrame from './ChatFrame'
-import GroupInfo from './GroupInfo'
+import ChatFrame from './ChatFrame/ChatFrame'
+import GroupInfo from './GroupInfo/GroupInfo'
 
 export default function ChatWindow() {
   const { selectedRoom } = useContext(AppContext)

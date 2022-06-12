@@ -1,57 +1,7 @@
 import { Avatar } from 'antd'
 import React, { useContext } from 'react'
-import styled from 'styled-components'
 import { AppContext } from '../../../../Context/AppProvider'
 import { AuthContext } from '../../../../Context/AuthProvider'
-
-const InfoStyled = styled.div`
-  .avatar-group {
-    width: 58px;
-    height: 58px;
-    position: relative;
-    .first-avt {
-      z-index: 1;
-    }
-    .second-avt {
-      z-index: 2;
-      position: absolute;
-      left: 30px;
-    }
-    .third-avt {
-      z-index: 3;
-      position: absolute;
-      top: 30px;
-      left: 0;
-    }
-    .third-avt-alone {
-      z-index: 3;
-      position: absolute;
-      top: 27px;
-      left: 15px;
-    }
-    .rest-avt {
-      z-index: 4;
-      position: absolute;
-      top: 30px;
-      left: 30px;
-    }
-    .ant-avatar-lg {
-      width: 55px;
-      height: 55px;
-      text-align: center;
-      .ant-avatar-string {
-        top: 10%;
-        font-size: 30px;
-      }
-    }
-  }
-  .name {
-    font-weight: 600;
-    font-size: 15px;
-    padding: 0;
-    margin: 0;
-  }
-`
 
 export default function Info() {
   const { selectedRoom } = useContext(AppContext)
@@ -59,7 +9,7 @@ export default function Info() {
     user: { uid },
   } = useContext(AuthContext)
   return (
-    <InfoStyled className='info noselect'>
+    <div className='info noselect'>
       <div className='avatar-group'>
         {selectedRoom.standByPhoto.lastThreeMembers.length === 2 ? (
           <>
@@ -129,6 +79,6 @@ export default function Info() {
         )}
       </div>
       <p className='name'>{selectedRoom.name}</p>
-    </InfoStyled>
+    </div>
   )
 }

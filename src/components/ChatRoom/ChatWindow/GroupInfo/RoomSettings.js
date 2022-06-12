@@ -7,7 +7,7 @@ import { updateDocument } from '../../../../firebase/services'
 import { arrayRemove } from 'firebase/firestore'
 import { AuthContext } from '../../../../Context/AuthProvider'
 
-const ModalTyled = styled(Modal)`
+const ModalStyled = styled(Modal)`
   .ant-modal-body {
     display: none;
   }
@@ -47,7 +47,7 @@ export default function RoomSettings() {
           Leave this room
         </Button>
       </div>
-      <ModalTyled
+      <ModalStyled
         centered
         visible={modalConfirmVisivle}
         placement='bottom'
@@ -62,7 +62,7 @@ export default function RoomSettings() {
         cancelText='No'
         onOk={handleLeaveRoom}
         onCancel={modalConfirmCancel}
-        closable={false}></ModalTyled>
+        closable={false}></ModalStyled>
     </>
   )
 }

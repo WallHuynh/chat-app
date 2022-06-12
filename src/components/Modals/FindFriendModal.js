@@ -3,11 +3,8 @@ import { Form, Modal, Input, notification } from 'antd'
 import { AppContext } from '../../Context/AppProvider'
 import { addDocument, updateDocument } from '../../firebase/services'
 import { AuthContext } from '../../Context/AuthProvider'
-import styledComponents from 'styled-components'
 import { collection, query, where, getDocs } from 'firebase/firestore'
 import { db } from '../../firebase/config'
-
-const ModalStyled = styledComponents(Modal)``
 
 export default function FindFriendModal() {
   const {
@@ -72,7 +69,7 @@ export default function FindFriendModal() {
 
   return (
     <div>
-      <ModalStyled
+      <Modal
         centered
         title='Find a friend'
         visible={isFindFriendVisible}
@@ -85,7 +82,7 @@ export default function FindFriendModal() {
             <Input placeholder="Your friend's email" maxLength={40} />
           </Form.Item>
         </Form>
-      </ModalStyled>
+      </Modal>
     </div>
   )
 }
