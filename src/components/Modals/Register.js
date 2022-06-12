@@ -31,16 +31,16 @@ export default function Register() {
 
   const handleCancel = () => {
     if (err.isSuccess) {
-      setEmailRegister('')
       form.resetFields()
+      setEmailRegister('')
       setErr(errInitState)
       setIsRegisterVisible(false)
       setTimeout(() => {
         window.location.reload()
       }, 1000)
     } else {
-      setEmailRegister('')
       form.resetFields()
+      setEmailRegister('')
       setErr(errInitState)
       setIsRegisterVisible(false)
     }

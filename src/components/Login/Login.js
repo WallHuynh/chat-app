@@ -16,6 +16,8 @@ import {
   FacebookFilled,
   GoogleSquareFilled,
   LoginOutlined,
+  IdcardOutlined,
+  QuestionOutlined,
 } from '@ant-design/icons'
 import styled from 'styled-components'
 import { auth } from '../../firebase/config'
@@ -29,22 +31,13 @@ import {
   browserSessionPersistence,
 } from 'firebase/auth'
 import { AppContext } from '../../Context/AppProvider'
+import './Login.scss'
 
 const { Title } = Typography
 
 const googleProvider = new GoogleAuthProvider()
 const fbProvider = new FacebookAuthProvider()
 
-const ColStyled = styled(Col)`
-  padding: 30px 40px 30px 40px;
-  margin-top: 35px;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  .ant-btn:hover,
-  .ant-btn:focus {
-    background: #f6f9fe;
-    color: #174ea6;
-  }
-`
 const TitleStyled = styled(Title)`
   margin-top: 35px;
 `
@@ -115,7 +108,7 @@ export default function Login() {
         </TitleStyled>
       </Row>
       <Row justify='center'>
-        <ColStyled span={9}>
+        <div className='login-graper'>
           <Form
             form={form}
             style={{ textAlign: 'center' }}
@@ -171,17 +164,9 @@ export default function Login() {
                 placeholder='Password'
               />
             </Form.Item>
-            <Form.Item style={{ marginBottom: '0' }}>
-              <Form.Item name='remember' valuePropName='checked' noStyle>
-                <Checkbox>Remember me</Checkbox>
-              </Form.Item>
 
-              <Button
-                className='login-form-forgot'
-                type='text'
-                onClick={handleForgotPassword}>
-                Forgot password
-              </Button>
+            <Form.Item name='remember' valuePropName='checked' noStyle>
+              <Checkbox className='check-box'>Remember me</Checkbox>
             </Form.Item>
 
             <Form.Item>
@@ -197,31 +182,41 @@ export default function Login() {
                   {<LoginOutlined />} Log in
                 </span>
               </button>
-              Don't have account?
+
+              <Button
+                className='button-83'
+                type='text'
+                icon={<QuestionOutlined />}
+                onClick={handleForgotPassword}>
+                Forgot password
+              </Button>
+
               <Button
                 type='text'
-                icon={<FormOutlined />}
+                className='button-83'
+                icon={<IdcardOutlined />}
                 onClick={handleRegister}>
-                Register now!
+                Register now
               </Button>
             </Form.Item>
 
             <Button
-              className='button-83'
+              className='button-17'
               icon={<GoogleSquareFilled />}
               style={{ width: '70%', marginBottom: '5px' }}
               onClick={() => handleLoginWithProvider(googleProvider)}>
               Login with Google account
             </Button>
+
             <Button
-              className='button-83'
+              className='button-17'
               icon={<FacebookFilled />}
               style={{ width: '70%' }}
               onClick={() => handleLoginWithProvider(fbProvider)}>
               Login with Facebook account
             </Button>
           </Form>
-        </ColStyled>
+        </div>
       </Row>
     </div>
   )
