@@ -1,6 +1,5 @@
 import { Avatar, Badge, Button, Dropdown, Menu, Tooltip } from 'antd'
 import React, { useContext } from 'react'
-import styled from 'styled-components'
 import { AppContext } from '../../../Context/AppProvider'
 import { AuthContext } from '../../../Context/AuthProvider'
 import {
@@ -11,46 +10,6 @@ import {
   UserOutlined,
 } from '@ant-design/icons'
 import { auth } from '../../../firebase/config'
-
-const DivStyled = styled.div`
-  display: flex;
-  height: 70px;
-  padding: 14px 16px;
-  border-bottom: 1px solid rgb(230, 230, 230);
-  background-color: white;
-  color: rgba(0, 0, 0, 0.8);
-  .avt-name {
-    width: 80%;
-    display: flex;
-    .username {
-      font-size: 17px;
-      font-weight: 500;
-      max-width: 80%;
-      margin: 0 5px 0 5px;
-      text-overflow: ellipsis;
-      overflow-x: hidden;
-      white-space: nowrap;
-      align-self: center;
-    }
-  }
-  .btns {
-    width: 20%;
-    display: flex;
-    .addroom,
-    .addfriend {
-      align-self: center;
-    }
-  }
-`
-const AvatarStyled = styled(Avatar)`
-.ant-avatar-string {
-  font-size: 20px;
-`
-
-const DropdownStyled = styled(Dropdown)`
-  text-align: center;
-  cursor: pointer;
-`
 
 export default function User() {
   const {
@@ -133,18 +92,15 @@ export default function User() {
     />
   )
   return (
-    <DivStyled className='noselect'>
+    <div className='user-bar noselect'>
       <div className='avt-name'>
-        <DropdownStyled
-          className='dropdown-list'
-          overlay={menu}
-          trigger={['click']}>
+        <Dropdown className='dropdown-list' overlay={menu} trigger={['click']}>
           <Badge size='small' color='cyan' count={status.length}>
-            <AvatarStyled src={photoURL} size='large'>
+            <Avatar className='avatar' src={photoURL} size='large'>
               {photoURL ? '' : displayName?.charAt(0)?.toUpperCase()}
-            </AvatarStyled>
+            </Avatar>
           </Badge>
-        </DropdownStyled>
+        </Dropdown>
         <p className='username'>{displayName}</p>
       </div>
       <div className='btns'>
@@ -171,6 +127,6 @@ export default function User() {
           />
         </Tooltip>
       </div>
-    </DivStyled>
+    </div>
   )
 }

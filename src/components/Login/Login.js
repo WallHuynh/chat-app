@@ -1,18 +1,8 @@
 import React, { useContext, useState } from 'react'
-import {
-  Form,
-  Input,
-  Button,
-  Checkbox,
-  Col,
-  Row,
-  Typography,
-  Alert,
-} from 'antd'
+import { Form, Input, Button, Checkbox, Row, Typography, Alert } from 'antd'
 import {
   UserOutlined,
   LockOutlined,
-  FormOutlined,
   FacebookFilled,
   GoogleSquareFilled,
   LoginOutlined,
@@ -54,15 +44,14 @@ export default function Login() {
     email: '',
   }
   const [err, setErr] = useState(errInitState)
-
   const handleLoginWithProvider = async provider => {
     const { user } = await signInWithPopup(auth, provider)
     userRegister(user)
   }
 
   const handleRegister = () => {
-    setIsRegisterVisible(true)
     setEmailRegister(form.getFieldValue().email)
+    setIsRegisterVisible(true)
   }
 
   const handleForgotPassword = () => {

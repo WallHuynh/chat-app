@@ -1,0 +1,281 @@
+.sidebar {
+  height: 100vh;
+  border-right: 1px solid rgb(230, 230, 230);
+  background-color: #f0fff0;
+  color: rgb(40, 40, 40);
+  .user-bar {
+    display: flex;
+    height: 70px;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgb(230, 230, 230);
+    background-color: white;
+    color: rgba(0, 0, 0, 0.8);
+    .avt-name {
+      width: 80%;
+      display: flex;
+      .dropdown-list {
+        text-align: center;
+        cursor: pointer;
+        .avatar {
+          .ant-avatar-string {
+            font-size: 20px;
+          }
+        }
+      }
+      .username {
+        font-size: 17px;
+        font-weight: 500;
+        max-width: 80%;
+        margin: 0 5px 0 5px;
+        text-overflow: ellipsis;
+        overflow-x: hidden;
+        white-space: nowrap;
+        align-self: center;
+      }
+    }
+    .btns {
+      width: 20%;
+      display: flex;
+      .addroom,
+      .addfriend {
+        align-self: center;
+      }
+    }
+  }
+  .room-list {
+    min-height: calc(100% - 70px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    &::-webkit-scrollbar {
+      width: 6px;
+      background: rgba(0, 0, 0, 0);
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.3);
+      border-radius: 4px;
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.6);
+      }
+    }
+    .room {
+      max-height: 75px;
+      min-height: 75px;
+      width: 100%;
+      padding: 7px 0 10px 0;
+      cursor: pointer;
+      &:hover {
+        background-color: rgba(224, 235, 235, 0.7);
+      }
+      .avatar-group {
+        margin-left: 15px;
+        width: 58px;
+        height: 58px;
+        position: relative;
+        .first-avt {
+          z-index: 1;
+        }
+        .second-avt {
+          z-index: 2;
+          position: absolute;
+          left: 30px;
+        }
+        .third-avt {
+          z-index: 3;
+          position: absolute;
+          top: 30px;
+          left: 0;
+        }
+        .third-avt-alone {
+          z-index: 3;
+          position: absolute;
+          top: 27px;
+          left: 15px;
+        }
+        .rest-avt {
+          z-index: 4;
+          position: absolute;
+          top: 30px;
+          left: 30px;
+        }
+        .ant-avatar-lg {
+          width: 55px;
+          height: 55px;
+          text-align: center;
+          .ant-avatar-string {
+            top: 10%;
+            font-size: 30px;
+          }
+        }
+      }
+      .titles {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0px;
+        .name {
+          font-size: 13pt;
+          font-weight: 500;
+        }
+        .text {
+          font-size: 12px;
+        }
+        .name,
+        .text {
+          margin: 0;
+          padding: 0;
+          width: fit-content;
+          max-width: 100%;
+          text-overflow: ellipsis;
+          overflow-x: hidden;
+          white-space: nowrap;
+        }
+      }
+
+      .time-stamp {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        p {
+          margin: 0;
+          font-family: 'Open Sans', sans-serif;
+          font-size: 10px;
+        }
+      }
+    }
+  }
+  .status-graper {
+    height: calc(100% - 70px);
+    background-color: white;
+    .header {
+      display: flex;
+      height: 56px;
+      padding: 0 16px;
+      align-items: center;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
+        rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+      .title {
+        margin: 0 0 0 -15px;
+        font-weight: 600;
+        font-size: 16px;
+        flex-basis: 90%;
+        text-align: center;
+      }
+      .btn-left {
+        align-selft: flex-start;
+        &:hover {
+          background-color: rgba(126, 166, 206, 0.2);
+        }
+      }
+    }
+    .status-list {
+      max-height: calc(100% - 56px);
+      min-height: calc(100% - 56px);
+      overflow-y: scroll;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 10px 0 10px 0;
+      &::-webkit-scrollbar {
+        width: 6px;
+        background: transparent;
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.4);
+        border-radius: 4px;
+      }
+      .status {
+        max-height: 90px;
+        min-height: 90px;
+        width: 100%;
+        padding: 0 0 5px 0;
+        cursor: pointer;
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
+          rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+        &:hover {
+          background-color: rgba(224, 235, 235, 0.5);
+        }
+        .avt {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          .ant-avatar-lg {
+            width: 64px;
+            height: 64px;
+            text-align: center;
+            .ant-avatar-string {
+              top: 15%;
+              font-size: 30px;
+            }
+          }
+        }
+        .content {
+          margin: 0;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          flex-wrap: no-wrap;
+          .name {
+            font-size: 18px;
+            font-weight: 600;
+          }
+          .caption {
+            font-weight: 300;
+          }
+          .name,
+          .caption {
+            margin: 0;
+            padding: 0;
+            width: fit-content;
+            max-width: 100%;
+            font-family: 'Montserrat', sans-serif;
+            color: #515151;
+            text-overflow: ellipsis;
+            overflow-x: hidden;
+            white-space: nowrap;
+          }
+        }
+        .time-stamp {
+          height: 100%;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          width: 100%;
+          height: 100%;
+          flex-wrap: no-wrap;
+          p {
+            color: #515151;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 10px;
+          }
+          .status-btn {
+            width: 35px;
+            height: 35px;
+          }
+          p,
+          .status-btn {
+            align-self: center;
+            padding: 0;
+            margin: 0;
+            &:hover {
+              background-color: rgba(224, 235, 235, 1);
+            }
+          }
+        }
+      }
+    }
+  }
+}

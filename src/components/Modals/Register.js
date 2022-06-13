@@ -71,6 +71,7 @@ export default function Register() {
       .then(userCredential => {
         // Signed in
         const user = userCredential.user
+        console.log(user)
         if (user) {
           updateProfile(auth.currentUser, {
             displayName: `${firstname} ${lastname}`,
@@ -99,14 +100,12 @@ export default function Register() {
         visible={isRegisterVisible}
         onCancel={handleCancel}>
         <Form
+          initialValues={{ email: emailRegister }}
           form={form}
           layout='vertical'
           style={{ textAlign: 'center' }}
           name='normal_login'
           className='login-form'
-          initialValues={{
-            remember: true,
-          }}
           onFinish={onFinish}>
           {err.email !== '' && (
             <AlertStyled message={err.email} type='error' showIcon closable />
@@ -146,7 +145,6 @@ export default function Register() {
 
           <Form.Item
             name='email'
-            initialValue={emailRegister}
             rules={[
               {
                 required: true,

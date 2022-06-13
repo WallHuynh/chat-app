@@ -1,121 +1,8 @@
-import React, { useContext, useEffect } from 'react'
-import { Button, Col, Row, Avatar, Tooltip } from 'antd'
-import styled from 'styled-components'
+import React, { useContext } from 'react'
+import { Col, Row, Avatar } from 'antd'
 import { AppContext } from '../../../Context/AppProvider'
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict'
 import { AuthContext } from '../../../Context/AuthProvider'
-
-const RoomListStyled = styled.div`
-  min-height: calc(100% - 70px);
-  overflow-y: scroll;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  &::-webkit-scrollbar {
-    width: 6px;
-    background: rgba(0, 0, 0, 0);
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    :hover {
-      background-color: rgba(0, 0, 0, 0.6);
-    }
-  }
-`
-
-const RoomStyled = styled.div`
-  max-height: 75px;
-  min-height: 75px;
-  width: 100%;
-  padding: 7px 0 10px 0;
-  cursor: pointer;
-  :hover {
-    background-color: rgba(224, 235, 235, 0.7);
-  }
-  .avatar-group {
-    margin-left: 15px;
-    width: 58px;
-    height: 58px;
-    position: relative;
-    .first-avt {
-      z-index: 1;
-    }
-    .second-avt {
-      z-index: 2;
-      position: absolute;
-      left: 30px;
-    }
-    .third-avt {
-      z-index: 3;
-      position: absolute;
-      top: 30px;
-      left: 0;
-    }
-    .third-avt-alone {
-      z-index: 3;
-      position: absolute;
-      top: 27px;
-      left: 15px;
-    }
-    .rest-avt {
-      z-index: 4;
-      position: absolute;
-      top: 30px;
-      left: 30px;
-    }
-    .ant-avatar-lg {
-      width: 55px;
-      height: 55px;
-      text-align: center;
-      .ant-avatar-string {
-        top: 10%;
-        font-size: 30px;
-      }
-    }
-  }
-  .titles {
-    height: 100%;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 0px;
-    .name {
-      font-size: 13pt;
-      font-weight: 500;
-    }
-    .text {
-      font-size: 12px;
-    }
-    .name,
-    .text {
-      margin: 0;
-      padding: 0;
-      width: fit-content;
-      max-width: 100%;
-      text-overflow: ellipsis;
-      overflow-x: hidden;
-      white-space: nowrap;
-    }
-  }
-
-  .time-stamp {
-    height: 100%;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    p {
-      margin: 0;
-      font-family: 'Open Sans', sans-serif;
-      font-size: 10px;
-    }
-  }
-`
 
 const formatNSecondsToSevaralSeconds = timeLineSeconds => {
   let formatTime = formatDistanceToNowStrict(new Date(timeLineSeconds * 1000))
@@ -131,9 +18,10 @@ export default function RoomList() {
     user: { uid },
   } = useContext(AuthContext)
   return (
-    <RoomListStyled className='noselect'>
+    <div className='room-list noselect'>
       {rooms.map(room => (
-        <RoomStyled
+        <div
+          className='room'
           style={
             room.id === selectedRoom.id
               ? { backgroundColor: '#4682B4', color: 'white' }
@@ -239,8 +127,8 @@ export default function RoomList() {
               </div>
             </Col>
           </Row>
-        </RoomStyled>
+        </div>
       ))}
-    </RoomListStyled>
+    </div>
   )
 }

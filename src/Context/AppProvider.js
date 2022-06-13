@@ -21,7 +21,7 @@ export default function AppProvider({ children }) {
   const [isFindFriendVisible, setIsFindFriendVisible] = useState(false)
   const [userAccountVisible, setUserAccountVisible] = useState(false)
   const [showUserStatus, setShowUserStatus] = useState(false)
-  const [emailRegister, setEmailRegister] = useState('')
+  const [emailRegister, setEmailRegister] = useState({})
   const [isForgotPassVisible, setIsForgotPassVisible] = useState(false)
   const {
     user: { uid },
