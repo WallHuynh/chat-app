@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import { Form, Modal, Input } from 'antd'
-import { AppContext } from '../../Context/AppProvider'
+import { AppContext } from '../../context/AppProvider'
 import { addDocument, updateDocument } from '../../firebase/services'
-import { AuthContext } from '../../Context/AuthProvider'
+import { AuthContext } from '../../context/AuthProvider'
 
 export default function AddRoomModal() {
   const { isAddRoomVisible, setIsAddRoomVisible, selectedRoom, members } =

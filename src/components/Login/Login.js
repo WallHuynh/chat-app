@@ -20,7 +20,7 @@ import {
   setPersistence,
   browserSessionPersistence,
 } from 'firebase/auth'
-import { AppContext } from '../../Context/AppProvider'
+import { AppContext } from '../../context/AppProvider'
 import './Login.scss'
 
 const { Title } = Typography

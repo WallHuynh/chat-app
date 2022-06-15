@@ -10,8 +10,8 @@ import {
   message,
   Button,
 } from 'antd'
-import { AppContext } from '../../Context/AppProvider'
-import { AuthContext } from '../../Context/AuthProvider'
+import { AppContext } from '../../context/AppProvider'
+import { AuthContext } from '../../context/AuthProvider'
 import styled from 'styled-components'
 import {
   CameraFilled,

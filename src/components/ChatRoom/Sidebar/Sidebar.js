@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import User from './User'
 import RoomList from './RoomList'
-import { AppContext } from '../../../Context/AppProvider'
+import { AppContext } from '../../../context/AppProvider'
 import UserStatus from './UserStatus'
 import './Sidebar.scss'
 

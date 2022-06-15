@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react'
 import { Form, Modal, Input, notification } from 'antd'
-import { AppContext } from '../../Context/AppProvider'
+import { AppContext } from '../../context/AppProvider'
 import { addDocument, updateDocument } from '../../firebase/services'
-import { AuthContext } from '../../Context/AuthProvider'
+import { AuthContext } from '../../context/AuthProvider'
 import { collection, query, where, getDocs } from 'firebase/firestore'
 import { db } from '../../firebase/config'
 

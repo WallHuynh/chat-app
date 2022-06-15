@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import { Avatar, Col, Row } from 'antd'
 import { formatRelative } from 'date-fns/esm'
-import { AuthContext } from '../../../../../Context/AuthProvider'
-import { AppContext } from '../../../../../Context/AppProvider'
+import { AuthContext } from '../../../../../context/AuthProvider'
+import { AppContext } from '../../../../../context/AppProvider'
 
 function formatDate(seconds) {
   let formattedDate = ''

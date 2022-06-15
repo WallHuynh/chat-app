@@ -1,6 +1,6 @@
 import { Row, Col, Alert } from 'antd'
 import React, { useContext } from 'react'
-import { AppContext } from '../../../Context/AppProvider'
+import { AppContext } from '../../../context/AppProvider'
 import ChatFrame from './ChatFrame/ChatFrame'
 import GroupInfo from './GroupInfo/GroupInfo'
 

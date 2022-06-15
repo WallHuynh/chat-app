@@ -1,8 +1,18 @@
-import React, { useContext } from 'react'
-import { Col, Row, Avatar } from 'antd'
-import { AppContext } from '../../../Context/AppProvider'
+import React, { useContext, useEffect, useState } from 'react'
+import { Col, Row, Avatar, Button, Dropdown, Menu, Modal } from 'antd'
+import { AppContext } from '../../../context/AppProvider'
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict'
-import { AuthContext } from '../../../Context/AuthProvider'
+import { AuthContext } from '../../../context/AuthProvider'
+import { ExclamationCircleTwoTone, MoreOutlined } from '@ant-design/icons'
+import styled from 'styled-components'
+import { updateDocument } from '../../../firebase/services'
+import { arrayRemove } from 'firebase/firestore'
+
+const ModalStyled = styled(Modal)`
+  .ant-modal-body {
+    display: none;
+  }
+`
 
 const formatNSecondsToSevaralSeconds = timeLineSeconds => {
   let formatTime = formatDistanceToNowStrict(new Date(timeLineSeconds * 1000))
@@ -13,46 +23,144 @@ const formatNSecondsToSevaralSeconds = timeLineSeconds => {
 }
 
 export default function RoomList() {
-  const { rooms, setSelectedRoomId, selectedRoom } = useContext(AppContext)
+  const { rooms, setSelectedRoomId, selectedRoom, userInfo } =
+    useContext(AppContext)
   const {
     user: { uid },
   } = useContext(AuthContext)
+  const [modalConfirmVisivle, setModalConfirmVisivle] = useState(false)
+  const [roomsData, setRoomData] = useState([])
+  console.log(userInfo)
+
+  useEffect(() => {
+    const sortRoomsByTimeStamp = () => {
+      const sorted = [...rooms].sort(
+        (a, b) => b['newestMess'].createdAt - a['newestMess'].createdAt
+      )
+      setRoomData(sorted)
+    }
+    sortRoomsByTimeStamp()
+  }, [rooms])
+
+  const handlePin = groupId => {
+    console.log(groupId)
+  }
+
+  const handleLeaveGroup = groupId => {
+    modalConfirmCancel()
+    setSelectedRoomId('')
+    updateDocument('rooms', groupId, {
+      members: arrayRemove(uid),
+    })
+  }
+  const modalConfirmCancel = () => {
+    setModalConfirmVisivle(false)
+  }
+  const openModalConfirm = () => {
+    setModalConfirmVisivle(true)
+  }
+
   return (
     <div className='room-list noselect'>
-      {rooms.map(room => (
-        <div
-          className='room'
-          style={
-            room.id === selectedRoom.id
-              ? { backgroundColor: '#4682B4', color: 'white' }
-              : null
-          }
+      {roomsData.map(room => (
+        <Dropdown
           key={room.id}
-          roomMembers={room.members}
-          onClick={() => setSelectedRoomId(room.id)}>
-          <Row>
-            <Col span={6}>
-              <div className='avatar-group'>
-                {room.standByPhoto.lastThreeMembers.length === 2 ? (
-                  <>
-                    {room.standByPhoto.lastThreeMembers
-                      .filter(member => member.uid !== uid)
-                      .map(member => (
-                        <Avatar
-                          key={member.uid}
-                          size='large'
-                          src={member.photoURL}>
-                          {member?.photoURL
-                            ? ''
-                            : member?.displayName?.charAt(0)?.toUpperCase()}
-                        </Avatar>
-                      ))}
-                  </>
-                ) : room.standByPhoto.lastThreeMembers.length === 3 ? (
-                  <>
+          overlay={
+            <Menu
+              items={[
+                {
+                  label: (
+                    <Button
+                      onClick={() => handlePin(room.id)}
+                      className='btn-dropdown-list'
+                      type='text'>
+                      Pin this conversation
+                    </Button>
+                  ),
+                  key: '0',
+                },
+
+                {
+                  label: (
+                    <Button
+                      onClick={openModalConfirm}
+                      className='btn-dropdown-list'
+                      type='text'>
+                      Leave this group
+                    </Button>
+                  ),
+                  key: '1',
+                },
+              ]}
+            />
+          }
+          trigger={['contextMenu']}>
+          <div
+            className='room'
+            style={
+              room.id === selectedRoom.id
+                ? { backgroundColor: '#4682B4', color: 'white' }
+                : null
+            }
+            onClick={() => setSelectedRoomId(room.id)}>
+            <Row>
+              <Col span={6}>
+                <div className='avatar-group'>
+                  {room.standByPhoto.lastThreeMembers.length === 2 ? (
+                    <>
+                      {room.standByPhoto.lastThreeMembers
+                        .filter(member => member.uid !== uid)
+                        .map(member => (
+                          <Avatar
+                            key={member.uid}
+                            size='large'
+                            src={member.photoURL}>
+                            {member?.photoURL
+                              ? ''
+                              : member?.displayName?.charAt(0)?.toUpperCase()}
+                          </Avatar>
+                        ))}
+                    </>
+                  ) : room.standByPhoto.lastThreeMembers.length === 3 ? (
+                    <>
+                      <Avatar
+                        className='first-avt'
+                        size='medium'
+                        src={room.standByPhoto.lastThreeMembers[0].photoURL}>
+                        {room.standByPhoto.lastThreeMembers[0]?.photoURL
+                          ? ''
+                          : room.standByPhoto.lastThreeMembers[0]?.displayName
+                              ?.charAt(0)
+                              ?.toUpperCase()}
+                      </Avatar>
+                      <Avatar
+                        className='second-avt'
+                        size='medium'
+                        src={room.standByPhoto.lastThreeMembers[1].photoURL}>
+                        {room.standByPhoto.lastThreeMembers[1]?.photoURL
+                          ? ''
+                          : room.standByPhoto.lastThreeMembers[1]?.displayName
+                              ?.charAt(0)
+                              ?.toUpperCase()}
+                      </Avatar>
+                      <Avatar
+                        className={
+                          room?.standByPhoto?.groupLengthRest
+                            ? 'third-avt'
+                            : 'third-avt-alone'
+                        }
+                        size='medium'
+                        src={room.standByPhoto.lastThreeMembers[2].photoURL}>
+                        {room.standByPhoto.lastThreeMembers[2]?.photoURL
+                          ? ''
+                          : room.standByPhoto.lastThreeMembers[2]?.displayName
+                              ?.charAt(0)
+                              ?.toUpperCase()}
+                      </Avatar>
+                    </>
+                  ) : (
                     <Avatar
-                      className='first-avt'
-                      size='medium'
+                      size='large'
                       src={room.standByPhoto.lastThreeMembers[0].photoURL}>
                       {room.standByPhoto.lastThreeMembers[0]?.photoURL
                         ? ''
@@ -60,74 +168,106 @@ export default function RoomList() {
                             ?.charAt(0)
                             ?.toUpperCase()}
                     </Avatar>
+                  )}
+
+                  {room?.standByPhoto?.groupLengthRest && (
                     <Avatar
-                      className='second-avt'
-                      size='medium'
-                      src={room.standByPhoto.lastThreeMembers[1].photoURL}>
-                      {room.standByPhoto.lastThreeMembers[1]?.photoURL
-                        ? ''
-                        : room.standByPhoto.lastThreeMembers[1]?.displayName
-                            ?.charAt(0)
-                            ?.toUpperCase()}
-                    </Avatar>
-                    <Avatar
-                      className={
-                        room?.standByPhoto?.groupLengthRest
-                          ? 'third-avt'
-                          : 'third-avt-alone'
-                      }
-                      size='medium'
-                      src={room.standByPhoto.lastThreeMembers[2].photoURL}>
-                      {room.standByPhoto.lastThreeMembers[2]?.photoURL
-                        ? ''
-                        : room.standByPhoto.lastThreeMembers[2]?.displayName
-                            ?.charAt(0)
-                            ?.toUpperCase()}
-                    </Avatar>
+                      className='rest-avt'
+                      size='medium'>{`+${room.standByPhoto.groupLengthRest}`}</Avatar>
+                  )}
+                </div>
+              </Col>
+
+              <Col span={14}>
+                <div className='titles'>
+                  <p className='name'>{room.name}</p>
+                  {room.newestMess.text && (
+                    <p className='text'>
+                      {room.newestMess.displayName}: {room.newestMess.text}
+                    </p>
+                  )}
+                </div>
+              </Col>
+              <Col span={4}>
+                <div className='time-stamp'>
+                  {room.newestMess.createdAt && (
+                    <p>
+                      {formatNSecondsToSevaralSeconds(
+                        room.newestMess.createdAt.seconds
+                      )}
+                    </p>
+                  )}
+                  <Dropdown
+                    className='dropdown-list'
+                    overlay={
+                      <Menu
+                        onContextMenu={e => e.stopPropagation()}
+                        items={[
+                          {
+                            label: (
+                              <Button
+                                onClick={e => {
+                                  e.stopPropagation()
+                                  handlePin(room.id)
+                                }}
+                                className='btn-dropdown-list'
+                                type='text'>
+                                Pin this conversation
+                              </Button>
+                            ),
+                            key: '0',
+                          },
+
+                          {
+                            label: (
+                              <Button
+                                onClick={e => {
+                                  e.stopPropagation()
+                                  openModalConfirm()
+                                }}
+                                className='btn-dropdown-list'
+                                type='text'>
+                                Leave this group
+                              </Button>
+                            ),
+                            key: '1',
+                          },
+                        ]}
+                      />
+                    }
+                    trigger={['click']}>
+                    <Button
+                      onClick={e => e.stopPropagation()}
+                      className='btn-more-option'
+                      type='text'
+                      icon={<MoreOutlined />}></Button>
+                  </Dropdown>
+                </div>
+              </Col>
+            </Row>
+            <div onContextMenu={e => e.stopPropagation()}>
+              <ModalStyled
+                centered
+                visible={modalConfirmVisivle}
+                placement='bottom'
+                title={
+                  <>
+                    <ExclamationCircleTwoTone twoToneColor='#ff5500' />
+                    {`Are you sure to leave ${selectedRoom.name}?`}
                   </>
-                ) : (
-                  <Avatar
-                    size='large'
-                    src={room.standByPhoto.lastThreeMembers[0].photoURL}>
-                    {room.standByPhoto.lastThreeMembers[0]?.photoURL
-                      ? ''
-                      : room.standByPhoto.lastThreeMembers[0]?.displayName
-                          ?.charAt(0)
-                          ?.toUpperCase()}
-                  </Avatar>
-                )}
-
-                {room?.standByPhoto?.groupLengthRest && (
-                  <Avatar
-                    className='rest-avt'
-                    size='medium'>{`+${room.standByPhoto.groupLengthRest}`}</Avatar>
-                )}
-              </div>
-            </Col>
-
-            <Col span={14}>
-              <div className='titles'>
-                <p className='name'>{room.name}</p>
-                {room.newestMess.text && (
-                  <p className='text'>
-                    {room.newestMess.displayName}: {room.newestMess.text}
-                  </p>
-                )}
-              </div>
-            </Col>
-            <Col span={4}>
-              <div className='time-stamp'>
-                {room.newestMess.createAt && (
-                  <p>
-                    {formatNSecondsToSevaralSeconds(
-                      room.newestMess.createAt.seconds
-                    )}
-                  </p>
-                )}
-              </div>
-            </Col>
-          </Row>
-        </div>
+                }
+                width={400}
+                okText='Yes'
+                cancelText='No'
+                onOk={e => {
+                  e.stopPropagation()
+                  handleLeaveGroup(room.id)
+                }}
+                onCancel={modalConfirmCancel}
+                closable={false}></ModalStyled>
+            </div>
+          </div>
+        </Dropdown>
       ))}
     </div>
   )

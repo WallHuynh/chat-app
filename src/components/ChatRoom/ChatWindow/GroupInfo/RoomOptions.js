@@ -2,10 +2,10 @@ import { ExclamationCircleTwoTone, SplitCellsOutlined } from '@ant-design/icons'
 import React, { useContext, useState } from 'react'
 import { Button, Modal } from 'antd'
 import styled from 'styled-components'
-import { AppContext } from '../../../../Context/AppProvider'
+import { AppContext } from '../../../../context/AppProvider'
 import { updateDocument } from '../../../../firebase/services'
 import { arrayRemove } from 'firebase/firestore'
-import { AuthContext } from '../../../../Context/AuthProvider'
+import { AuthContext } from '../../../../context/AuthProvider'
 
 const ModalStyled = styled(Modal)`
   .ant-modal-body {
@@ -13,13 +13,10 @@ const ModalStyled = styled(Modal)`
   }
 `
 
-export default function RoomSettings() {
+export default function RoomOptions() {
   const [modalConfirmVisivle, setModalConfirmVisible] = useState(false)
   const {
-    members,
     selectedRoom,
-    setUserInfoVisible,
-    setSelectedUser,
     setSelectedRoomId,
   } = useContext(AppContext)
 
@@ -42,11 +39,12 @@ export default function RoomSettings() {
   }
   return (
     <>
-      <div className='leave-btn' onClick={openModalConfirm}>
+      <div className='btn' onClick={openModalConfirm}>
         <Button type='text' icon={<SplitCellsOutlined />}>
-          Leave this room
+          Leave this group
         </Button>
       </div>
+
       <ModalStyled
         centered
         visible={modalConfirmVisivle}
@@ -57,7 +55,7 @@ export default function RoomSettings() {
             {`Are you sure to leave ${selectedRoom.name}?`}
           </>
         }
-        width={300}
+        width={400}
         okText='Yes'
         cancelText='No'
         onOk={handleLeaveRoom}

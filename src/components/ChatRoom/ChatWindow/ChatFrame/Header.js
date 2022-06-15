@@ -1,7 +1,7 @@
 import { PlusCircleOutlined } from '@ant-design/icons'
 import React, { useContext } from 'react'
 import { Button, Tooltip, Avatar } from 'antd'
-import { AppContext } from '../../../../Context/AppProvider'
+import { AppContext } from '../../../../context/AppProvider'
 
 export default function Header() {
   const {

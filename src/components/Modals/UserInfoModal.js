@@ -1,7 +1,7 @@
 import React, { useContext, memo, useState, useEffect } from 'react'
 import { Modal, Image, Avatar, Form, Input, Button } from 'antd'
-import { AppContext } from '../../Context/AppProvider'
-import { AuthContext } from '../../Context/AuthProvider'
+import { AppContext } from '../../context/AppProvider'
+import { AuthContext } from '../../context/AuthProvider'
 import styled from 'styled-components'
 import {
   UserDeleteOutlined,

@@ -1,6 +1,6 @@
 import { Avatar } from 'antd'
 import React, { useContext } from 'react'
-import { AppContext } from '../../../../Context/AppProvider'
+import { AppContext } from '../../../../context/AppProvider'
 
 export default function RoomMembers() {
   const { members, selectedRoom, setUserInfoVisible, setSelectedUser } =

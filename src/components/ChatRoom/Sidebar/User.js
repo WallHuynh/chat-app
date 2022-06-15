@@ -1,7 +1,7 @@
 import { Avatar, Badge, Button, Dropdown, Menu, Tooltip } from 'antd'
 import React, { useContext } from 'react'
-import { AppContext } from '../../../Context/AppProvider'
-import { AuthContext } from '../../../Context/AuthProvider'
+import { AppContext } from '../../../context/AppProvider'
+import { AuthContext } from '../../../context/AuthProvider'
 import {
   BellOutlined,
   LogoutOutlined,
@@ -61,7 +61,10 @@ export default function User() {
       items={[
         {
           label: (
-            <Button icon={<UserOutlined />} type='text'>
+            <Button
+              className='btn-dropdown-list'
+              icon={<UserOutlined />}
+              type='text'>
               User
             </Button>
           ),
@@ -70,7 +73,10 @@ export default function User() {
         {
           label: (
             <Badge size='default' dot={true} color='cyan' count={status.length}>
-              <Button icon={<BellOutlined />} type='text'>
+              <Button
+                className='btn-dropdown-list'
+                icon={<BellOutlined />}
+                type='text'>
                 Status
               </Button>
             </Badge>
@@ -82,7 +88,10 @@ export default function User() {
         },
         {
           label: (
-            <Button icon={<LogoutOutlined />} type='text'>
+            <Button
+              className='btn-dropdown-list'
+              icon={<LogoutOutlined />}
+              type='text'>
               Log Out
             </Button>
           ),
@@ -94,7 +103,7 @@ export default function User() {
   return (
     <div className='user-bar noselect'>
       <div className='avt-name'>
-        <Dropdown className='dropdown-list' overlay={menu} trigger={['click']}>
+        <Dropdown className='dropdown-list' overlay={menu} trigger={['hover']}>
           <Badge size='small' color='cyan' count={status.length}>
             <Avatar className='avatar' src={photoURL} size='large'>
               {photoURL ? '' : displayName?.charAt(0)?.toUpperCase()}

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Form, Modal, Input, Button, Alert } from 'antd'
-import { AppContext } from '../../Context/AppProvider'
+import { AppContext } from '../../context/AppProvider'
 import styled from 'styled-components'
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
@@ -26,6 +26,9 @@ export default function Register() {
     errorMessage: null,
   }
   const [err, setErr] = useState(errInitState)
+  const [email, setEmail] = useState('')
+
+  useEffect(() => {setEmail(emailRegister)}, [emailRegister])
 
   const [form] = Form.useForm()
 

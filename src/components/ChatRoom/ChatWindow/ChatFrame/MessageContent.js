@@ -2,9 +2,9 @@ import { SendOutlined } from '@ant-design/icons'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Button, Form, Input, Typography } from 'antd'
 import Message from './Message'
-import { AppContext } from '../../../../Context/AppProvider'
+import { AppContext } from '../../../../context/AppProvider'
 import { addDocument, updateDocument } from '../../../../firebase/services'
-import { AuthContext } from '../../../../Context/AuthProvider'
+import { AuthContext } from '../../../../context/AuthProvider'
 import useFirestore from '../../../../hooks/useFirestore'
 import { serverTimestamp } from 'firebase/firestore'
 
@@ -136,7 +136,7 @@ export default function MessageContent() {
       displayName,
     })
     updateDocument('rooms', selectedRoom.id, {
-      'newestMess.createAt': serverTimestamp(),
+      'newestMess.createdAt': serverTimestamp(),
       'newestMess.displayName': displayName,
       'newestMess.text': inputValue,
     })

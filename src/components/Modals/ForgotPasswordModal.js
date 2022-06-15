@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Form, Modal, Input, notification } from 'antd'
-import { AppContext } from '../../Context/AppProvider'
+import { AppContext } from '../../context/AppProvider'
 import styledComponents from 'styled-components'
 import { db } from '../../firebase/config'
 import { collection, getDocs, query, where } from 'firebase/firestore'

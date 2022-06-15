@@ -1,11 +1,11 @@
 import React, { useContext } from 'react'
-import { AppContext } from '../../../../Context/AppProvider'
-import { AuthContext } from '../../../../Context/AuthProvider'
+import { AppContext } from '../../../../context/AppProvider'
+import { AuthContext } from '../../../../context/AuthProvider'
 import Info from './Info'
 import RoomMembers from './RoomMembers'
 import { Collapse } from 'antd'
 import { CaretRightOutlined } from '@ant-design/icons'
-import RoomSettings from './RoomSettings'
+import RoomOptions from './RoomOptions'
 import './GroupInfo.scss'
 
 export default function GroupInfo() {
@@ -42,7 +42,7 @@ export default function GroupInfo() {
             header='Settings'
             key='2'
             className='site-collapse-custom-panel'>
-            <RoomSettings />
+            <RoomOptions />
           </Panel>
         </Collapse>
       </div>

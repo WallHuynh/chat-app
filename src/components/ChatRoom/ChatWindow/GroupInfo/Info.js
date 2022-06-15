@@ -1,7 +1,7 @@
 import { Avatar } from 'antd'
 import React, { useContext } from 'react'
-import { AppContext } from '../../../../Context/AppProvider'
-import { AuthContext } from '../../../../Context/AuthProvider'
+import { AppContext } from '../../../../context/AppProvider'
+import { AuthContext } from '../../../../context/AuthProvider'
 
 export default function Info() {
   const { selectedRoom } = useContext(AppContext)

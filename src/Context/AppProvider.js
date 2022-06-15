@@ -52,13 +52,25 @@ export default function AppProvider({ children }) {
     [rooms, selectedRoomId]
   )
   const usersCondition = useMemo(() => {
-    return {
-      fieldName: 'uid',
-      operator: 'in',
-      compareValue: selectedRoom.members,
+    if (selectedRoom?.members) {
+      return {
+        fieldName: 'uid',
+        operator: 'in',
+        compareValue: selectedRoom.members,
+      }
+    } else {
+      return {
+        fieldName: 'uid',
+        operator: '==',
+        compareValue: uid,
+      }
     }
-  }, [selectedRoom.members])
+  }, [selectedRoom.members, uid])
   const members = useFirestore('users', usersCondition)
+  const userInfo = useMemo(
+    () => members.find(member => member.uid === uid) || {},
+    [members, uid]
+  )
   console.log('members', members)
 
   const clearState = () => {
@@ -78,6 +90,7 @@ export default function AppProvider({ children }) {
   return (
     <AppContext.Provider
       value={{
+        userInfo,
         isForgotPassVisible,
         setIsForgotPassVisible,
         emailRegister,

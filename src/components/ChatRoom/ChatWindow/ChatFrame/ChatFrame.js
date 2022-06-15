@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { Alert } from 'antd'
-import { AppContext } from '../../../../Context/AppProvider'
+import { AppContext } from '../../../../context/AppProvider'
 import Header from './Header'
 import MessageContent from './MessageContent'
 import './ChatFrame.scss'

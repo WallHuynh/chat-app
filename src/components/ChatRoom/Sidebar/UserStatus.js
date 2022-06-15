@@ -1,10 +1,10 @@
 import { CheckOutlined, DeleteOutlined, LeftOutlined } from '@ant-design/icons'
 import { Avatar, Button, Col, Row, Tooltip } from 'antd'
-import React, { useContext } from 'react'
-import { AppContext } from '../../../Context/AppProvider'
+import React, { useContext, useEffect, useState } from 'react'
+import { AppContext } from '../../../context/AppProvider'
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict'
 import { deleteDocument, updateDocument } from '../../../firebase/services'
-import { AuthContext } from '../../../Context/AuthProvider'
+import { AuthContext } from '../../../context/AuthProvider'
 import { arrayRemove, arrayUnion } from 'firebase/firestore'
 
 const formatNSecondsToSevaralSeconds = timeLineSeconds => {
@@ -20,6 +20,16 @@ export default function UserStatus() {
   const {
     user: { uid },
   } = useContext(AuthContext)
+
+  const [statusData, setStatusData] = useState([])
+
+  useEffect(() => {
+    const sortStatusDataByTimestamp = () => {
+      const sorted = [...status].sort((a, b) => b['createdAt'] - a['createdAt'])
+      setStatusData(sorted)
+    }
+    sortStatusDataByTimestamp()
+  }, [status])
 
   const handleCancelStatus = () => {
     setShowUserStatus(false)
@@ -59,6 +69,7 @@ export default function UserStatus() {
       requestedTo: arrayRemove(uid),
     })
   }
+
   return (
     <div className='status-graper noselect'>
       <div className='header'>
@@ -70,7 +81,7 @@ export default function UserStatus() {
         <p className='title'>Status</p>
       </div>
       <div className='status-list'>
-        {status.map(eachStatus => (
+        {statusData.map(eachStatus => (
           <div className='status' key={eachStatus.requestUser.uid}>
             <Row>
               <Col span={6}>
