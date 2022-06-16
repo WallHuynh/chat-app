@@ -111,9 +111,10 @@ export default memo(function UserInfoModal() {
     setSelectedUser,
     setUserAccountVisible,
     members,
+    userInfo,
   } = useContext(AppContext)
   const {
-    user: { uid, displayName, photoURL, userInfo },
+    user: { uid, displayName, photoURL },
   } = useContext(AuthContext)
 
   const [userInfoRef, setUserInfoRef] = useState(userInfo)
@@ -179,8 +180,6 @@ export default memo(function UserInfoModal() {
     handleCancel()
     setUserAccountVisible(true)
   }
-
-  // const isFriend = selectedUser?.friends?.some(id => id === uid)
 
   return (
     <div>

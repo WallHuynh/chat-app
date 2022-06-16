@@ -173,14 +173,15 @@ export default function UserAccountModal() {
   const {
     user: { email, displayName, photoURL, uid },
   } = useContext(AuthContext)
-  const { userAccountVisible, setUserAccountVisible } = useContext(AppContext)
-  const initialPhoto = useMemo(
-    () => ({ photoURL: photoURL, file: null }),
-    [photoURL]
-  )
+  const { userAccountVisible, setUserAccountVisible, userInfo } =
+    useContext(AppContext)
   const [form] = Form.useForm()
   const [isFieldChange, setIsFieldChange] = useState(false)
   const [popConfirmVisivle, setPopConfirmVisible] = useState(false)
+  const initialPhoto = useMemo(
+    () => ({ photoURL: userInfo.photoURL, file: null }),
+    [userInfo.photoURL]
+  )
   const [photo, setPhoto] = useState(initialPhoto)
 
   useEffect(() => {
@@ -222,7 +223,7 @@ export default function UserAccountModal() {
     if (form?.getFieldsValue()?.name) {
       const name = form?.getFieldsValue()?.name
       console.log(name)
-      if (name.trim() !== displayName) {
+      if (name.trim() !== userInfo.displayName) {
         const newName = name.trim()
         updateDocument('users', uid, {
           displayName: newName,
@@ -300,9 +301,9 @@ export default function UserAccountModal() {
       })
       .then(function (result) {
         console.log(result)
-        return new Promise((resolve, reject) => {
-          setTimeout(() => resolve(reloadPage()), 4000)
-        })
+        // return new Promise((resolve, reject) => {
+        //   setTimeout(() => resolve(reloadPage()), 4000)
+        // })
       })
   }
 
@@ -381,18 +382,14 @@ export default function UserAccountModal() {
 
         <div className='info'>
           <Form form={form} layout='vertical'>
-            <Form.Item label='Name' name='name' initialValue={displayName}>
-              <Input
-                maxLength={40}
-                // value={displayName}
-                onChange={() => setIsFieldChange(true)}
-              />
+            <Form.Item
+              label='Name'
+              name='name'
+              initialValue={userInfo.displayName}>
+              <Input maxLength={40} onChange={() => setIsFieldChange(true)} />
             </Form.Item>
-            <Form.Item label='Email' name='email' initialValue={email}>
-              <Input
-                //  value={email}
-                disabled
-              />
+            <Form.Item label='Email' name='email' initialValue={userInfo.email}>
+              <Input disabled />
             </Form.Item>
           </Form>
         </div>

@@ -15,10 +15,7 @@ const ModalStyled = styled(Modal)`
 
 export default function RoomOptions() {
   const [modalConfirmVisivle, setModalConfirmVisible] = useState(false)
-  const {
-    selectedRoom,
-    setSelectedRoomId,
-  } = useContext(AppContext)
+  const { selectedRoom, setSelectedRoomId, userInfo } = useContext(AppContext)
 
   const {
     user: { uid },
@@ -29,6 +26,9 @@ export default function RoomOptions() {
     setSelectedRoomId('')
     updateDocument('rooms', selectedRoom.id, {
       members: arrayRemove(uid),
+    })
+    updateDocument('users', userInfo.uid, {
+      pinnedRoomsId: arrayRemove(selectedRoom.id),
     })
   }
   const openModalConfirm = () => {

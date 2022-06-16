@@ -3,10 +3,14 @@ import { Col, Row, Avatar, Button, Dropdown, Menu, Modal } from 'antd'
 import { AppContext } from '../../../context/AppProvider'
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict'
 import { AuthContext } from '../../../context/AuthProvider'
-import { ExclamationCircleTwoTone, MoreOutlined } from '@ant-design/icons'
+import {
+  ExclamationCircleTwoTone,
+  MoreOutlined,
+  PushpinOutlined,
+} from '@ant-design/icons'
 import styled from 'styled-components'
 import { updateDocument } from '../../../firebase/services'
-import { arrayRemove } from 'firebase/firestore'
+import { arrayRemove, arrayUnion } from 'firebase/firestore'
 
 const ModalStyled = styled(Modal)`
   .ant-modal-body {
@@ -33,24 +37,40 @@ export default function RoomList() {
   console.log(userInfo)
 
   useEffect(() => {
-    const sortRoomsByTimeStamp = () => {
-      const sorted = [...rooms].sort(
-        (a, b) => b['newestMess'].createdAt - a['newestMess'].createdAt
-      )
-      setRoomData(sorted)
-    }
-    sortRoomsByTimeStamp()
-  }, [rooms])
+    const sortPinRoomsByTimeStamp = () => {
+      const pinnedRoomsId = userInfo.pinnedRoomsId
+      const sortedNormalRooms = [...rooms]
+        .filter(room => !pinnedRoomsId?.includes(room.id))
+        .sort((a, b) => b['newestMess'].createdAt - a['newestMess'].createdAt)
 
-  const handlePin = groupId => {
-    console.log(groupId)
+      const pinnedRooms = [...rooms].filter(room =>
+        pinnedRoomsId?.includes(room.id)
+      )
+      setRoomData(pinnedRooms.concat(sortedNormalRooms))
+    }
+
+    sortPinRoomsByTimeStamp()
+  }, [rooms, userInfo])
+
+  const handlePin = roomId => {
+    updateDocument('users', userInfo.uid, {
+      pinnedRoomsId: arrayUnion(roomId),
+    })
+  }
+  const handleUnpin = roomId => {
+    updateDocument('users', userInfo.uid, {
+      pinnedRoomsId: arrayRemove(roomId),
+    })
   }
 
-  const handleLeaveGroup = groupId => {
+  const handleLeaveGroup = roomId => {
     modalConfirmCancel()
     setSelectedRoomId('')
-    updateDocument('rooms', groupId, {
+    updateDocument('rooms', roomId, {
       members: arrayRemove(uid),
+    })
+    updateDocument('users', userInfo.uid, {
+      pinnedRoomsId: arrayRemove(roomId),
     })
   }
   const modalConfirmCancel = () => {
@@ -197,51 +217,111 @@ export default function RoomList() {
                       )}
                     </p>
                   )}
-                  <Dropdown
-                    className='dropdown-list'
-                    overlay={
-                      <Menu
-                        onContextMenu={e => e.stopPropagation()}
-                        items={[
-                          {
-                            label: (
-                              <Button
-                                onClick={e => {
-                                  e.stopPropagation()
-                                  handlePin(room.id)
-                                }}
-                                className='btn-dropdown-list'
-                                type='text'>
-                                Pin this conversation
-                              </Button>
-                            ),
-                            key: '0',
-                          },
 
-                          {
-                            label: (
-                              <Button
-                                onClick={e => {
-                                  e.stopPropagation()
-                                  openModalConfirm()
-                                }}
-                                className='btn-dropdown-list'
-                                type='text'>
-                                Leave this group
-                              </Button>
-                            ),
-                            key: '1',
-                          },
-                        ]}
+                  {userInfo?.pinnedRoomsId?.includes(room.id) ? (
+                    <>
+                      <Button
+                        onClick={e => e.stopPropagation()}
+                        className='btn-pinned'
+                        type='text'
+                        icon={<PushpinOutlined />}
                       />
-                    }
-                    trigger={['click']}>
-                    <Button
-                      onClick={e => e.stopPropagation()}
-                      className='btn-more-option'
-                      type='text'
-                      icon={<MoreOutlined />}></Button>
-                  </Dropdown>
+
+                      <Dropdown
+                        className='dropdown-list'
+                        overlay={
+                          <Menu
+                            onContextMenu={e => e.stopPropagation()}
+                            items={[
+                              {
+                                label: (
+                                  <Button
+                                    onClick={e => {
+                                      e.stopPropagation()
+                                      handleUnpin(room.id)
+                                    }}
+                                    className='btn-dropdown-list'
+                                    type='text'>
+                                    UnPin this conversation
+                                  </Button>
+                                ),
+                                key: '0',
+                              },
+
+                              {
+                                label: (
+                                  <Button
+                                    onClick={e => {
+                                      e.stopPropagation()
+                                      openModalConfirm()
+                                    }}
+                                    className='btn-dropdown-list'
+                                    type='text'>
+                                    Leave this group
+                                  </Button>
+                                ),
+                                key: '1',
+                              },
+                            ]}
+                          />
+                        }
+                        trigger={['hover']}>
+                        <Button
+                          onClick={e => e.stopPropagation()}
+                          className='btn-more-option'
+                          type='text'
+                          icon={<MoreOutlined />}
+                        />
+                      </Dropdown>
+                    </>
+                  ) : (
+                    <Dropdown
+                      className='dropdown-list'
+                      overlay={
+                        <Menu
+                          onContextMenu={e => e.stopPropagation()}
+                          items={[
+                            {
+                              label: (
+                                <Button
+                                  onClick={e => {
+                                    e.stopPropagation()
+                                    handlePin(room.id)
+                                  }}
+                                  className='btn-dropdown-list'
+                                  type='text'>
+                                  Pin this conversation
+                                </Button>
+                              ),
+                              key: '0',
+                            },
+
+                            {
+                              label: (
+                                <Button
+                                  onClick={e => {
+                                    e.stopPropagation()
+                                    openModalConfirm()
+                                  }}
+                                  className='btn-dropdown-list'
+                                  type='text'>
+                                  Leave this group
+                                </Button>
+                              ),
+                              key: '1',
+                            },
+                          ]}
+                        />
+                      }
+                      trigger={['hover']}>
+                      <Button
+                        onClick={e => e.stopPropagation()}
+                        className='btn-more-option'
+                        type='text'
+                        icon={<MoreOutlined />}
+                      />
+                    </Dropdown>
+                  )}
                 </div>
               </Col>
             </Row>

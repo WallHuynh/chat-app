@@ -19,6 +19,7 @@ export default function User() {
     setUserAccountVisible,
     setShowUserStatus,
     status,
+    userInfo,
   } = React.useContext(AppContext)
 
   const {
@@ -105,12 +106,14 @@ export default function User() {
       <div className='avt-name'>
         <Dropdown className='dropdown-list' overlay={menu} trigger={['hover']}>
           <Badge size='small' color='cyan' count={status.length}>
-            <Avatar className='avatar' src={photoURL} size='large'>
-              {photoURL ? '' : displayName?.charAt(0)?.toUpperCase()}
+            <Avatar className='avatar' src={userInfo.photoURL} size='large'>
+              {userInfo.photoURL
+                ? ''
+                : userInfo.displayName?.charAt(0)?.toUpperCase()}
             </Avatar>
           </Badge>
         </Dropdown>
-        <p className='username'>{displayName}</p>
+        <p className='username'>{userInfo.displayName}</p>
       </div>
       <div className='btns'>
         <Tooltip

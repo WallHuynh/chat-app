@@ -71,6 +71,9 @@
       cursor: pointer;
       &:hover {
         background-color: #dffadf;
+        .time-stamp > .btn-pinned {
+          display: none;
+        }
         .time-stamp > .btn-more-option {
           display: block;
         }

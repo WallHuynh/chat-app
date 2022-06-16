@@ -80,6 +80,7 @@ export const userRegister = async user => {
       uid: user.uid,
       friends: [],
       requestedTo: [],
+      pinnedRoomsId: [],
       providerId: user.providerData[0].providerId,
       keywords: generateKeywords(user.displayName?.toLowerCase()),
     })
