@@ -23,6 +23,9 @@ export default function AppProvider({ children }) {
   const [showUserStatus, setShowUserStatus] = useState(false)
   const [emailRegister, setEmailRegister] = useState({})
   const [isForgotPassVisible, setIsForgotPassVisible] = useState(false)
+  const [modalConfirmVisible, setModalConfirmVisible] = useState(false)
+  const [selectedRoomLeave, setSelectedRoomLeave] = useState({})
+  const [openGroupInfo, setOpenGroupInfo] = useState(false)
   const {
     user: { uid },
   } = useContext(AuthContext)
@@ -85,11 +88,20 @@ export default function AppProvider({ children }) {
     setShowUserStatus(false)
     setEmailRegister('')
     setIsForgotPassVisible(false)
+    setModalConfirmVisible(false)
+    setSelectedRoomLeave({})
+    setOpenGroupInfo(false)
   }
 
   return (
     <AppContext.Provider
       value={{
+        openGroupInfo,
+        setOpenGroupInfo,
+        modalConfirmVisible,
+        setModalConfirmVisible,
+        selectedRoomLeave,
+        setSelectedRoomLeave,
         userInfo,
         isForgotPassVisible,
         setIsForgotPassVisible,

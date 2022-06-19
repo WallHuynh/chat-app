@@ -1,9 +1,11 @@
+@use '/src/theme/variables';
+
 .sidebar {
   height: 100vh;
   border-right: 1px solid rgb(230, 230, 230);
   background-color: #f0fff0;
   color: rgb(40, 40, 40);
-
+  flex-shrink: 0;
   .user-bar {
     display: flex;
     height: 70px;
@@ -24,7 +26,7 @@
         }
       }
       .username {
-        font-size: 17px;
+        font-size: var(--step-0);
         font-weight: 500;
         max-width: 80%;
         margin: 0 5px 0 5px;
@@ -64,75 +66,87 @@
     }
 
     .room {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
       max-height: 75px;
       min-height: 75px;
       width: 100%;
-      padding: 7px 0 10px 0;
+      gap: 0;
       cursor: pointer;
       &:hover {
         background-color: #dffadf;
-        .time-stamp > .btn-pinned {
+        .time-stamp > .btns > .btn-pinned {
           display: none;
         }
-        .time-stamp > .btn-more-option {
+        .time-stamp > .btns > .btn-more-option {
           display: block;
         }
       }
-
-      .avatar-group {
-        margin-left: 15px;
-        width: 58px;
-        height: 58px;
-        position: relative;
-        .first-avt {
-          z-index: 1;
-        }
-        .second-avt {
-          z-index: 2;
-          position: absolute;
-          left: 30px;
-        }
-        .third-avt {
-          z-index: 3;
-          position: absolute;
-          top: 30px;
-          left: 0;
-        }
-        .third-avt-alone {
-          z-index: 3;
-          position: absolute;
-          top: 27px;
-          left: 15px;
-        }
-        .rest-avt {
-          z-index: 4;
-          position: absolute;
-          top: 30px;
-          left: 30px;
-        }
-        .ant-avatar-lg {
-          width: 55px;
-          height: 55px;
-          text-align: center;
-          .ant-avatar-string {
-            top: 10%;
-            font-size: 30px;
+      .avt-graper {
+        flex: 1 0;
+        margin: 0 0 0 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .avatar-group {
+          width: 58px;
+          height: 58px;
+          position: relative;
+          .first-avt {
+            z-index: 1;
+          }
+          .second-avt {
+            z-index: 2;
+            position: absolute;
+            left: 30px;
+          }
+          .third-avt {
+            z-index: 3;
+            position: absolute;
+            top: 30px;
+            left: 0;
+          }
+          .third-avt-alone {
+            z-index: 3;
+            position: absolute;
+            top: 27px;
+            left: 15px;
+          }
+          .rest-avt {
+            z-index: 4;
+            position: absolute;
+            top: 30px;
+            left: 30px;
+          }
+          .ant-avatar-lg {
+            width: 55px;
+            height: 55px;
+            text-align: center;
+            .ant-avatar-string {
+              top: 10%;
+              font-size: 30px;
+            }
           }
         }
       }
+
       .titles {
-        height: 100%;
-        margin: 0;
+        margin: 0 5px 0 0;
+        flex: 8 1 90%;
+        max-width: 63%;
         display: flex;
         flex-direction: column;
         justify-content: center;
         gap: 0px;
         .name {
-          font-size: 13pt;
-          font-weight: 500;
+          font-size: var(--step--1);
+          font-weight: 400;
         }
         .text {
-          font-size: 12px;
+          font-size: var(--step--2);
+          font-weight: 300;
         }
         .name,
         .text {
@@ -146,19 +160,22 @@
         }
       }
       .time-stamp {
-        height: 100%;
-        padding: 0;
-        margin: 0;
+        flex: 1 0 10%;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
-        width: 100%;
+        align-items: flex-end;
+        max-width: fit-content;
         height: 100%;
+        .btns {
+          display: flex;
+          gap: 0;
+        }
         p {
           font-family: 'Open Sans', sans-serif;
           font-size: 10px;
           margin: 5px 0;
+          white-space: nowrap;
         }
         .btn-more-option {
           display: none;
@@ -184,7 +201,6 @@
         text-align: center;
       }
       .btn-left {
-        align-selft: flex-start;
         &:hover {
           background-color: rgba(126, 166, 206, 0.2);
         }

@@ -11,6 +11,7 @@ import UserInfoModal from './components/Modals/UserInfoModal'
 import UserAccountModal from './components/Modals/UserAccountModal'
 import FindFriendModal from './components/Modals/FindFriendModal'
 import ForgotPasswordModal from './components/Modals/ForgotPasswordModal'
+import ModalConfirmLeaveRoom from './components/Modals/ModalConfirmLeaveRoom'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <UserAccountModal />
           <InviteMemberModal />
           <ForgotPasswordModal />
+          <ModalConfirmLeaveRoom />
         </AppProvider>
       </AuthProvider>
     </BrowserRouter>

@@ -5,13 +5,10 @@ body {
   font-family: Segoe UI;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: var(--step-0);
 }
 code {
   font-family: 'Times New Roman', Times, serif;
   /* source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace; */
 }
-
-/* -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif */

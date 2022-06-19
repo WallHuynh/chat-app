@@ -27,7 +27,7 @@ import {
   ref,
   uploadBytesResumable,
 } from 'firebase/storage'
-import { updateDocument } from '../../firebase/services'
+import { generateKeywords, updateDocument } from '../../firebase/services'
 
 const ModalStyled = styled(Modal)`
   .ant-avatar-lg {
@@ -227,6 +227,7 @@ export default function UserAccountModal() {
         const newName = name.trim()
         updateDocument('users', uid, {
           displayName: newName,
+          keywords: generateKeywords(newName),
         })
         updateProfile(auth.currentUser, {
           displayName: newName,
@@ -282,10 +283,6 @@ export default function UserAccountModal() {
     }
   }
 
-  const reloadPage = () => {
-    window.location.reload()
-  }
-
   const handleUpdateAccount = () => {
     setIsFieldChange(false)
     popConfirmCancel()
@@ -301,9 +298,6 @@ export default function UserAccountModal() {
       })
       .then(function (result) {
         console.log(result)
-        // return new Promise((resolve, reject) => {
-        //   setTimeout(() => resolve(reloadPage()), 4000)
-        // })
       })
   }
 

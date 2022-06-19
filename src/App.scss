@@ -15,7 +15,44 @@
 .ant-image-preview-img {
   width: 300px;
 }
+
 .btn-dropdown-list {
   width: 100%;
   text-align: left;
+}
+
+@media only screen and (max-width: 600px) {
+  .ant-row > .ant-col-6 {
+    flex: auto;
+    max-width: 100%;
+  }
+  .ant-row > .ant-col-18 {
+    flex: auto;
+    max-width: 100%;
+  }
+  .chat-window-responsive-close {
+    display: none;
+  }
+  .chat-window-responsive-open {
+    display: block;
+    .ant-col-18 {
+      flex: auto;
+      max-width: 100%;
+    }
+    .chat-frame-wraper > .header-graper > .btn-exit {
+      display: flex;
+    }
+  }
+  .room-list-responsive-open {
+    display: block;
+    .side-bar > .room-list > .room > .titles {
+      padding: 0;
+    }
+    .side-bar > .room-list > .room {
+      padding: 0;
+    }
+  }
+  .room-list-responsive-close {
+    display: none;
+  }
 }

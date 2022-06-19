@@ -2,55 +2,113 @@
   height: 100vh;
   border-right: 1px solid rgb(230, 230, 230);
   .header-graper {
-    display: flex;
-    justify-content: space-between;
-    height: 56px;
-    padding: 0 16px;
-    align-items: center;
-    border-bottom: 1px solid rgb(230, 230, 230);
     background-color: #4682b4;
+    display: flex;
+    height: 62px;
+    padding: 0 0 0 13px;
+    align-items: center;
+    justify-content: space-between;
     color: white;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
       rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
-    .avt-group {
-      flex-grow: 1;
-      cursor: pointer;
-      .avt {
-        cursor: pointer;
+    .btn-exit {
+      flex: 0;
+      display: none;
+      height: 56px;
+      align-items: center;
+      .btn-left {
+        margin: 0 16px 0 0;
+        &:hover {
+          background-color: rgba(126, 166, 206, 0.2);
+        }
+      }
+    }
+    .avatar-group {
+      width: 58px;
+      height: 58px;
+      position: relative;
+      .first-avt {
+        z-index: 1;
+      }
+      .second-avt {
+        z-index: 2;
+        position: absolute;
+        left: 30px;
+      }
+      .third-avt {
+        z-index: 3;
+        position: absolute;
+        top: 30px;
+        left: 0;
+      }
+      .third-avt-alone {
+        z-index: 3;
+        position: absolute;
+        top: 27px;
+        left: 15px;
+      }
+      .rest-avt {
+        z-index: 4;
+        position: absolute;
+        top: 30px;
+        left: 30px;
+      }
+      .ant-avatar-lg {
+        width: 55px;
+        height: 55px;
+        text-align: center;
         .ant-avatar-string {
-          font-size: 20px;
+          top: 10%;
+          font-size: 30px;
         }
       }
     }
     .info {
-      flex-grow: 3;
-      flex-basis: 70%;
-      text-overflow: ellipsis;
-      overflow-x: hidden;
-      white-space: nowrap;
-      padding: 10px 10px 15px 0;
+      margin: 0 0 0 5px;
+      flex: 7 1 70%;
+      max-width: 100%;
 
+      .title,
+      .description {
+        margin: 0;
+      }
       .title {
         margin: 0;
         font-weight: bold;
         font-size: 20px;
+        width: fit-content;
+        max-width: 100%;
+        text-overflow: ellipsis;
+        overflow-x: hidden;
+        white-space: nowrap;
       }
-
       .description {
         font-size: 12px;
       }
     }
-
-    .add-member-btn {
+    .add-member {
+      flex: 0.5 0 5%;
       display: flex;
+      justify-content: flex-end;
+      max-width: fit-content;
+      .add-member-btn {
+        color: white;
+      }
+    }
+    .btn-group-info {
+      margin: 0 5px 0 0;
+      display: flex;
+      justify-content: center;
       align-items: center;
-      flex-grow: 1;
+      .btn-open-group-info {
+        color: white;
+      }
     }
   }
 
   .messages-content {
     font-family: 'Montserrat', sans-serif;
-    height: calc(100% - 56px);
+    height: calc(100% - 62px);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;

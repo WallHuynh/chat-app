@@ -1,2 +1,13 @@
 $headerColor: #4682b4;
-$listColor: 
+$listColor: #9bcebf;
+
+:root {
+  --step--2: clamp(0.78rem, calc(0.74rem + 0.19vw), 0.88rem);
+  --step--1: clamp(0.94rem, calc(0.87rem + 0.32vw), 1.1rem);
+  --step-0: clamp(1.13rem, calc(1.03rem + 0.49vw), 1.38rem);
+  --step-1: clamp(1.35rem, calc(1.21rem + 0.72vw), 1.72rem);
+  --step-2: clamp(1.62rem, calc(1.41rem + 1.03vw), 2.15rem);
+  --step-3: clamp(1.94rem, calc(1.65rem + 1.45vw), 2.69rem);
+  --step-4: clamp(2.33rem, calc(1.93rem + 2vw), 3.36rem);
+  --step-5: clamp(2.8rem, calc(2.25rem + 2.73vw), 4.2rem);
+}
