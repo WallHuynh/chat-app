@@ -1,14 +1,10 @@
 @use '~antd/dist/antd';
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700&display=swap');
 
 body {
   margin: 0;
-  font-family: Segoe UI;
+  font-family: 'Raleway', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: var(--step-0);
-}
-code {
-  font-family: 'Times New Roman', Times, serif;
-  /* source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace; */
 }

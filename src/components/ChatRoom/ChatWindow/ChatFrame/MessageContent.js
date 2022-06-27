@@ -1,14 +1,14 @@
-import { SendOutlined } from '@ant-design/icons'
+import { SendOutlined, SmileFilled, SmileOutlined } from '@ant-design/icons'
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { Button, Form, Input, Typography } from 'antd'
+import { Button, Input } from 'antd'
 import Message from './Message'
 import { AppContext } from '../../../../context/AppProvider'
 import { addDocument, updateDocument } from '../../../../firebase/services'
 import { AuthContext } from '../../../../context/AuthProvider'
 import useFirestore from '../../../../hooks/useFirestore'
 import { serverTimestamp } from 'firebase/firestore'
-
-const { Text } = Typography
+import Picker from 'emoji-picker-react'
+import useMeasure from 'react-use-measure'
 
 export default function MessageContent() {
   const { selectedRoom, members } = useContext(AppContext)
@@ -16,13 +16,49 @@ export default function MessageContent() {
     user: { uid, photoURL, displayName },
   } = useContext(AuthContext)
   const [inputValue, setInputValue] = useState('')
-  const [form] = Form.useForm()
-
-  const inputRef = useRef(null)
   const [isTyping, setIsTyping] = useState(false)
   const [userQueue, setUserQueue] = useState(true)
+  const [emojiPickerVisible, setEmojiPickerVisible] = useState(false)
+  const [chosenEmoji, setChosenEmoji] = useState(null)
   const messageListRef = useRef(null)
   let inputTimeout
+  const emojiContainRef = useRef(null)
+  const inputRef = useRef(null)
+  const [inputHeight, setInputHeight] = useState(0)
+  const [ref, bounds] = useMeasure()
+
+  const handleClickOutside = e => {
+    if (!emojiContainRef?.current?.contains(e.target)) {
+      setEmojiPickerVisible(false)
+    }
+  }
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  })
+
+  useEffect(() => {
+    setInputHeight(bounds?.height)
+  }, [bounds])
+
+  const onEmojiClick = (event, emojiObject) => {
+    setChosenEmoji(emojiObject)
+  }
+
+  const handleInputChange = e => {
+    setInputValue(e.target.value)
+  }
+
+  useEffect(() => {
+    setInputValue(prevText =>
+      chosenEmoji?.emoji ? `${prevText} ${chosenEmoji?.emoji}` : prevText
+    )
+    if (inputRef?.current) {
+      setTimeout(() => {
+        inputRef.current.focus()
+      })
+    }
+  }, [chosenEmoji])
 
   const handleKey = () => {
     if (isTyping) {
@@ -104,10 +140,6 @@ export default function MessageContent() {
     selectedRoom.id,
   ])
 
-  const handleInputChange = e => {
-    setInputValue(e.target.value)
-  }
-
   const handleOnSubmit = () => {
     if (inputValue === '') {
       return
@@ -140,8 +172,6 @@ export default function MessageContent() {
       'newestMess.displayName': displayName,
       'newestMess.text': inputValue,
     })
-
-    form.resetFields(['message'])
     setInputValue('')
     setIsTyping(false)
 
@@ -151,6 +181,13 @@ export default function MessageContent() {
         inputRef.current.focus()
       })
     }
+  }
+
+  const handlePressEnter = e => {
+    if (e.keyCode == 13) {
+      e.preventDefault()
+    }
+    handleOnSubmit()
   }
 
   const condition = React.useMemo(
@@ -242,7 +279,12 @@ export default function MessageContent() {
 
   return (
     <div className='messages-content'>
-      <div className='messages-list' ref={messageListRef}>
+      <div
+        className='messages-list'
+        ref={messageListRef}
+        style={{
+          paddingBottom: `calc(3em + ${inputHeight}px - 44px)`,
+        }}>
         {messages.map(mes => (
           <Message
             key={mes.id}
@@ -254,47 +296,80 @@ export default function MessageContent() {
           />
         ))}
       </div>
-
-      <div className='typing'>
+      <div
+        className='typing'
+        style={{
+          bottom: `${inputHeight + 22}px`,
+        }}>
         {selectedRoom.typing.user1.isTyping &&
         selectedRoom.typing.user1.uid !== uid ? (
-          <Text className='typing-text'>
+          <p className='typing-text'>
             {`${selectedRoom.typing.user1.name} is tyiping...`}
-          </Text>
+          </p>
         ) : (
           ''
         )}
 
         {selectedRoom.typing.user2.isTyping &&
         selectedRoom.typing.user2.uid !== uid ? (
-          <Text className='typing-text'>
+          <p className='typing-text'>
             {`${selectedRoom.typing.user2.name} is tyiping...`}
-          </Text>
+          </p>
         ) : (
           ''
         )}
       </div>
 
-      <Form className='form-send-messages' form={form}>
-        <Form.Item name='message'>
-          <Input
+      {emojiPickerVisible ? (
+        <div
+          ref={emojiContainRef}
+          className='emojis-container'
+          style={{
+            bottom: `${inputHeight + 10}px`,
+          }}>
+          <Picker disableSearchBar={true} onEmojiClick={onEmojiClick} />
+        </div>
+      ) : null}
+
+      <div className='form-message'>
+        <div
+          className='input-container'
+          ref={ref}
+          style={{ minHeight: '2em', maxHeight: '5em' }}>
+          <Input.TextArea
+            className='input'
+            autoSize={true}
             ref={inputRef}
+            value={inputValue}
             onChange={handleInputChange}
-            onPressEnter={handleOnSubmit}
+            onPressEnter={handlePressEnter}
             onKeyDown={handleKey}
             placeholder='Type your message here...'
-            bordered={false}
-            autoComplete='off'
           />
-        </Form.Item>
-        <Button
-          type='primary'
-          onClick={handleOnSubmit}
-          disabled={!inputValue}
-          icon={<SendOutlined />}>
-          Send
-        </Button>
-      </Form>
+        </div>
+
+        <div className='btns'>
+          <Button
+            className='btn-open-emoji'
+            onClick={() => setEmojiPickerVisible(!emojiPickerVisible)}
+            type='text'
+            icon={
+              emojiPickerVisible ? <SmileFilled /> : <SmileOutlined />
+            }></Button>
+          <Button
+            className='btn-send'
+            type='text'
+            onClick={handleOnSubmit}
+            disabled={!inputValue}
+            icon={
+              inputValue ? (
+                <SendOutlined style={{ color: ' #0e497ce7' }} />
+              ) : (
+                <SendOutlined />
+              )
+            }></Button>
+        </div>
+      </div>
     </div>
   )
 }

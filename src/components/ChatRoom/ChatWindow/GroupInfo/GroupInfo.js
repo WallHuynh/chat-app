@@ -3,13 +3,13 @@ import { AppContext } from '../../../../context/AppProvider'
 import { AuthContext } from '../../../../context/AuthProvider'
 import Info from './Info'
 import RoomMembers from './RoomMembers'
-import { Collapse } from 'antd'
-import { CaretRightOutlined } from '@ant-design/icons'
+import { Button, Collapse } from 'antd'
+import { CaretRightOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import RoomOptions from './RoomOptions'
 import './GroupInfo.scss'
 
 export default function GroupInfo() {
-  const { selectedRoom, members, setIsInviteMemberVisible } =
+  const { selectedRoom, members, setIsInviteMemberVisible, setOpenGroupInfo } =
     useContext(AppContext)
 
   const {
@@ -19,6 +19,13 @@ export default function GroupInfo() {
   return (
     <div className='graper-group noselect'>
       <div className='header-group'>
+        <div className='btn-exit'>
+          <Button
+            onClick={() => setOpenGroupInfo(false)}
+            className='btn-left'
+            type='text'
+            icon={<MenuUnfoldOutlined />}></Button>
+        </div>
         <p className='title'>
           {selectedRoom.isAGroup ? 'Group Info' : 'Communication info'}
         </p>

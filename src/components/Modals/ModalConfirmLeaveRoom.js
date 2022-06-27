@@ -48,7 +48,7 @@ export default function ModalConfirmLeaveRoom() {
         onOk={handleLeaveRoom}
         onCancel={modalConfirmCancel}
         closable={false}>
-        {`Are you sure to leave ${selectedRoomLeave.name}`}
+        {`Are you sure to leave ${selectedRoomLeave.name}?`}
       </Modal>
     </div>
   )

@@ -24,25 +24,40 @@
 @media only screen and (max-width: 600px) {
   .ant-row > .ant-col-6 {
     flex: auto;
-    max-width: 100%;
+    min-width: 100vw;
   }
+
   .ant-row > .ant-col-18 {
     flex: auto;
-    max-width: 100%;
+    min-width: 100vw;
   }
+
+  .ant-row > .ant-col-18 > .ant-row > .ant-col-16 {
+    display: none;
+  }
+  .ant-row > .ant-col-18 > .ant-row > .ant-col-8 {
+    flex: auto;
+    min-width: 100vw;
+    .graper-group > .header-group > .btn-exit {
+      display: flex;
+    }
+  }
+
   .chat-window-responsive-close {
     display: none;
   }
+
   .chat-window-responsive-open {
     display: block;
     .ant-col-18 {
       flex: auto;
-      max-width: 100%;
+      min-width: 100vw;
     }
     .chat-frame-wraper > .header-graper > .btn-exit {
       display: flex;
     }
   }
+
   .room-list-responsive-open {
     display: block;
     .side-bar > .room-list > .room > .titles {
@@ -52,6 +67,7 @@
       padding: 0;
     }
   }
+  
   .room-list-responsive-close {
     display: none;
   }

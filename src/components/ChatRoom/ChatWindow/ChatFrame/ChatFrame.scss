@@ -1,130 +1,98 @@
+@use '/src/components/ChatRoom/Sidebar/Sidebar';
+
 .chat-frame-wraper {
   height: 100vh;
   border-right: 1px solid rgb(230, 230, 230);
   .header-graper {
     background-color: #4682b4;
     display: flex;
-    height: 62px;
-    padding: 0 0 0 13px;
+    height: 70px;
+    max-width: 100%;
+    min-width: 100%;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     color: white;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
       rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+
     .btn-exit {
-      flex: 0;
       display: none;
-      height: 56px;
       align-items: center;
+      justify-content: center;
       .btn-left {
-        margin: 0 16px 0 0;
+        color: white;
         &:hover {
           background-color: rgba(126, 166, 206, 0.2);
         }
       }
     }
+
     .avatar-group {
-      width: 58px;
-      height: 58px;
-      position: relative;
-      .first-avt {
-        z-index: 1;
-      }
-      .second-avt {
-        z-index: 2;
-        position: absolute;
-        left: 30px;
-      }
-      .third-avt {
-        z-index: 3;
-        position: absolute;
-        top: 30px;
-        left: 0;
-      }
-      .third-avt-alone {
-        z-index: 3;
-        position: absolute;
-        top: 27px;
-        left: 15px;
-      }
-      .rest-avt {
-        z-index: 4;
-        position: absolute;
-        top: 30px;
-        left: 30px;
-      }
-      .ant-avatar-lg {
-        width: 55px;
-        height: 55px;
-        text-align: center;
-        .ant-avatar-string {
-          top: 10%;
-          font-size: 30px;
-        }
+      margin: 0 0 0.1em 0.5em;
+      @include Sidebar.avatar-generator;
+      @media (max-width: 600px) {
+        display: none;
       }
     }
-    .info {
-      margin: 0 0 0 5px;
-      flex: 7 1 70%;
-      max-width: 100%;
 
-      .title,
-      .description {
-        margin: 0;
+    .group-title {
+      max-height: 100%;
+      flex: 7 1 70%;
+      max-width: calc(98% - (64px + 58px + 28px));
+      @media (max-width: 600px) {
+        max-width: calc(98% - (64px + 58px));
       }
       .title {
         margin: 0;
-        font-weight: bold;
-        font-size: 20px;
-        width: fit-content;
-        max-width: 100%;
+        font-weight: 500;
+        font-size: var(--step-1);
+      }
+      .description {
+        font-size: var(--step--2);
+        font-family: 'Montserrat', sans-serif;
+        margin: 0 0 0.5em 0;
+        padding: 0;
+      }
+      .title,
+      .description {
         text-overflow: ellipsis;
         overflow-x: hidden;
         white-space: nowrap;
       }
-      .description {
-        font-size: 12px;
-      }
     }
-    .add-member {
-      flex: 0.5 0 5%;
-      display: flex;
-      justify-content: flex-end;
-      max-width: fit-content;
-      .add-member-btn {
+
+    .btns {
+      margin: 0 0.5em 0 0;
+      .btn-open-group-info {
         color: white;
       }
-    }
-    .btn-group-info {
-      margin: 0 5px 0 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      .btn-open-group-info {
+      .add-member-btn {
         color: white;
       }
     }
   }
 
   .messages-content {
-    font-family: 'Montserrat', sans-serif;
-    height: calc(100% - 62px);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    // justify-content: flex-start;
+    height: calc(100vh - 70px);
+    max-width: 100%;
     position: relative;
+
     .messages-list {
-      // min-height: calc(100% - 40px);
-      font-family: 'Montserrat', sans-serif;
+      max-width: 100%;
+      min-height: 100%;
+      max-height: 100%;
       overflow-y: scroll;
       overflow-x: hidden;
-      padding: 0 0 20px 0;
+      display: flex;
+      flex-direction: column;
+      padding: 0 0 3em 0;
+      position: relative;
 
       &::-webkit-scrollbar {
         width: 8px;
         background: rgba(0, 0, 0, 0);
       }
+
       &::-webkit-scrollbar-thumb {
         background-color: rgba(0, 0, 0, 0.3);
         border-radius: 4px;
@@ -133,8 +101,9 @@
           background-color: rgba(0, 0, 0, 0.6);
         }
       }
-
-      .graper {
+      .graper-right-content,
+      .graper-left-content {
+        display: flex;
         max-width: 100%;
         min-width: 100%;
         margin: 10px 0 5px 0;
@@ -148,28 +117,28 @@
           max-width: 70%;
           height: auto;
           border-radius: 7px;
-          padding: 10px 12px 10px 12px;
+          padding: 0 12px 10px 12px;
           word-wrap: break-word;
           .name {
             color: gray;
-            font-size: 12px;
+            font-size: 0.9rem;
           }
           .message {
-            font-size: 14px;
-            color: black;
+            font-size: var(--step--1);
             font-weight: 400;
             margin-bottom: 0;
           }
           .time-stamp {
-            font-size: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.6rem;
             color: gray;
           }
         }
         .right {
+          padding-top: 0.5em;
           background-color: #dffadf;
           box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
             rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
-          float: right;
         }
         .left {
           background-color: white;
@@ -177,16 +146,28 @@
             rgba(0, 0, 0, 0.23) 0px 3px 6px;
         }
       }
+      .graper-right-content {
+        justify-content: flex-end;
+      }
+      .graper-left-content {
+        justify-content: flex-start;
+      }
     }
+
+    .messages-list > :first-child {
+      margin-top: auto;
+    }
+
     .typing {
       height: 20px;
       width: auto;
-      margin-left: 15px;
+      margin-left: 1em;
       position: absolute;
-      bottom: 40px;
-      background-color: white;
-      opacity: 0.8;
+      background-color: rgba(255, 255, 255, 0.527);
+      border-radius: 0.4em;
+      padding-inline: 0.5em;
       .typing-text {
+        font-size: 1rem;
         margin-right: 10px;
         background-image: linear-gradient(
           to right,
@@ -211,19 +192,102 @@
         }
       }
     }
-    .form-send-messages {
-      background-color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 2px 2px 2px 0;
-      border: 1px solid rgb(230, 230, 230);
-      border-radius: 2px;
+    .emojis-container {
+      position: absolute;
+      right: 3em;
+      width: fit-content;
+      bottom: 50px;
+      @media (max-width: 600px) {
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+    .form-message {
       font-family: 'Montserrat', sans-serif;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      position: absolute;
+      width: 100%;
+      gap: 0px;
+      background-color: transparent;
+      min-height: 50px;
+      bottom: 0.2em;
+      @media (max-width: 600px) {
+        bottom: 0.5em;
+      }
+      .input-container {
+        min-height: 2em;
+        max-height: 5em;
+        width: calc(96% - 90px);
+        margin-left: 0.7em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow-y: scroll;
+        overflow-x: hidden;
 
-      .ant-form-item {
-        flex: 1;
-        margin-bottom: 0;
+        &::-webkit-scrollbar {
+          width: 6px;
+          background: rgba(0, 0, 0, 0);
+        }
+        &::-webkit-scrollbar-thumb {
+          background-color: rgba(0, 0, 0, 0.3);
+          border-radius: 4px;
+          &:hover {
+            border: 1px solid white;
+            background-color: rgba(0, 0, 0, 0.6);
+          }
+        }
+        .input {
+          width: 97%;
+          height: 100%;
+          margin-left: 0.5em;
+          padding: 0.5em;
+          font-size: 0.9rem;
+          border: none;
+          background-color: #0e497ce7;
+          color: white;
+
+          &::-webkit-scrollbar {
+            display: none;
+          }
+        }
+      }
+
+      .btns {
+        margin-right: 1em;
+        width: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.2em;
+
+        .ant-btn-icon-only > * {
+          font-size: 22px;
+        }
+        .btn-open-emoji,
+        .btn-send {
+          width: 40px;
+          height: 40px;
+        }
+      }
+
+      ::placeholder {
+        color: rgb(199, 228, 240);
+        opacity: 1; /* Firefox */
+      }
+
+      :-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
+        color: rgb(199, 228, 240);
+      }
+
+      ::-ms-input-placeholder {
+        /* Microsoft Edge */
+        color: rgb(199, 228, 240);
       }
     }
   }

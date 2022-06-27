@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^4.20.0",
     "antd-img-crop": "^4.2.3",
+    "emoji-picker-react": "^3.5.1",
     "firebase": "^9.6.11",
     "firebase-functions": "^3.21.2",
     "lodash": "^4.17.21",
@@ -16,6 +17,7 @@
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
+    "react-use-measure": "^2.1.1",
     "sass": "^1.52.3",
     "styled-components": "^5.3.5",
     "web-vitals": "^2.1.4"

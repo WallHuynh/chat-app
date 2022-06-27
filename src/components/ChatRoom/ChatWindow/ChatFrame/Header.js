@@ -100,14 +100,14 @@ export default function Header() {
         )}
       </div>
 
-      <div className='info'>
+      <div className='group-title'>
         <p className='title'>{selectedRoom.name}</p>
         {selectedRoom.isAGroup && (
           <p className='description'>{`${selectedRoom.members.length} members`}</p>
         )}
       </div>
 
-      <div className='add-member'>
+      <div className='btns'>
         <Tooltip placement='bottom' title='Invite more friends'>
           <Button
             className='add-member-btn'
@@ -115,16 +115,27 @@ export default function Header() {
             type='text'
             onClick={() => setIsInviteMemberVisible(true)}></Button>
         </Tooltip>
-      </div>
-
-      <div className='btn-group-info'>
-        <Tooltip placement='bottom' title='Conversation info'>
+        {openGroupInfo ? (
+          <Tooltip
+            mouseEnterDelay={2}
+            placement='bottom'
+            title='Conversation info'
+            arrowPointAtCenter={true}>
+            <Button
+              className='btn-open-group-info'
+              icon={<MenuUnfoldOutlined />}
+              type='text'
+              onClick={() =>
+                setOpenGroupInfo(prevState => !prevState)
+              }></Button>
+          </Tooltip>
+        ) : (
           <Button
             className='btn-open-group-info'
-            icon={openGroupInfo ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            icon={<MenuFoldOutlined />}
             type='text'
             onClick={() => setOpenGroupInfo(prevState => !prevState)}></Button>
-        </Tooltip>
+        )}
       </div>
     </div>
   )

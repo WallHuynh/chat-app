@@ -1,5 +1,47 @@
 @use '/src/theme/variables';
 
+@mixin avatar-generator {
+  min-width: 58px;
+  min-height: 58px;
+  position: relative;
+  .first-avt {
+    z-index: 1;
+    position: absolute;
+  }
+  .second-avt {
+    z-index: 2;
+    position: absolute;
+    left: 28px;
+  }
+  .third-avt {
+    z-index: 3;
+    position: absolute;
+    top: 28px;
+    left: 0;
+  }
+  .third-avt-alone {
+    z-index: 3;
+    position: absolute;
+    top: 28px;
+    left: 14px;
+  }
+  .rest-avt {
+    z-index: 4;
+    position: absolute;
+    top: 28px;
+    left: 28px;
+  }
+  .ant-avatar-lg {
+    width: 58px;
+    height: 58px;
+    text-align: center;
+    .ant-avatar-string {
+      top: 10%;
+      font-size: 30px;
+    }
+  }
+}
+
 .sidebar {
   height: 100vh;
   border-right: 1px solid rgb(230, 230, 230);
@@ -8,7 +50,7 @@
   flex-shrink: 0;
   .user-bar {
     display: flex;
-    height: 70px;
+    min-height: 70px;
     padding: 14px 16px;
     background-color: #dffadf;
     border-bottom: 1px solid rgb(230, 230, 230);
@@ -67,8 +109,7 @@
 
     .room {
       display: flex;
-      flex-direction: row;
-      justify-content: space-around;
+      justify-content: flex-end;
       align-items: center;
       max-height: 75px;
       min-height: 75px;
@@ -84,61 +125,21 @@
           display: block;
         }
       }
+
       .avt-graper {
-        flex: 1 0;
-        margin: 0 0 0 5px;
+        margin: 0 5px 0 0;
         display: flex;
-        justify-content: center;
-        align-items: center;
         .avatar-group {
-          width: 58px;
-          height: 58px;
-          position: relative;
-          .first-avt {
-            z-index: 1;
-          }
-          .second-avt {
-            z-index: 2;
-            position: absolute;
-            left: 30px;
-          }
-          .third-avt {
-            z-index: 3;
-            position: absolute;
-            top: 30px;
-            left: 0;
-          }
-          .third-avt-alone {
-            z-index: 3;
-            position: absolute;
-            top: 27px;
-            left: 15px;
-          }
-          .rest-avt {
-            z-index: 4;
-            position: absolute;
-            top: 30px;
-            left: 30px;
-          }
-          .ant-avatar-lg {
-            width: 55px;
-            height: 55px;
-            text-align: center;
-            .ant-avatar-string {
-              top: 10%;
-              font-size: 30px;
-            }
-          }
+          @include avatar-generator();
         }
       }
 
       .titles {
-        margin: 0 5px 0 0;
-        flex: 8 1 90%;
-        max-width: 63%;
+        max-width: calc(82% - 58px);
+        min-width: calc(82% - 58px);
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        align-items: flex-start;
         gap: 0px;
         .name {
           font-size: var(--step--1);
@@ -160,7 +161,8 @@
         }
       }
       .time-stamp {
-        flex: 1 0 10%;
+        max-width: 15%;
+        min-width: 15%;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -173,7 +175,7 @@
         }
         p {
           font-family: 'Open Sans', sans-serif;
-          font-size: 10px;
+          font-size: 0.6rem;
           margin: 5px 0;
           white-space: nowrap;
         }
