@@ -11,7 +11,7 @@ import Picker from 'emoji-picker-react'
 import useMeasure from 'react-use-measure'
 
 export default function MessageContent() {
-  const { selectedRoom, members } = useContext(AppContext)
+  const { selectedRoom, members, userInfo } = useContext(AppContext)
   const {
     user: { uid, photoURL, displayName },
   } = useContext(AuthContext)
@@ -27,14 +27,24 @@ export default function MessageContent() {
   const [inputHeight, setInputHeight] = useState(0)
   const [ref, bounds] = useMeasure()
 
-  const handleClickOutside = e => {
+  const handleOpenEmojiPicker = () => {
+    setEmojiPickerVisible(!emojiPickerVisible)
+    if (inputRef?.current) {
+      setTimeout(() => {
+        inputRef.current.focus()
+      })
+    }
+  }
+
+  const handleClickOutsideEmojiPicker = e => {
     if (!emojiContainRef?.current?.contains(e.target)) {
       setEmojiPickerVisible(false)
     }
   }
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    document.addEventListener('mousedown', handleClickOutsideEmojiPicker)
+    return () =>
+      document.removeEventListener('mousedown', handleClickOutsideEmojiPicker)
   })
 
   useEffect(() => {
@@ -141,7 +151,10 @@ export default function MessageContent() {
   ])
 
   const handleOnSubmit = () => {
-    if (inputValue === '') {
+    if (
+      // inputValue === ''||
+      /((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$/gm.test(inputValue)
+    ) {
       return
     }
     if (isTyping) {
@@ -174,7 +187,7 @@ export default function MessageContent() {
     })
     setInputValue('')
     setIsTyping(false)
-
+    setEmojiPickerVisible(false)
     // focus to input again after submit
     if (inputRef?.current) {
       setTimeout(() => {
@@ -278,7 +291,11 @@ export default function MessageContent() {
   }, [messages])
 
   return (
-    <div className='messages-content'>
+    <div
+      // style={{
+      //   backgroundImage: `url(${userInfo.coverPhotoURL})`,
+      // }}
+      className='messages-content'>
       <div
         className='messages-list'
         ref={messageListRef}
@@ -325,17 +342,14 @@ export default function MessageContent() {
           ref={emojiContainRef}
           className='emojis-container'
           style={{
-            bottom: `${inputHeight + 10}px`,
+            bottom: `${inputHeight + 12}px`,
           }}>
           <Picker disableSearchBar={true} onEmojiClick={onEmojiClick} />
         </div>
       ) : null}
 
       <div className='form-message'>
-        <div
-          className='input-container'
-          ref={ref}
-          style={{ minHeight: '2em', maxHeight: '5em' }}>
+        <div className='input-container' ref={ref}>
           <Input.TextArea
             className='input'
             autoSize={true}
@@ -351,7 +365,7 @@ export default function MessageContent() {
         <div className='btns'>
           <Button
             className='btn-open-emoji'
-            onClick={() => setEmojiPickerVisible(!emojiPickerVisible)}
+            onClick={handleOpenEmojiPicker}
             type='text'
             icon={
               emojiPickerVisible ? <SmileFilled /> : <SmileOutlined />

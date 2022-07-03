@@ -1,3 +1,6 @@
+@use '/src/components/ChatRoom/Sidebar/Sidebar';
+@use '/src/theme/variables';
+
 .graper-group {
   height: 100vh;
   .header-group {
@@ -6,18 +9,21 @@
     padding: 0 16px;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid rgb(230, 230, 230);
-    background-color: #4682b4;
-    color: white;
+    border-bottom: 1px solid variables.$borderColor;
+    background-color: variables.$primaryColor;
+    color: variables.$lightText;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
       rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
     .title {
       font-weight: bold;
       font-size: 20px;
-      margin: 0;
+      margin: 0 0 0 0.3em;
       flex-basis: 95%;
       text-align: center;
-      padding: 0 35px 0 0;
+      padding: 0;
+      @media (max-width: 600px) {
+        margin: 0 1em 0 0;
+      }
     }
     .btn-exit {
       display: none;
@@ -25,7 +31,7 @@
       align-items: center;
 
       .btn-left {
-        color: white;
+        color: variables.$lightText;
         &:hover {
           background-color: rgba(126, 166, 206, 0.2);
         }
@@ -50,7 +56,7 @@
       }
     }
     .info {
-      padding: 10px 0;
+      padding: 10px 0 0 10px;
       height: 110px;
       width: 100%;
       display: flex;
@@ -58,50 +64,29 @@
       align-items: center;
       justify-content: space-around;
       .avatar-group {
-        width: 58px;
-        height: 58px;
-        position: relative;
-        .first-avt {
-          z-index: 1;
+        @include Sidebar.avatar-generator;
+      }
+      .title-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0;
+        .title {
+          font-weight: 500;
+          font-size: var(--step--1);
+          padding: 0;
+          margin: 0;
         }
-        .second-avt {
-          z-index: 2;
-          position: absolute;
-          left: 30px;
-        }
-        .third-avt {
-          z-index: 3;
-          position: absolute;
-          top: 30px;
-          left: 0;
-        }
-        .third-avt-alone {
-          z-index: 3;
-          position: absolute;
-          top: 27px;
-          left: 15px;
-        }
-        .rest-avt {
-          z-index: 4;
-          position: absolute;
-          top: 30px;
-          left: 30px;
-        }
-        .ant-avatar-lg {
-          width: 55px;
-          height: 55px;
-          text-align: center;
-          .ant-avatar-string {
-            top: 10%;
-            font-size: 30px;
+        .btn-edit {
+          background-color: variables.$lightText;
+          margin-left: 0.3em;
+          border-radius: 50%;
+          width: 25px;
+          height: 25px;
+          &:hover {
+            background-color: rgba(182, 182, 182, 0.822);
           }
         }
-      }
-      .name {
-        font-weight: 600;
-        font-size: 15px;
-        padding: 0;
-        margin: 0;
       }
     }
     .members {
@@ -115,11 +100,15 @@
         display: flex;
         padding: 0 10px 0;
         &:hover {
-          background-color: rgba(224, 235, 235, 0.5);
+          background-color: variables.$hoverColor;
         }
         .name,
         .avt {
           align-self: center;
+          .ant-avatar-string {
+            font-size: 20px;
+            top: 5%;
+          }
         }
         .name {
           max-width: 70%;
@@ -132,7 +121,7 @@
     }
     .btn {
       &:hover {
-        background: rgba(230, 230, 230, 0.6);
+        background: variables.$hoverColor;
       }
       .ant-btn-text {
         background: transparent;

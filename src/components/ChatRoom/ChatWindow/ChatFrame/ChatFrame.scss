@@ -1,29 +1,31 @@
 @use '/src/components/ChatRoom/Sidebar/Sidebar';
+@use '/src/theme/variables' as *;
 
-.chat-frame-wraper {
+.chat-frame-wrapper {
   height: 100vh;
-  border-right: 1px solid rgb(230, 230, 230);
-  .header-graper {
-    background-color: #4682b4;
+  border-right: 1px solid $borderColor;
+  .header-wrapper {
+    background-color: $primaryColor;
     display: flex;
     height: 70px;
-    max-width: 100%;
-    min-width: 100%;
+    width: 100%;
+    padding: 0;
     align-items: center;
     justify-content: space-around;
-    color: white;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
-      rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
-
+    color: $lightText;
     .btn-exit {
       display: none;
       align-items: center;
       justify-content: center;
+      margin-inline: 0.7em;
       .btn-left {
-        color: white;
+        color: $lightText;
         &:hover {
           background-color: rgba(126, 166, 206, 0.2);
         }
+      }
+      @media (max-width: 600px) {
+        display: inline-block;
       }
     }
 
@@ -36,25 +38,54 @@
     }
 
     .group-title {
-      max-height: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
       flex: 7 1 70%;
-      max-width: calc(98% - (64px + 58px + 28px));
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-width: calc(100% - (80px + 58px + 32px + 0.7em));
       @media (max-width: 600px) {
-        max-width: calc(98% - (64px + 58px));
+        max-width: calc(97% - (64px + 58px + 0.5em));
       }
-      .title {
-        margin: 0;
-        font-weight: 500;
-        font-size: var(--step-1);
+      .title-wrapper {
+        display: flex;
+        align-items: center;
+        &:hover {
+          .btn-edit {
+            display: block;
+          }
+        }
+        &:focus {
+          .btn-edit {
+            display: block;
+          }
+        }
+        .title {
+          font-weight: 500;
+          font-size: var(--step-0);
+        }
+
+        .btn-edit {
+          margin-left: 0.3em;
+          color: $lightText;
+          background-color: rgba(255, 255, 255, 0.281);
+          border-radius: 50%;
+          width: 25px;
+          height: 25px;
+          display: none;
+        }
       }
       .description {
         font-size: var(--step--2);
         font-family: 'Montserrat', sans-serif;
-        margin: 0 0 0.5em 0;
-        padding: 0;
       }
       .title,
       .description {
+        margin: 0;
+        padding: 0;
+        max-width: fit-content;
         text-overflow: ellipsis;
         overflow-x: hidden;
         white-space: nowrap;
@@ -62,12 +93,14 @@
     }
 
     .btns {
-      margin: 0 0.5em 0 0;
+      display: flex;
+      align-items: center;
+      margin-inline-end: 0.5em;
       .btn-open-group-info {
-        color: white;
+        color: $lightText;
       }
       .add-member-btn {
-        color: white;
+        color: $lightText;
       }
     }
   }
@@ -76,7 +109,6 @@
     height: calc(100vh - 70px);
     max-width: 100%;
     position: relative;
-
     .messages-list {
       max-width: 100%;
       min-height: 100%;
@@ -85,14 +117,16 @@
       overflow-x: hidden;
       display: flex;
       flex-direction: column;
-      padding: 0 0 3em 0;
+      padding: 1em 0 3em 0;
       position: relative;
 
       &::-webkit-scrollbar {
-        width: 8px;
+        width: 0.4em;
         background: rgba(0, 0, 0, 0);
       }
-
+      &::-webkit-scrollbar-track {
+        margin: 0 0 2.5em 0;
+      }
       &::-webkit-scrollbar-thumb {
         background-color: rgba(0, 0, 0, 0.3);
         border-radius: 4px;
@@ -120,30 +154,31 @@
           padding: 0 12px 10px 12px;
           word-wrap: break-word;
           .name {
-            color: gray;
+            color: $darkText;
             font-size: 0.9rem;
           }
           .message {
-            font-size: var(--step--1);
+            color: $darkerText;
+            font-family: $noto-sans-font;
+            font-size: var(--step--2);
             font-weight: 400;
             margin-bottom: 0;
           }
           .time-stamp {
-            font-family: 'Montserrat', sans-serif;
             font-size: 0.6rem;
-            color: gray;
+            color: $darkText;
           }
         }
         .right {
           padding-top: 0.5em;
-          background-color: #dffadf;
+          background-color: $userColor;
           box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
             rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
         }
         .left {
-          background-color: white;
-          box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px,
-            rgba(0, 0, 0, 0.23) 0px 3px 6px;
+          background-color: $lightText;
+          box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em,
+            rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
         }
       }
       .graper-right-content {
@@ -220,7 +255,7 @@
       }
       .input-container {
         min-height: 2em;
-        max-height: 5em;
+        max-height: 10em;
         width: calc(96% - 90px);
         margin-left: 0.7em;
         display: flex;
@@ -248,15 +283,16 @@
           padding: 0.5em;
           font-size: 0.9rem;
           border: none;
-          background-color: #0e497ce7;
-          color: white;
-
+          background-color: #3636368c;
+          color: $lightText;
+          &:focus {
+            background-color: #2e2e2ee0;
+          }
           &::-webkit-scrollbar {
             display: none;
           }
         }
       }
-
       .btns {
         margin-right: 1em;
         width: 90px;
@@ -276,18 +312,18 @@
       }
 
       ::placeholder {
-        color: rgb(199, 228, 240);
+        color: $lightText;
         opacity: 1; /* Firefox */
       }
 
       :-ms-input-placeholder {
         /* Internet Explorer 10-11 */
-        color: rgb(199, 228, 240);
+        color: $lightText;
       }
 
       ::-ms-input-placeholder {
         /* Microsoft Edge */
-        color: rgb(199, 228, 240);
+        color: $lightText;
       }
     }
   }

@@ -1,4 +1,5 @@
 import {
+  EditOutlined,
   LeftOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -16,13 +17,14 @@ export default function Header() {
     userInfo,
     openGroupInfo,
     setOpenGroupInfo,
+    setChangeRoomNameVisible,
   } = useContext(AppContext)
 
   const handleExit = () => {
     setSelectedRoomId('')
   }
   return (
-    <div className='noselect header-graper'>
+    <div className='noselect header-wrapper'>
       <div className='btn-exit'>
         <Button
           onClick={handleExit}
@@ -101,9 +103,26 @@ export default function Header() {
       </div>
 
       <div className='group-title'>
-        <p className='title'>{selectedRoom.name}</p>
-        {selectedRoom.isAGroup && (
-          <p className='description'>{`${selectedRoom.members.length} members`}</p>
+        {selectedRoom.isAGroup ? (
+          <>
+            <div className='title-wrapper'>
+              <p className='title'>{selectedRoom.name}</p>
+              <Button
+                className='btn-edit'
+                onClick={() => setChangeRoomNameVisible(true)}
+                icon={<EditOutlined />}
+                type='text'></Button>
+            </div>
+            <p className='description'>{`${selectedRoom.members.length} members`}</p>
+          </>
+        ) : (
+          <p className='title'>
+            {
+              selectedRoom?.standByPhoto?.lastThreeMembers?.filter(
+                mem => mem?.displayName !== userInfo?.displayName
+              )[0]?.displayName
+            }
+          </p>
         )}
       </div>
 

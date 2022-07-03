@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons'
 import { auth } from '../../../firebase/config'
 
-export default function User() {
+export default function UserHeader() {
   const {
     clearState,
     setIsAddRoomVisible,
@@ -119,7 +119,7 @@ export default function User() {
         <Tooltip
           className='addfriend'
           placement='bottom'
-          title='Add friend'
+          title='Find friend'
           color='#b8a3f5'>
           <Button
             type='text'

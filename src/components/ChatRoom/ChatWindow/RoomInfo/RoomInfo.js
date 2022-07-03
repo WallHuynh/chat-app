@@ -1,33 +1,32 @@
 import React, { useContext } from 'react'
 import { AppContext } from '../../../../context/AppProvider'
-import { AuthContext } from '../../../../context/AuthProvider'
 import Info from './Info'
 import RoomMembers from './RoomMembers'
 import { Button, Collapse } from 'antd'
 import { CaretRightOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
-import RoomOptions from './RoomOptions'
-import './GroupInfo.scss'
+import './RoomInfo.scss'
+import SettingOptions from './SettingOptions'
 
-export default function GroupInfo() {
+export default function RoomInfo() {
   const { selectedRoom, members, setIsInviteMemberVisible, setOpenGroupInfo } =
     useContext(AppContext)
-
-  const {
-    user: { uid },
-  } = useContext(AuthContext)
   const { Panel } = Collapse
+
+  const handleLeave = () => {
+    setOpenGroupInfo(false)
+  }
   return (
     <div className='graper-group noselect'>
       <div className='header-group'>
         <div className='btn-exit'>
           <Button
-            onClick={() => setOpenGroupInfo(false)}
+            onClick={handleLeave}
             className='btn-left'
             type='text'
             icon={<MenuUnfoldOutlined />}></Button>
         </div>
         <p className='title'>
-          {selectedRoom.isAGroup ? 'Group Info' : 'Communication info'}
+          {selectedRoom.isAGroup ? 'Room info' : 'Communication info'}
         </p>
       </div>
       <div className='group-info-body'>
@@ -49,7 +48,7 @@ export default function GroupInfo() {
             header='Settings'
             key='2'
             className='site-collapse-custom-panel'>
-            <RoomOptions />
+            <SettingOptions />
           </Panel>
         </Collapse>
       </div>

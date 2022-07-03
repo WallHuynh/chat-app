@@ -3,8 +3,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import ChatRoom from './components/ChatRoom'
 import AuthProvider from './context/AuthProvider'
 import AppProvider from './context/AppProvider'
-import Login from './components/Login/Login'
-import Register from './components/Modals/Register'
+import Login from './components/Auth/Login'
+import RegisterModal from './components/Auth/RegisterModal'
 import AddRoomModal from './components/Modals/AddRoomModal'
 import InviteMemberModal from './components/Modals/InviteMemberModal'
 import UserInfoModal from './components/Modals/UserInfoModal'
@@ -12,6 +12,8 @@ import UserAccountModal from './components/Modals/UserAccountModal'
 import FindFriendModal from './components/Modals/FindFriendModal'
 import ForgotPasswordModal from './components/Modals/ForgotPasswordModal'
 import ModalConfirmLeaveRoom from './components/Modals/ModalConfirmLeaveRoom'
+import UnfriendConfirmModal from './components/Modals/UnfriendConfirmModal'
+import ChangeRoomNameModal from './components/Modals/ChangeRoomNameModal'
 
 function App() {
   return (
@@ -22,8 +24,10 @@ function App() {
             <Route path='/' element={<ChatRoom />} />
             <Route path='/login' element={<Login />} />
           </Routes>
+          <ChangeRoomNameModal />
+          <UnfriendConfirmModal />
           <AddRoomModal />
-          <Register />
+          <RegisterModal />
           <FindFriendModal />
           <UserInfoModal />
           <UserAccountModal />

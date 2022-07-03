@@ -11,7 +11,7 @@ const AlertStyled = styled(Alert)`
   margin-bottom: 10px;
 `
 
-export default function Register() {
+export default function RegisterModal() {
   const {
     isRegisterVisible,
     setIsRegisterVisible,

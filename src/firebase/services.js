@@ -46,7 +46,11 @@ export const addDocument = async (oneCollection, data) => {
       })
       break
     case 'status':
-      docRef = doc(db, oneCollection, data.requestUser.uid)
+      docRef = doc(
+        db,
+        oneCollection,
+        `${data.requestUser.uid}-${data.receiveUid}`
+      )
       await setDoc(docRef, {
         ...data,
         createdAt: serverTimestamp(),
@@ -54,10 +58,11 @@ export const addDocument = async (oneCollection, data) => {
       break
     default:
       docRef = collection(db, oneCollection)
-      await addDoc(docRef, {
+      const docSnap = await addDoc(docRef, {
         ...data,
         createdAt: serverTimestamp(),
       })
+      return docSnap
   }
 }
 
@@ -81,6 +86,8 @@ export const userRegister = async user => {
       friends: [],
       requestedTo: [],
       pinnedRoomsId: [],
+      coverPhotoURL:
+        'https://firebasestorage.googleapis.com/v0/b/chat-app-5947f.appspot.com/o/cover-avt%2Fphoto-1501785888041-af3ef285b470.jpg?alt=media&token=812cd6c3-72eb-49b0-93aa-392af38278f9',
       providerId: user.providerData[0].providerId,
       keywords: generateKeywords(user.displayName?.toLowerCase()),
     })

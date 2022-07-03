@@ -1,13 +1,24 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Row, Col } from 'antd'
 import Sidebar from './Sidebar/Sidebar'
 import ChatWindow from './ChatWindow'
 import { AppContext } from '../../context/AppProvider'
+import useMeasure from 'react-use-measure'
 
 export default function ChatRoom() {
-  const { selectedRoomId } = useContext(AppContext)
+  const { selectedRoomId, setOpenGroupInfo, setViewWidth } =
+    useContext(AppContext)
+  const [ref, bounds] = useMeasure()
+
+  useEffect(() => {
+    setViewWidth(bounds.width)
+    if (bounds.width <= 600 && bounds.width !== 0) {
+      setOpenGroupInfo(false)
+    }
+  }, [bounds])
+
   return (
-    <div>
+    <div ref={ref}>
       <Row>
         <Col
           className={

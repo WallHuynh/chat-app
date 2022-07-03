@@ -1,11 +1,12 @@
-import { Row, Col, Alert } from 'antd'
+import { Row, Col } from 'antd'
 import React, { useContext } from 'react'
 import { AppContext } from '../../../context/AppProvider'
 import ChatFrame from './ChatFrame/ChatFrame'
-import GroupInfo from './GroupInfo/GroupInfo'
+import RoomInfo from './RoomInfo/RoomInfo'
 
 export default function ChatWindow() {
-  const { selectedRoom, openGroupInfo } = useContext(AppContext)
+  const { selectedRoom, openGroupInfo, userInfo } = useContext(AppContext)
+
   return (
     <>
       {selectedRoom.id ? (
@@ -15,18 +16,17 @@ export default function ChatWindow() {
               <ChatFrame />
             </Col>
             <Col span={openGroupInfo ? 8 : 0}>
-              <GroupInfo />
+              <RoomInfo />
             </Col>
           </Row>
         </>
       ) : (
-        <Alert
-          message='chose your room'
-          type='info'
-          showIcon
-          style={{ top: '15px', left: '15px', width: '70%' }}
-          closable
-        />
+        <div className='wrapper'>
+          <p id='title'>
+            welcome to <span>Chat-app</span>!
+          </p>
+          <p id='description'>Let's choose your room</p>
+        </div>
       )}
     </>
   )

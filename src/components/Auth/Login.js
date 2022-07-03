@@ -29,7 +29,7 @@ const googleProvider = new GoogleAuthProvider()
 const fbProvider = new FacebookAuthProvider()
 
 const TitleStyled = styled(Title)`
-  margin-top: 35px;
+  margin-top: 0.5em;
 `
 const AlertStyled = styled(Alert)`
   margin-bottom: 10px;
@@ -70,7 +70,6 @@ export default function Login() {
         .then(userCredential => {
           // Signed in
           const user = userCredential.user
-          window.location.reload()
           // ...
         })
         .catch(error => {
@@ -152,7 +151,7 @@ export default function Login() {
           </Form.Item>
 
           <Form.Item name='remember' valuePropName='checked' noStyle>
-            <Checkbox className='check-box'>Remember me</Checkbox>
+            <Checkbox className='check-box noselect'>Remember me</Checkbox>
           </Form.Item>
 
           <Form.Item>
@@ -165,7 +164,7 @@ export default function Login() {
               <span className='button-82-shadow'></span>
               <span className='button-82-edge'></span>
               <span className='button-82-front text'>
-                {<LoginOutlined />} Log in
+                {<LoginOutlined />} Login
               </span>
             </button>
 

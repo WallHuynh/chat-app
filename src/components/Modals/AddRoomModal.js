@@ -5,16 +5,16 @@ import { addDocument, updateDocument } from '../../firebase/services'
 import { AuthContext } from '../../context/AuthProvider'
 
 export default function AddRoomModal() {
-  const { isAddRoomVisible, setIsAddRoomVisible, selectedRoom, members } =
+  const { isAddRoomVisible, setIsAddRoomVisible, setSelectedRoomId } =
     useContext(AppContext)
   const {
     user: { uid, displayName, photoURL },
   } = useContext(AuthContext)
   const [form] = Form.useForm()
 
-  const handleOk = () => {
+  const handleOk = async () => {
     if (form?.getFieldsValue()?.name) {
-      addDocument('rooms', {
+      const roomRef = await addDocument('rooms', {
         ...form.getFieldsValue(),
         members: [uid],
         isAGroup: true,
@@ -34,6 +34,7 @@ export default function AddRoomModal() {
           groupLengthRest: null,
         },
       })
+      setSelectedRoomId(roomRef.id)
       form.resetFields()
       setIsAddRoomVisible(false)
     } else {
@@ -57,14 +58,14 @@ export default function AddRoomModal() {
         width={400}
         okText='Create'>
         <Form form={form} layout='vertical'>
-          <Form.Item label='Name' name='name'>
+          <Form.Item name='name'>
             <Input
               onPressEnter={handleOk}
               placeholder="What's your room's name"
               maxLength={40}
             />
           </Form.Item>
-          <Form.Item label='Discription' name='description' initialValue={''}>
+          <Form.Item name='description' initialValue={''}>
             <Input.TextArea
               onPressEnter={handleOk}
               placeholder="What's your room's description"

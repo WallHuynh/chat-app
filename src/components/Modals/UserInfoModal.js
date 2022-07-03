@@ -10,131 +10,42 @@ import {
   SendOutlined,
   ArrowLeftOutlined,
   SettingOutlined,
+  CloseOutlined,
 } from '@ant-design/icons'
-import { addDocument, updateDocument } from '../../firebase/services'
-import { arrayUnion } from 'firebase/firestore'
-
-const ModalStyled = styled(Modal)`
-  .ant-avatar-lg {
-    cursor: pointer;
-    width: 80px;
-    height: 80px;
-    text-align: center;
-    .ant-avatar-string {
-      top: 23%;
-      font-size: 30px;
-    }
-  }
-  .ant-modal-body {
-    max-height: 330px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    &::-webkit-scrollbar {
-      width: 2px;
-      background: rgba(0, 0, 0, 0);
-    }
-    &::-webkit-scrollbar-thumb {
-      background-color: rgba(0, 0, 0, 0.6);
-      border-radius: 0.2px;
-    }
-  }
-  .ant-modal-footer {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 10px;
-    height: 50px;
-    .friend-btn {
-      border: 0.1px solid gray;
-      background-color: white;
-      font-weight: 600;
-      color: black;
-      :hover {
-        font-weight: 600;
-        border: solid 1px green;
-        color: green;
-      }
-    }
-  }
-  .cover-photo {
-    background-color: lightgray;
-    height: 150px;
-    position: relative;
-    .avatar,
-    .ant-image {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translate(-40px, 40px);
-    }
-    .ant-image,
-    .ant-image-mask {
-      border-radius: 50%;
-      overflow: hidden;
-      perspective: 1px;
-    }
-    .avatar > .ant-avatar-string {
-      font-size: 40px;
-      top: 25%;
-    }
-  }
-  .info {
-    height: 180px;
-    padding-top: 45px;
-    .name {
-      font-size: 25px;
-      text-align: center;
-      padding: 0 40px 0 40px;
-      text-overflow: ellipsis;
-      overflow-x: hidden;
-      white-space: nowrap;
-    }
-    .email {
-      padding: 0 20px 0 20px;
-      font-size: 16px;
-      .tag {
-        opacity: 0.7;
-      }
-    }
-    .input-send-request {
-      margin: 0 15px 0 15px;
-    }
-  }
-`
+import {
+  addDocument,
+  deleteDocument,
+  updateDocument,
+} from '../../firebase/services'
+import { openNotification } from './FindFriendModal'
+import { arrayRemove, arrayUnion } from 'firebase/firestore'
+import { collection, query, where, getDocs } from 'firebase/firestore'
+import { db } from '../../firebase/config'
+import './Modals.scss'
 
 export default memo(function UserInfoModal() {
   const [form] = Form.useForm()
   const {
+    setOpenGroupInfo,
+    viewWidth,
     userInfoVisible,
     setUserInfoVisible,
     selectedUser,
     setSelectedUser,
     setUserAccountVisible,
-    members,
     userInfo,
+    setModalUnfiendVisible,
+    setSelectedRoomId,
   } = useContext(AppContext)
   const {
     user: { uid, displayName, photoURL },
   } = useContext(AuthContext)
 
-  const [userInfoRef, setUserInfoRef] = useState(userInfo)
   const [showSendRequest, setShowSendRequest] = useState(false)
-  const initialIsRequested = userInfoRef?.requestedTo?.includes(
-    selectedUser.uid
-  )
+  const initialIsRequested = userInfo?.requestedTo?.includes(selectedUser.uid)
   const [isRequested, setIsRequested] = useState(initialIsRequested)
-  const initialIsFriend = userInfoRef?.friends?.includes(selectedUser.uid)
+  const initialIsFriend = userInfo?.friends?.includes(selectedUser.uid)
   const [isFriend, setIsFriend] = useState(initialIsFriend)
-
-  console.log('isrequest', isRequested)
-  console.log('isfriend', isFriend)
-  console.log('userInfo', userInfoRef)
-
-  useEffect(() => {
-    const userRef = members.filter(member => member.uid === uid)[0]
-    setUserInfoRef(userRef)
-  }, [selectedUser])
-
   useEffect(() => {
     setIsRequested(initialIsRequested)
   }, [initialIsRequested, selectedUser])
@@ -149,6 +60,37 @@ export default memo(function UserInfoModal() {
     form.resetFields()
     setShowSendRequest(false)
     setIsRequested(false)
+  }
+
+  const handleConfirmFriendRequest = () => {
+    updateDocument('users', userInfo.uid, {
+      friends: arrayUnion(selectedUser.uid),
+    })
+
+    //Cloud Functions without credit card below :(
+    // const userRequestRef = db.collection('users').doc(newFriend)
+    // userRequestRef
+    //   .update({
+    //     requestedTo: admin.firestore.FieldValue.arrayRemove(uid),
+    //     friends: admin.firestore.FieldValue.arrayUnion(uid),
+    //   })
+    //   .then(() => console.log(`User ${newFriend} was updated`))
+    //   .catch(error => console.log(`Update error:`, error))
+    updateDocument('users', selectedUser.uid, {
+      requestedTo: arrayRemove(userInfo.uid),
+      friends: arrayUnion(userInfo.uid),
+    })
+
+    // const statusRef = db.collection('status').doc(newFriend)
+    // statusRef
+    //   .delete()
+    //   .then(() => console.log(`Status ${newFriend} was deleted`))
+    //   .catch(error => console.error('Error removing document: ', error))
+    deleteDocument('status', `${selectedUser.uid}-${userInfo.uid}`)
+    openNotification(
+      'top',
+      `You and ${selectedUser.displayName} are friends now`
+    )
   }
 
   const handleSendRequest = () => {
@@ -166,6 +108,59 @@ export default memo(function UserInfoModal() {
     })
     setIsRequested(true)
     setShowSendRequest(false)
+    openNotification('top', `Request was sent to ${selectedUser.displayName}`)
+  }
+
+  const handleRevokeRequest = () => {
+    updateDocument('users', uid, {
+      requestedTo: arrayRemove(selectedUser.uid),
+    })
+    deleteDocument('status', `${userInfo.uid}-${selectedUser.uid}`)
+    openNotification(
+      'top',
+      `Request to ${selectedUser.displayName} was revoked`
+    )
+  }
+
+  const handleSendMess = async () => {
+    const q = query(
+      collection(db, 'rooms'),
+      where('isAGroup', '==', false),
+      where('members', 'in', [[selectedUser.uid, userInfo.uid]])
+    )
+    const querySnapshot = await getDocs(q)
+    if (!querySnapshot.empty) {
+      const documents = querySnapshot.docs.map(doc => ({
+        ...doc.data(),
+        id: doc.id,
+      }))[0]
+      setSelectedRoomId(documents.id)
+      handleCancel()
+    } else {
+      const roomRef = await addDocument('rooms', {
+        members: [selectedUser.uid, userInfo.uid],
+        isAGroup: false,
+        typing: {
+          user1: { uid: null, name: null, isTyping: false },
+          user2: { uid: null, name: null, isTyping: false },
+        },
+        newestMess: { createAt: null, displayName: null, text: null },
+        groupPhoto: null,
+        standByPhoto: {
+          lastThreeMembers: [
+            {
+              displayName: displayName,
+              photoURL: photoURL || null,
+            },
+          ],
+          groupLengthRest: null,
+        },
+      })
+      setSelectedRoomId(roomRef.id)
+    }
+    if (viewWidth < 600 && viewWidth !== 0) {
+      setOpenGroupInfo(false)
+    }
   }
 
   const handleShowSendRequest = () => {
@@ -183,8 +178,8 @@ export default memo(function UserInfoModal() {
 
   return (
     <div>
-      <ModalStyled
-        className='noselect'
+      <Modal
+        className='user-info noselect'
         centered
         bodyStyle={{ padding: '0' }}
         width={350}
@@ -193,7 +188,7 @@ export default memo(function UserInfoModal() {
             {selectedUser.uid === uid ? (
               <Button
                 icon={<SettingOutlined />}
-                className='friend-btn'
+                className='btn-primary'
                 onClick={handleOpenUserAccount}>
                 Modify my account info
               </Button>
@@ -201,34 +196,50 @@ export default memo(function UserInfoModal() {
               <>
                 <Button
                   icon={<ArrowLeftOutlined />}
-                  className='friend-btn'
+                  className='btn-primary'
                   onClick={handleBackToPrevious}>
                   Back
                 </Button>
                 <Button
                   icon={<SendOutlined />}
-                  className='friend-btn'
+                  className='btn-primary'
                   onClick={handleSendRequest}>
                   Send request
                 </Button>
               </>
             ) : (
               <>
-                <Button icon={<MessageOutlined />} className='friend-btn'>
+                <Button
+                  onClick={handleSendMess}
+                  icon={<MessageOutlined />}
+                  className='btn-primary'>
                   Send message
                 </Button>
                 {isFriend ? (
-                  <Button icon={<UserDeleteOutlined />} className='friend-btn'>
+                  <Button
+                    onClick={() => setModalUnfiendVisible(true)}
+                    icon={<UserDeleteOutlined />}
+                    className='btn-primary'>
                     Unfriend
                   </Button>
                 ) : isRequested ? (
-                  <Button icon={<SendOutlined />} disabled>
-                    Request was sent
+                  <Button
+                    onClick={handleRevokeRequest}
+                    icon={<CloseOutlined />}
+                    className='btn-primary'>
+                    Revoke request
+                  </Button>
+                ) : selectedUser?.requestedTo?.includes(userInfo.uid) ? (
+                  <Button
+                    icon={<UserAddOutlined />}
+                    className='btn-primary'
+                    onClick={handleConfirmFriendRequest}>
+                    Accept
                   </Button>
                 ) : (
                   <Button
                     icon={<UserAddOutlined />}
-                    className='friend-btn'
+                    className='btn-primary'
                     onClick={handleShowSendRequest}>
                     Add friend
                   </Button>
@@ -240,14 +251,24 @@ export default memo(function UserInfoModal() {
         title='User info'
         visible={userInfoVisible}
         onCancel={handleCancel}>
-        <div className='cover-photo'>
-          {selectedUser.photoURL ? (
-            <Image src={selectedUser.photoURL} width={80} />
-          ) : (
-            <Avatar size='large' className='avatar'>
-              {selectedUser.displayName?.charAt(0)?.toUpperCase()}
-            </Avatar>
-          )}
+        <div className='avt-wrapper'>
+          <Image
+            className='cover-photo'
+            src={selectedUser.coverPhotoURL}></Image>
+          <div className='circle-avt'>
+            {selectedUser.photoURL ? (
+              <Image
+                src={selectedUser.photoURL}
+                width={100}
+                rootClassName='image-avt'
+                className='noselect'
+              />
+            ) : (
+              <Avatar size='large' className='avatar noselect'>
+                {selectedUser.displayName?.charAt(0)?.toUpperCase()}
+              </Avatar>
+            )}
+          </div>
         </div>
         <div className='info'>
           <p className='name'>{selectedUser.displayName}</p>
@@ -273,7 +294,7 @@ export default memo(function UserInfoModal() {
             </p>
           )}
         </div>
-      </ModalStyled>
+      </Modal>
     </div>
   )
 })

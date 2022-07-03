@@ -1,20 +1,43 @@
+@use '/src/theme/variables';
+
 .login-graper {
-  width: 40%;
+  width: 45%;
   padding: 2em 3em 2em 3em;
   box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
     rgba(17, 17, 26, 0.1) 0px 0px 8px;
   margin: 0 auto;
+  @media (max-width: 1000px) {
+    width: 70%;
+  }
+  @media (max-width: 800px) {
+    width: 80%;
+  }
   @media (max-width: 600px) {
     width: 100%;
     box-shadow: none;
+    padding: 1em 1.5em 1em 1.5em;
+  }
+  @media (max-width: 300px) {
+    width: 100%;
+    box-shadow: none;
+    padding: 0.3em 0.5em 0.3em 0.5em;
+  }
+
+  .ant-input-affix-wrapper {
+    border: 1px solid #16576b77;
   }
   .check-box {
     margin-bottom: 10px;
+    .ant-checkbox-inner {
+      background-color: #093f50;
+      border: 1px solid #093f50;
+    }
   }
+
   .ant-btn:hover,
   .ant-btn:focus {
     background: #f6f9fe;
-    color: rgb(0, 172, 240);
+    color: variables.$btnHover;
   }
   .button-82-pushable {
     position: relative;
@@ -51,10 +74,10 @@
     border-radius: 12px;
     background: linear-gradient(
       to left,
-      rgb(5, 66, 136) 0%,
-      rgb(0, 111, 163) 8%,
-      rgb(0, 111, 163) 8%,
-      rgb(5, 66, 136) 0%
+      variables.$btnHover 0%,
+      variables.$primaryColor 8%,
+      variables.$primaryColor 8%,
+      variables.$btnHover 0%
     );
   }
 
@@ -64,8 +87,8 @@
     padding: 12px 27px;
     border-radius: 12px;
     font-size: 1.1rem;
-    color: white;
-    background: rgb(0, 172, 240);
+    color: variables.$lightText;
+    background: variables.$primaryColor;
     will-change: transform;
     transform: translateY(-4px);
     transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
@@ -79,7 +102,7 @@
   }
 
   .button-82-pushable:hover {
-    filter: brightness(110%);
+    filter: brightness(200%);
     -webkit-filter: brightness(110%);
   }
 
@@ -172,6 +195,7 @@
     line-height: normal;
     overflow: visible;
     padding: 0.1em 1em;
+    margin: 0 auto;
     position: relative;
     text-align: center;
     text-transform: none;
@@ -183,9 +207,17 @@
     width: 24em;
     will-change: transform, opacity;
     z-index: 0;
+
+    @media (max-width: 1100px) {
+      width: 20em;
+    }
     @media (max-width: 600px) {
       width: 18em;
     }
+    @media (max-width: 300px) {
+      width: 90%;
+    }
+
     .button-17:hover {
       background: #f6f9fe;
       color: #174ea6;

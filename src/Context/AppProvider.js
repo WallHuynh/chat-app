@@ -1,11 +1,4 @@
-import { doc } from 'firebase/firestore'
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from 'react'
+import React, { createContext, useContext, useMemo, useState } from 'react'
 import useFirestore from '../hooks/useFirestore'
 import { AuthContext } from './AuthProvider'
 
@@ -23,9 +16,14 @@ export default function AppProvider({ children }) {
   const [showUserStatus, setShowUserStatus] = useState(false)
   const [emailRegister, setEmailRegister] = useState({})
   const [isForgotPassVisible, setIsForgotPassVisible] = useState(false)
-  const [modalConfirmVisible, setModalConfirmVisible] = useState(false)
+  const [modalConfirmLeaveVisible, setModalConfirmLeaveVisible] =
+    useState(false)
+  const [modalUnfiendVisible, setModalUnfiendVisible] = useState(false)
   const [selectedRoomLeave, setSelectedRoomLeave] = useState({})
-  const [openGroupInfo, setOpenGroupInfo] = useState(false)
+  const [openGroupInfo, setOpenGroupInfo] = useState(true)
+  const [viewWidth, setViewWidth] = useState(null)
+  const [changeRoomNameVisible, setChangeRoomNameVisible] = useState(false)
+
   const {
     user: { uid },
   } = useContext(AuthContext)
@@ -38,7 +36,6 @@ export default function AppProvider({ children }) {
     }
   }, [uid])
   const status = useFirestore('status', requestCondition)
-  console.log('status', status)
 
   const roomsCondition = useMemo(() => {
     return {
@@ -88,18 +85,27 @@ export default function AppProvider({ children }) {
     setShowUserStatus(false)
     setEmailRegister('')
     setIsForgotPassVisible(false)
-    setModalConfirmVisible(false)
+    setModalConfirmLeaveVisible(false)
     setSelectedRoomLeave({})
-    setOpenGroupInfo(false)
+    setOpenGroupInfo(true)
+    setModalUnfiendVisible(false)
+    setViewWidth(null)
+    setChangeRoomNameVisible(false)
   }
 
   return (
     <AppContext.Provider
       value={{
+        changeRoomNameVisible,
+        setChangeRoomNameVisible,
+        viewWidth,
+        setViewWidth,
+        modalUnfiendVisible,
+        setModalUnfiendVisible,
         openGroupInfo,
         setOpenGroupInfo,
-        modalConfirmVisible,
-        setModalConfirmVisible,
+        modalConfirmLeaveVisible,
+        setModalConfirmLeaveVisible,
         selectedRoomLeave,
         setSelectedRoomLeave,
         userInfo,

@@ -1,11 +1,16 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { Form, Modal, Input, notification } from 'antd'
 import { AppContext } from '../../context/AppProvider'
-import { addDocument, updateDocument } from '../../firebase/services'
-import { AuthContext } from '../../context/AuthProvider'
 import { collection, query, where, getDocs } from 'firebase/firestore'
 import { db } from '../../firebase/config'
 
+export const openNotification = (placement, msg, describe) => {
+  notification.warn({
+    message: msg,
+    description: describe,
+    placement: placement,
+  })
+}
 export default function FindFriendModal() {
   const {
     isFindFriendVisible,
@@ -13,19 +18,8 @@ export default function FindFriendModal() {
     setSelectedUser,
     setUserInfoVisible,
   } = useContext(AppContext)
-  const {
-    user: { uid, displayName, photoURL },
-  } = useContext(AuthContext)
-  const { selectedRoom, members } = useContext(AppContext)
-  const [form] = Form.useForm()
 
-  const openNotification = (placement, msg, describe) => {
-    notification.warn({
-      message: msg,
-      description: describe,
-      placement: placement,
-    })
-  }
+  const [form] = Form.useForm()
 
   const handleOk = async () => {
     const email = form?.getFieldsValue()?.email

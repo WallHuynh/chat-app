@@ -12,6 +12,44 @@ import {
   limit,
 } from 'firebase/firestore'
 import { updateDocument } from '../../firebase/services'
+import styled from 'styled-components'
+
+const ModalStyled = styled(Modal)`
+  .ant-modal-footer {
+    .btn-primary {
+      border: 0.1px solid gray;
+      background-color: white;
+      font-weight: 600;
+      color: black;
+      :hover {
+        font-weight: 600;
+        border: solid 1px green;
+        color: green;
+      }
+    }
+    .disabled-btn {
+      cursor: not-allowed;
+      color: rgba(0, 0, 0, 0.25);
+      border: 0.1px solid;
+      background: #f5f5f5;
+      text-shadow: none;
+      box-shadow: none;
+    }
+    .confirm-btn {
+      border: 0.1px solid green;
+      background-color: green;
+      font-weight: 600;
+      color: white;
+      &:active {
+        box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px,
+          rgba(6, 24, 44, 0.65) 0px 4px 6px -1px,
+          rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+        transform: translateY(-0.5px);
+        transition: 200ms;
+      }
+    }
+  }
+`
 
 function DebounceSelect({
   fetchOptions,
@@ -116,7 +154,7 @@ export default function InviteMemberModal() {
 
   return (
     <div>
-      <Modal
+      <ModalStyled
         centered
         okText='Invite'
         title='Invite members'
@@ -136,7 +174,7 @@ export default function InviteMemberModal() {
             curMembers={selectedRoom.members}
           />
         </Form>
-      </Modal>
+      </ModalStyled>
     </div>
   )
 }

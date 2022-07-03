@@ -1,10 +1,12 @@
-import { Avatar } from 'antd'
+import { EditOutlined } from '@ant-design/icons'
+import { Avatar, Button } from 'antd'
 import React, { useContext } from 'react'
 import { AppContext } from '../../../../context/AppProvider'
 import { AuthContext } from '../../../../context/AuthProvider'
 
 export default function Info() {
-  const { selectedRoom } = useContext(AppContext)
+  const { selectedRoom, userInfo, setChangeRoomNameVisible } =
+    useContext(AppContext)
   const {
     user: { uid },
   } = useContext(AuthContext)
@@ -78,7 +80,20 @@ export default function Info() {
             size='medium'>{`+${selectedRoom.standByPhoto.groupLengthRest}`}</Avatar>
         )}
       </div>
-      <p className='name'>{selectedRoom.name}</p>
+      <div className='title-wrapper'>
+        <p className='title'>
+          {selectedRoom.isAGroup
+            ? selectedRoom.name
+            : selectedRoom?.standByPhoto?.lastThreeMembers?.filter(
+                mem => mem?.displayName !== userInfo?.displayName
+              )[0]?.displayName}
+        </p>
+        <Button
+          className='btn-edit'
+          onClick={() => setChangeRoomNameVisible(true)}
+          icon={<EditOutlined />}
+          type='text'></Button>
+      </div>
     </div>
   )
 }

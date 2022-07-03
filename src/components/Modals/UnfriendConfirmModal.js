@@ -4,36 +4,35 @@ import { ExclamationCircleTwoTone } from '@ant-design/icons'
 import { updateDocument } from '../../firebase/services'
 import { arrayRemove } from 'firebase/firestore'
 import { AppContext } from '../../context/AppProvider'
+import { openNotification } from './FindFriendModal'
 
-export default function ModalConfirmLeaveRoom() {
+export default function UnfriendConfirmModal() {
   const {
-    modalConfirmLeaveVisible,
-    setModalConfirmLeaveVisible,
-    selectedRoomLeave,
-    setSelectedRoomLeave,
+    modalUnfiendVisible,
+    setModalUnfiendVisible,
+    selectedUser,
     userInfo,
   } = useContext(AppContext)
 
-  const handleLeaveRoom = () => {
-    // setSelectedRoomId('')
-    updateDocument('rooms', selectedRoomLeave.id, {
-      members: arrayRemove(userInfo.uid),
-    })
+  const handleUnfriend = () => {
     updateDocument('users', userInfo.uid, {
-      pinnedRoomsId: arrayRemove(selectedRoomLeave.id),
+      friends: arrayRemove(selectedUser.uid),
+    })
+    updateDocument('users', selectedUser.uid, {
+      friends: arrayRemove(userInfo.uid),
     })
     modalConfirmCancel()
+    openNotification('top', 'Unfriend successully')
   }
 
   const modalConfirmCancel = () => {
-    setModalConfirmLeaveVisible(false)
-    setSelectedRoomLeave({})
+    setModalUnfiendVisible(false)
   }
   return (
     <div>
       <Modal
         centered
-        visible={modalConfirmLeaveVisible}
+        visible={modalUnfiendVisible}
         placement='bottom'
         title={
           <>
@@ -44,10 +43,10 @@ export default function ModalConfirmLeaveRoom() {
         width={400}
         okText='Yes'
         cancelText='No'
-        onOk={handleLeaveRoom}
+        onOk={handleUnfriend}
         onCancel={modalConfirmCancel}
         closable={false}>
-        {`Are you sure to leave ${selectedRoomLeave.name}?`}
+        {`Are you sure to unfriend ${selectedUser.displayName}?`}
       </Modal>
     </div>
   )
