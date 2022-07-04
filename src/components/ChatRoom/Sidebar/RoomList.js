@@ -28,7 +28,6 @@ export default function RoomList() {
     user: { uid },
   } = useContext(AuthContext)
   const [roomsData, setRoomData] = useState([])
-  console.log(userInfo)
 
   useEffect(() => {
     const sortPinRoomsByTimeStamp = () => {

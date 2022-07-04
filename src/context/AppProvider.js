@@ -45,7 +45,6 @@ export default function AppProvider({ children }) {
     }
   }, [uid])
   const rooms = useFirestore('rooms', roomsCondition)
-  console.log('rooms', rooms)
 
   const selectedRoom = useMemo(
     () => rooms.find(room => room.id === selectedRoomId) || {},
@@ -71,7 +70,6 @@ export default function AppProvider({ children }) {
     () => members.find(member => member.uid === uid) || {},
     [members, uid]
   )
-  console.log('members', members)
 
   const clearState = () => {
     setSelectedRoomId('')
