@@ -11,7 +11,6 @@ import {
   setDoc,
   updateDoc,
   deleteDoc,
-  onSnapshot,
 } from 'firebase/firestore'
 
 export const deleteDocument = async (oneCollection, oneDocument) => {
@@ -23,7 +22,6 @@ export const getDocument = async (oneCollection, oneDocument) => {
   const docRef = doc(db, oneCollection, oneDocument)
   const docSnap = await getDoc(docRef)
   if (docSnap.exists()) {
-    console.log('Document data:', docSnap.data())
     return docSnap.data()
   } else {
     console.log('No such document!')
