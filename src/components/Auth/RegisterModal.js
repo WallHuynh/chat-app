@@ -129,14 +129,7 @@ export default function RegisterModal() {
               closable
             />
           )}
-          {/* {err.errorMessage !== null && (
-            <AlertStyled
-              message={err.errorMessage}
-              type='error'
-              showIcon
-              closable
-            />
-          )} */}
+      
           {err.isSuccess && (
             <AlertStyled
               message='Sign up successfully! Now you can close this tab'

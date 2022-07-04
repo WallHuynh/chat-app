@@ -69,7 +69,7 @@ export default function Login() {
       signInWithEmailAndPassword(auth, values.email, values.password)
         .then(userCredential => {
           // Signed in
-          const user = userCredential.user
+          // const user = userCredential.user
           // ...
         })
         .catch(error => {
@@ -114,14 +114,6 @@ export default function Login() {
           {err.email !== '' && (
             <AlertStyled message={err.email} type='error' showIcon closable />
           )}
-          {/* {err.errorMessage !== null && (
-              <AlertStyled
-                message={err.errorMessage}
-                type='error'
-                showIcon
-                closable
-              />
-            )} */}
           <Form.Item
             name='email'
             rules={[
@@ -184,7 +176,6 @@ export default function Login() {
               Register now
             </Button>
           </Form.Item>
-
           <Button
             className='button-17'
             icon={<GoogleSquareFilled />}
