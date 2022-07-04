@@ -29,3 +29,6 @@ firebase.json
 /emulators
 /functions
 
+
+# Local Netlify folder
+.netlify

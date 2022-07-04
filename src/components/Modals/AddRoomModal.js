@@ -61,15 +61,8 @@ export default function AddRoomModal() {
           <Form.Item name='name'>
             <Input
               onPressEnter={handleOk}
-              placeholder="What's your room's name"
+              placeholder="Your room's name"
               maxLength={40}
-            />
-          </Form.Item>
-          <Form.Item name='description' initialValue={''}>
-            <Input.TextArea
-              onPressEnter={handleOk}
-              placeholder="What's your room's description"
-              maxLength={300}
             />
           </Form.Item>
         </Form>

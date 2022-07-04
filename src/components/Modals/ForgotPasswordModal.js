@@ -28,7 +28,6 @@ export default function ForgotPasswordModal() {
   const handleOk = async () => {
     const email = form?.getFieldsValue()?.email
     if (email) {
-      console.log(email)
       let flatIsErr = false
       if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
         openNotification('bottom', 'Invalid email', '')
