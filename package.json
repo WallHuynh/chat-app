@@ -13,8 +13,8 @@
     "firebase": "^9.6.11",
     "firebase-functions": "^3.21.2",
     "lodash": "^4.17.21",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "react-use-measure": "^2.1.1",
@@ -45,8 +45,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "moment": "^2.29.3"
   }
 }
