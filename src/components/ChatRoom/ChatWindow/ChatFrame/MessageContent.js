@@ -53,6 +53,11 @@ export default function MessageContent() {
 
   const onEmojiClick = (event, emojiObject) => {
     setChosenEmoji(emojiObject)
+    if (inputRef?.current) {
+      setTimeout(() => {
+        inputRef.current.focus()
+      })
+    }
   }
 
   const handleInputChange = e => {
@@ -63,11 +68,6 @@ export default function MessageContent() {
     setInputValue(prevText =>
       chosenEmoji?.emoji ? `${prevText} ${chosenEmoji?.emoji}` : prevText
     )
-    if (inputRef?.current) {
-      setTimeout(() => {
-        inputRef.current.focus()
-      })
-    }
   }, [chosenEmoji])
 
   const handleKey = () => {
