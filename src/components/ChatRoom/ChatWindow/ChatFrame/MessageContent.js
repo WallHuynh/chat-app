@@ -359,6 +359,7 @@ export default function MessageContent() {
             onPressEnter={handlePressEnter}
             onKeyDown={handleKey}
             placeholder='Type your message here...'
+            autoFocus={false}
           />
         </div>
 
