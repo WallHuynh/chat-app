@@ -1,0 +1,24 @@
+$primaryColor: rgb(4, 67, 97);
+$listColor: #9bcebf;
+$hoverColor: rgb(225, 239, 252);
+$sideBarColor: aliceblue;
+$userColor: #dffadf;
+$lightText: rgb(229, 252, 253);
+$darkText: rgb(88, 88, 88);
+$darkerText: rgb(34, 34, 34);
+$btnHover: rgb(8, 151, 120);
+$borderColor: rgb(230, 230, 230);
+
+$noto-sans-font: 'Noto Sans', sans-serif;
+$source-sans-pro-font: 'Source Sans Pro', sans-serif;
+
+:root {
+  --step--2: clamp(0.87rem, calc(0.85rem + 0.1vw), 0.92rem);
+  --step--1: clamp(1.04rem, calc(1rem + 0.21vw), 1.15rem);
+  --step-0: clamp(1.25rem, calc(1.18rem + 0.37vw), 1.44rem);
+  --step-1: clamp(1.5rem, calc(1.38rem + 0.58vw), 1.8rem);
+  --step-2: clamp(1.8rem, calc(1.63rem + 0.87vw), 2.25rem);
+  --step-3: clamp(2.16rem, calc(1.91rem + 1.26vw), 2.81rem);
+  --step-4: clamp(2.59rem, calc(2.23rem + 1.79vw), 3.51rem);
+  --step-5: clamp(3.11rem, calc(2.61rem + 2.49vw), 4.39rem);
+}
