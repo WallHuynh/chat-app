@@ -283,11 +283,8 @@
           padding: 0.5em;
           font-size: 0.9rem;
           border: none;
-          background-color: #3636368c;
+          background-color: #2e2e2eb4;
           color: $lightText;
-          &:focus {
-            background-color: #2e2e2ee0;
-          }
           &::-webkit-scrollbar {
             display: none;
           }

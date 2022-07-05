@@ -19,7 +19,6 @@ export default function MessageContent() {
   const [isTyping, setIsTyping] = useState(false)
   const [userQueue, setUserQueue] = useState(true)
   const [emojiPickerVisible, setEmojiPickerVisible] = useState(false)
-  const [chosenEmoji, setChosenEmoji] = useState(null)
   const messageListRef = useRef(null)
   let inputTimeout
   const emojiContainRef = useRef(null)
@@ -52,7 +51,7 @@ export default function MessageContent() {
   }, [bounds])
 
   const onEmojiClick = (event, emojiObject) => {
-    setChosenEmoji(emojiObject)
+    setInputValue(`${inputValue} ${emojiObject?.emoji}`)
     if (inputRef?.current) {
       setTimeout(() => {
         inputRef.current.focus()
@@ -63,12 +62,6 @@ export default function MessageContent() {
   const handleInputChange = e => {
     setInputValue(e.target.value)
   }
-
-  useEffect(() => {
-    setInputValue(prevText =>
-      chosenEmoji?.emoji ? `${prevText} ${chosenEmoji?.emoji}` : prevText
-    )
-  }, [chosenEmoji])
 
   const handleKey = () => {
     if (isTyping) {
@@ -359,7 +352,11 @@ export default function MessageContent() {
             onPressEnter={handlePressEnter}
             onKeyDown={handleKey}
             placeholder='Type your message here...'
-            autoFocus={false}
+            onFocus={e => {
+              const temp_value = e.target.value
+              e.target.value = ''
+              e.target.value = temp_value
+            }}
           />
         </div>
 
