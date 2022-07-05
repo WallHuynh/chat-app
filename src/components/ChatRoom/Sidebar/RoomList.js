@@ -3,7 +3,12 @@ import { Avatar, Button, Dropdown, Menu } from 'antd'
 import { AppContext } from '../../../context/AppProvider'
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict'
 import { AuthContext } from '../../../context/AuthProvider'
-import { MoreOutlined, PushpinFilled } from '@ant-design/icons'
+import {
+  MoreOutlined,
+  PushpinFilled,
+  UserAddOutlined,
+  UsergroupAddOutlined,
+} from '@ant-design/icons'
 import { updateDocument } from '../../../firebase/services'
 import { arrayRemove, arrayUnion } from 'firebase/firestore'
 
@@ -63,102 +68,138 @@ export default function RoomList() {
 
   return (
     <div className='room-list noselect'>
-      {roomsData.map(room => (
-        <Dropdown
-          key={room.id}
-          overlay={
-            <Menu
-              items={
-                room.isAGroup
-                  ? [
-                      {
-                        label: userInfo?.pinnedRoomsId?.includes(room.id) ? (
-                          <Button
-                            onClick={e => {
-                              e.stopPropagation()
-                              handleUnpin(room.id)
-                            }}
-                            className='btn-dropdown-list'
-                            type='text'>
-                            UnPin this conversation
-                          </Button>
-                        ) : (
-                          <Button
-                            onClick={() => handlePin(room.id)}
-                            className='btn-dropdown-list'
-                            type='text'>
-                            Pin this conversation
-                          </Button>
-                        ),
-                        key: '0',
-                      },
+      {roomsData.length > 0 ? (
+        roomsData.map(room => (
+          <Dropdown
+            key={room.id}
+            overlay={
+              <Menu
+                items={
+                  room.isAGroup
+                    ? [
+                        {
+                          label: userInfo?.pinnedRoomsId?.includes(room.id) ? (
+                            <Button
+                              onClick={e => {
+                                e.stopPropagation()
+                                handleUnpin(room.id)
+                              }}
+                              className='btn-dropdown-list'
+                              type='text'>
+                              UnPin this conversation
+                            </Button>
+                          ) : (
+                            <Button
+                              onClick={() => handlePin(room.id)}
+                              className='btn-dropdown-list'
+                              type='text'>
+                              Pin this conversation
+                            </Button>
+                          ),
+                          key: '0',
+                        },
 
-                      {
-                        label: (
-                          <Button
-                            onClick={() => openModalConfirm(room)}
-                            className='btn-dropdown-list'
-                            type='text'>
-                            Leave this group
-                          </Button>
-                        ),
-                        key: '1',
-                      },
-                    ]
-                  : [
-                      {
-                        label: userInfo?.pinnedRoomsId?.includes(room.id) ? (
-                          <Button
-                            onClick={() => handleUnpin(room.id)}
-                            className='btn-dropdown-list'
-                            type='text'>
-                            UnPin this conversation
-                          </Button>
-                        ) : (
-                          <Button
-                            onClick={() => handlePin(room.id)}
-                            className='btn-dropdown-list'
-                            type='text'>
-                            Pin this conversation
-                          </Button>
-                        ),
-                        key: '0',
-                      },
-                    ]
-              }
-            />
-          }
-          trigger={['contextMenu']}>
-          <div
-            className={room.id === selectedRoom.id ? 'room selected' : 'room'}
-            style={
-              room.id === selectedRoom.id
-                ? { backgroundColor: 'rgb(4, 67, 97)', color: 'white' }
-                : null
+                        {
+                          label: (
+                            <Button
+                              onClick={() => openModalConfirm(room)}
+                              className='btn-dropdown-list'
+                              type='text'>
+                              Leave this group
+                            </Button>
+                          ),
+                          key: '1',
+                        },
+                      ]
+                    : [
+                        {
+                          label: userInfo?.pinnedRoomsId?.includes(room.id) ? (
+                            <Button
+                              onClick={() => handleUnpin(room.id)}
+                              className='btn-dropdown-list'
+                              type='text'>
+                              UnPin this conversation
+                            </Button>
+                          ) : (
+                            <Button
+                              onClick={() => handlePin(room.id)}
+                              className='btn-dropdown-list'
+                              type='text'>
+                              Pin this conversation
+                            </Button>
+                          ),
+                          key: '0',
+                        },
+                      ]
+                }
+              />
             }
-            onClick={() => setSelectedRoomId(room.id)}>
-            <div className='avt-graper'>
-              <div className='avatar-group'>
-                {room.standByPhoto.lastThreeMembers.length === 2 ? (
-                  <>
-                    {room.standByPhoto.lastThreeMembers
-                      .filter(member => member.uid !== uid)
-                      .map(member => (
-                        <Avatar
-                          key={member.uid}
-                          size='large'
-                          src={member.photoURL}>
-                          {member?.photoURL
-                            ? ''
-                            : member?.displayName?.charAt(0)?.toUpperCase()}
-                        </Avatar>
-                      ))}
-                  </>
-                ) : room.standByPhoto.lastThreeMembers.length === 3 ? (
-                  <>
+            trigger={['contextMenu']}>
+            <div
+              className={room.id === selectedRoom.id ? 'room selected' : 'room'}
+              style={
+                room.id === selectedRoom.id
+                  ? { backgroundColor: 'rgb(4, 67, 97)', color: 'white' }
+                  : null
+              }
+              onClick={() => setSelectedRoomId(room.id)}>
+              <div className='avt-graper'>
+                <div className='avatar-group'>
+                  {room.standByPhoto.lastThreeMembers.length === 2 ? (
+                    <>
+                      {room.standByPhoto.lastThreeMembers
+                        .filter(member => member.uid !== uid)
+                        .map(member => (
+                          <Avatar
+                            key={member.uid}
+                            size='large'
+                            src={member.photoURL}>
+                            {member?.photoURL
+                              ? ''
+                              : member?.displayName?.charAt(0)?.toUpperCase()}
+                          </Avatar>
+                        ))}
+                    </>
+                  ) : room.standByPhoto.lastThreeMembers.length === 3 ? (
+                    <>
+                      <Avatar
+                        className='first-avt'
+                        size='medium'
+                        src={room.standByPhoto.lastThreeMembers[0].photoURL}>
+                        {room.standByPhoto.lastThreeMembers[0]?.photoURL
+                          ? ''
+                          : room.standByPhoto.lastThreeMembers[0]?.displayName
+                              ?.charAt(0)
+                              ?.toUpperCase()}
+                      </Avatar>
+                      <Avatar
+                        className='second-avt'
+                        size='medium'
+                        src={room.standByPhoto.lastThreeMembers[1].photoURL}>
+                        {room.standByPhoto.lastThreeMembers[1]?.photoURL
+                          ? ''
+                          : room.standByPhoto.lastThreeMembers[1]?.displayName
+                              ?.charAt(0)
+                              ?.toUpperCase()}
+                      </Avatar>
+                      <Avatar
+                        className={
+                          room?.standByPhoto?.groupLengthRest
+                            ? 'third-avt'
+                            : 'third-avt-alone'
+                        }
+                        size='medium'
+                        src={room.standByPhoto.lastThreeMembers[2].photoURL}>
+                        {room.standByPhoto.lastThreeMembers[2]?.photoURL
+                          ? ''
+                          : room.standByPhoto.lastThreeMembers[2]?.displayName
+                              ?.charAt(0)
+                              ?.toUpperCase()}
+                      </Avatar>
+                    </>
+                  ) : (
                     <Avatar
-                      className='first-avt'
-                      size='medium'
+                      size='large'
                       src={room.standByPhoto.lastThreeMembers[0].photoURL}>
                       {room.standByPhoto.lastThreeMembers[0]?.photoURL
                         ? ''
@@ -166,179 +207,166 @@ export default function RoomList() {
                             ?.charAt(0)
                             ?.toUpperCase()}
                     </Avatar>
-                    <Avatar
-                      className='second-avt'
-                      size='medium'
-                      src={room.standByPhoto.lastThreeMembers[1].photoURL}>
-                      {room.standByPhoto.lastThreeMembers[1]?.photoURL
-                        ? ''
-                        : room.standByPhoto.lastThreeMembers[1]?.displayName
-                            ?.charAt(0)
-                            ?.toUpperCase()}
-                    </Avatar>
-                    <Avatar
-                      className={
-                        room?.standByPhoto?.groupLengthRest
-                          ? 'third-avt'
-                          : 'third-avt-alone'
-                      }
-                      size='medium'
-                      src={room.standByPhoto.lastThreeMembers[2].photoURL}>
-                      {room.standByPhoto.lastThreeMembers[2]?.photoURL
-                        ? ''
-                        : room.standByPhoto.lastThreeMembers[2]?.displayName
-                            ?.charAt(0)
-                            ?.toUpperCase()}
-                    </Avatar>
-                  </>
-                ) : (
-                  <Avatar
-                    size='large'
-                    src={room.standByPhoto.lastThreeMembers[0].photoURL}>
-                    {room.standByPhoto.lastThreeMembers[0]?.photoURL
-                      ? ''
-                      : room.standByPhoto.lastThreeMembers[0]?.displayName
-                          ?.charAt(0)
-                          ?.toUpperCase()}
-                  </Avatar>
-                )}
-
-                {room?.standByPhoto?.groupLengthRest && (
-                  <Avatar
-                    className='rest-avt'
-                    size='medium'>{`+${room.standByPhoto.groupLengthRest}`}</Avatar>
-                )}
-              </div>
-            </div>
-
-            <div className='titles'>
-              <p className='name'>
-                {room.isAGroup
-                  ? room.name
-                  : room?.standByPhoto?.lastThreeMembers?.filter(
-                      mem => mem?.displayName !== userInfo?.displayName
-                    )[0]?.displayName}
-              </p>
-
-              {room.newestMess.text && (
-                <p className='text'>
-                  {room.newestMess.displayName}: {room.newestMess.text}
-                </p>
-              )}
-            </div>
-
-            <div className='time-stamp'>
-              {room.newestMess.createdAt && (
-                <p>
-                  {formatNSecondsToSevaralSeconds(
-                    room.newestMess.createdAt.seconds
                   )}
+
+                  {room?.standByPhoto?.groupLengthRest && (
+                    <Avatar
+                      className='rest-avt'
+                      size='medium'>{`+${room.standByPhoto.groupLengthRest}`}</Avatar>
+                  )}
+                </div>
+              </div>
+
+              <div className='titles'>
+                <p className='name'>
+                  {room.isAGroup
+                    ? room.name
+                    : room?.standByPhoto?.lastThreeMembers?.filter(
+                        mem => mem?.displayName !== userInfo?.displayName
+                      )[0]?.displayName}
                 </p>
-              )}
 
-              <div className='btns'>
-                {userInfo?.pinnedRoomsId?.includes(room.id) && (
-                  <Button
-                    className='btn-pinned'
-                    onClick={e => e.stopPropagation()}
-                    type='text'
-                    icon={<PushpinFilled />}
-                  />
+                {room.newestMess.text && (
+                  <p className='text'>
+                    {room.newestMess.displayName}: {room.newestMess.text}
+                  </p>
                 )}
-                <Dropdown
-                  className='dropdown-list'
-                  overlay={
-                    <Menu
-                      onContextMenu={e => e.stopPropagation()}
-                      items={
-                        room.isAGroup
-                          ? [
-                              {
-                                label: userInfo?.pinnedRoomsId?.includes(
-                                  room.id
-                                ) ? (
-                                  <Button
-                                    onClick={e => {
-                                      e.stopPropagation()
-                                      handleUnpin(room.id)
-                                    }}
-                                    className='btn-dropdown-list'
-                                    type='text'>
-                                    UnPin this conversation
-                                  </Button>
-                                ) : (
-                                  <Button
-                                    onClick={e => {
-                                      e.stopPropagation()
-                                      handlePin(room.id)
-                                    }}
-                                    className='btn-dropdown-list'
-                                    type='text'>
-                                    Pin this conversation
-                                  </Button>
-                                ),
-                                key: '0',
-                              },
+              </div>
 
-                              {
-                                label: (
-                                  <Button
-                                    onClick={e => {
-                                      e.stopPropagation()
-                                      openModalConfirm(room)
-                                    }}
-                                    className='btn-dropdown-list'
-                                    type='text'>
-                                    Leave this group
-                                  </Button>
-                                ),
-                                key: '1',
-                              },
-                            ]
-                          : [
-                              {
-                                label: userInfo?.pinnedRoomsId?.includes(
-                                  room.id
-                                ) ? (
-                                  <Button
-                                    onClick={e => {
-                                      e.stopPropagation()
-                                      handleUnpin(room.id)
-                                    }}
-                                    className='btn-dropdown-list'
-                                    type='text'>
-                                    UnPin this conversation
-                                  </Button>
-                                ) : (
-                                  <Button
-                                    onClick={e => {
-                                      e.stopPropagation()
-                                      handlePin(room.id)
-                                    }}
-                                    className='btn-dropdown-list'
-                                    type='text'>
-                                    Pin this conversation
-                                  </Button>
-                                ),
-                                key: '0',
-                              },
-                            ]
-                      }
+              <div className='time-stamp'>
+                {room.newestMess.createdAt && (
+                  <p>
+                    {formatNSecondsToSevaralSeconds(
+                      room.newestMess.createdAt.seconds
+                    )}
+                  </p>
+                )}
+
+                <div className='btns'>
+                  {userInfo?.pinnedRoomsId?.includes(room.id) && (
+                    <Button
+                      className='btn-pinned'
+                      onClick={e => e.stopPropagation()}
+                      type='text'
+                      icon={<PushpinFilled />}
                     />
-                  }
-                  trigger={['hover', 'click']}>
-                  <Button
-                    onClick={e => e.stopPropagation()}
-                    type='text'
-                    className='btn-more-option'
-                    icon={<MoreOutlined />}
-                  />
-                </Dropdown>
+                  )}
+                  <Dropdown
+                    className='dropdown-list'
+                    overlay={
+                      <Menu
+                        onContextMenu={e => e.stopPropagation()}
+                        items={
+                          room.isAGroup
+                            ? [
+                                {
+                                  label: userInfo?.pinnedRoomsId?.includes(
+                                    room.id
+                                  ) ? (
+                                    <Button
+                                      onClick={e => {
+                                        e.stopPropagation()
+                                        handleUnpin(room.id)
+                                      }}
+                                      className='btn-dropdown-list'
+                                      type='text'>
+                                      UnPin this conversation
+                                    </Button>
+                                  ) : (
+                                    <Button
+                                      onClick={e => {
+                                        e.stopPropagation()
+                                        handlePin(room.id)
+                                      }}
+                                      className='btn-dropdown-list'
+                                      type='text'>
+                                      Pin this conversation
+                                    </Button>
+                                  ),
+                                  key: '0',
+                                },
+
+                                {
+                                  label: (
+                                    <Button
+                                      onClick={e => {
+                                        e.stopPropagation()
+                                        openModalConfirm(room)
+                                      }}
+                                      className='btn-dropdown-list'
+                                      type='text'>
+                                      Leave this group
+                                    </Button>
+                                  ),
+                                  key: '1',
+                                },
+                              ]
+                            : [
+                                {
+                                  label: userInfo?.pinnedRoomsId?.includes(
+                                    room.id
+                                  ) ? (
+                                    <Button
+                                      onClick={e => {
+                                        e.stopPropagation()
+                                        handleUnpin(room.id)
+                                      }}
+                                      className='btn-dropdown-list'
+                                      type='text'>
+                                      UnPin this conversation
+                                    </Button>
+                                  ) : (
+                                    <Button
+                                      onClick={e => {
+                                        e.stopPropagation()
+                                        handlePin(room.id)
+                                      }}
+                                      className='btn-dropdown-list'
+                                      type='text'>
+                                      Pin this conversation
+                                    </Button>
+                                  ),
+                                  key: '0',
+                                },
+                              ]
+                        }
+                      />
+                    }
+                    trigger={['hover', 'click']}>
+                    <Button
+                      onClick={e => e.stopPropagation()}
+                      type='text'
+                      className={
+                        userInfo?.pinnedRoomsId?.includes(room.id)
+                          ? 'btn-more-option-hide'
+                          : 'btn-more-option'
+                      }
+                      icon={<MoreOutlined />}
+                    />
+                  </Dropdown>
+                </div>
               </div>
             </div>
-          </div>
-        </Dropdown>
-      ))}
+          </Dropdown>
+        ))
+      ) : (
+        <div className='guide-wrapper'>
+          <p className='title'>
+            Hello <span>{`${userInfo.displayName}`}</span>!
+          </p>
+          <p className='title'>You haven't join any room yet</p>
+          <p className='description'>
+            Choose
+            <Button type='text' icon={<UserAddOutlined />}></Button>
+            button to find your friends
+          </p>
+          <p className='description'>
+            Choose
+            <Button type='text' icon={<UsergroupAddOutlined />}></Button>
+            button to join or create your own room
+          </p>
+        </div>
+      )}
     </div>
   )
 }

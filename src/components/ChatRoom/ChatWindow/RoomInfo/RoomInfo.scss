@@ -39,7 +39,7 @@
     }
   }
   .group-info-body {
-    height: calc(100% - 56px);
+    max-height: calc(100% - 56px);
     overflow-y: scroll;
     overflow-x: hidden;
     &::-webkit-scrollbar {
@@ -57,7 +57,7 @@
     }
     .info {
       padding: 10px 0 0 10px;
-      height: 110px;
+      height: 200px;
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -72,8 +72,8 @@
         justify-content: flex-start;
         padding: 0;
         .title {
-          font-weight: 500;
-          font-size: var(--step--1);
+          font-weight: 600;
+          font-size: var(--step--0);
           padding: 0;
           margin: 0;
         }
@@ -85,6 +85,17 @@
           height: 25px;
           &:hover {
             background-color: rgba(182, 182, 182, 0.822);
+          }
+        }
+      }
+      .group-id {
+        @extend .title-wrapper;
+        p {
+          font-size: var(--step--2);
+          font-weight: 300;
+          margin: 0;
+          span {
+            font-weight: 500;
           }
         }
       }

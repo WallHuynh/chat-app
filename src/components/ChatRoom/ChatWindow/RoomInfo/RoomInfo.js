@@ -8,8 +8,7 @@ import './RoomInfo.scss'
 import SettingOptions from './SettingOptions'
 
 export default function RoomInfo() {
-  const { selectedRoom, members, setIsInviteMemberVisible, setOpenGroupInfo } =
-    useContext(AppContext)
+  const { selectedRoom, setOpenGroupInfo } = useContext(AppContext)
   const { Panel } = Collapse
 
   const handleLeave = () => {

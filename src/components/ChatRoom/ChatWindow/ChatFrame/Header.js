@@ -136,9 +136,9 @@ export default function Header() {
         </Tooltip>
         {openGroupInfo ? (
           <Tooltip
-            mouseEnterDelay={2}
-            placement='bottom'
-            title='Conversation info'
+            mouseEnterDelay={1}
+            placement='bottomRight'
+            title='Close conversation info'
             arrowPointAtCenter={true}>
             <Button
               className='btn-open-group-info'

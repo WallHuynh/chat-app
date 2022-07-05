@@ -88,6 +88,25 @@
     }
   }
   .room-list {
+    .guide-wrapper {
+      margin: 40% auto;
+      text-align: center;
+      .title {
+        font-size: var(--step--1);
+        font-weight: 500;
+        span {
+          font-weight: 600;
+        }
+      }
+      .description {
+        font-size: var(--step--2);
+        font-weight: 300;
+      }
+      .title,
+      .description {
+        margin: 0;
+      }
+    }
     min-height: calc(100% - 70px);
     max-height: calc(100% - 70px);
     overflow-y: overlay;
@@ -123,7 +142,7 @@
         .time-stamp > .btns > .btn-pinned {
           display: none;
         }
-        .time-stamp > .btns > .btn-more-option {
+        .time-stamp > .btns > .btn-more-option-hide {
           display: block;
         }
       }
@@ -183,7 +202,7 @@
           margin: 5px 0;
           white-space: nowrap;
         }
-        .btn-more-option {
+        .btn-more-option-hide {
           display: none;
         }
       }

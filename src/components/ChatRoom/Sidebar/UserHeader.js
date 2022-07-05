@@ -19,6 +19,7 @@ export default function UserHeader() {
     setUserAccountVisible,
     setShowUserStatus,
     status,
+    viewWidth,
     userInfo,
   } = React.useContext(AppContext)
 
@@ -129,7 +130,7 @@ export default function UserHeader() {
         </Tooltip>
         <Tooltip
           className='addroom'
-          placement='bottom'
+          placement={viewWidth < 800 ? 'bottomRight' : 'bottom'}
           title='Create a chat room'
           color='#b8a3f5'>
           <Button

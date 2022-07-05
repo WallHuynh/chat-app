@@ -186,17 +186,19 @@ export default function MessageContent() {
     setIsTyping(false)
     setEmojiPickerVisible(false)
     // focus to input again after submit
-    if (inputRef?.current) {
+    if (viewWidth > 800) {
       setTimeout(() => {
         inputRef.current.focus()
+      })
+    } else {
+      setTimeout(() => {
+        inputRef.current.blur()
       })
     }
   }
 
   const handlePressEnter = e => {
-    if (e.keyCode == 13) {
-      e.preventDefault()
-    }
+    e.preventDefault()
     handleOnSubmit()
   }
 
@@ -288,11 +290,7 @@ export default function MessageContent() {
   }, [messages])
 
   return (
-    <div
-      // style={{
-      //   backgroundImage: `url(${userInfo.coverPhotoURL})`,
-      // }}
-      className='messages-content'>
+    <div className='messages-content'>
       <div
         className='messages-list'
         ref={messageListRef}
@@ -361,6 +359,7 @@ export default function MessageContent() {
               e.target.value = ''
               e.target.value = temp_value
             }}
+            autoFocus={false}
           />
         </div>
 

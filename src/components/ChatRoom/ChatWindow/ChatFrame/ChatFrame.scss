@@ -232,7 +232,7 @@
       right: 3em;
       width: fit-content;
       bottom: 50px;
-      @media (max-width: 600px) {
+      @media (max-width: 800px) {
         left: 0;
         right: 0;
         margin-left: auto;
@@ -250,7 +250,7 @@
       background-color: transparent;
       min-height: 50px;
       bottom: 0.2em;
-      @media (max-width: 600px) {
+      @media (max-width: 800px) {
         bottom: 0.5em;
       }
       .input-container {

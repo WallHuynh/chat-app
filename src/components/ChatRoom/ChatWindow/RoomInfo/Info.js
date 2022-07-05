@@ -1,8 +1,9 @@
-import { EditOutlined } from '@ant-design/icons'
+import { CopyOutlined, EditOutlined } from '@ant-design/icons'
 import { Avatar, Button } from 'antd'
 import React, { useContext } from 'react'
 import { AppContext } from '../../../../context/AppProvider'
 import { AuthContext } from '../../../../context/AuthProvider'
+import { openNotification } from '../../../Modals/FindFriendModal'
 
 export default function Info() {
   const { selectedRoom, userInfo, setChangeRoomNameVisible } =
@@ -10,6 +11,11 @@ export default function Info() {
   const {
     user: { uid },
   } = useContext(AuthContext)
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(selectedRoom.id)
+    openNotification('right', 'Copied room ID to clipboard')
+  }
   return (
     <div className='info noselect'>
       <div className='avatar-group'>
@@ -92,6 +98,16 @@ export default function Info() {
           className='btn-edit'
           onClick={() => setChangeRoomNameVisible(true)}
           icon={<EditOutlined />}
+          type='text'></Button>
+      </div>
+      <div className='group-id'>
+        <p>
+          <span>Room ID:</span> {selectedRoom.id}
+        </p>
+        <Button
+          className='btn-edit'
+          onClick={handleCopy}
+          icon={<CopyOutlined />}
           type='text'></Button>
       </div>
     </div>
