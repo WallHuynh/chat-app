@@ -68,21 +68,20 @@ export default function ForgotPasswordModal() {
   }
 
   return (
-    <div>
-      <ModalStyled
-        centered
-        title='Recover password'
-        visible={isForgotPassVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        width={350}
-        okText='Find'>
-        <Form form={form} layout='vertical'>
-          <Form.Item name='email' initialValue={emailRegister}>
-            <Input placeholder='Your email' maxLength={40} />
-          </Form.Item>
-        </Form>
-      </ModalStyled>
-    </div>
+    <ModalStyled
+      className='noselect'
+      centered
+      title='Recover password'
+      visible={isForgotPassVisible}
+      onOk={handleOk}
+      onCancel={handleCancel}
+      width={350}
+      okText='Find'>
+      <Form form={form} layout='vertical'>
+        <Form.Item name='email' initialValue={emailRegister}>
+          <Input placeholder='Your email' maxLength={40} />
+        </Form.Item>
+      </Form>
+    </ModalStyled>
   )
 }

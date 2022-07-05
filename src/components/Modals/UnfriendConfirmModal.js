@@ -29,25 +29,24 @@ export default function UnfriendConfirmModal() {
     setModalUnfiendVisible(false)
   }
   return (
-    <div>
-      <Modal
-        centered
-        visible={modalUnfiendVisible}
-        placement='bottom'
-        title={
-          <>
-            <ExclamationCircleTwoTone twoToneColor='#ff5500' />
-            {` Warning`}
-          </>
-        }
-        width={400}
-        okText='Yes'
-        cancelText='No'
-        onOk={handleUnfriend}
-        onCancel={modalConfirmCancel}
-        closable={false}>
-        {`Are you sure to unfriend ${selectedUser.displayName}?`}
-      </Modal>
-    </div>
+    <Modal
+      className='noselect'
+      centered
+      visible={modalUnfiendVisible}
+      placement='bottom'
+      title={
+        <>
+          <ExclamationCircleTwoTone twoToneColor='#ff5500' />
+          {` Warning`}
+        </>
+      }
+      width={400}
+      okText='Yes'
+      cancelText='No'
+      onOk={handleUnfriend}
+      onCancel={modalConfirmCancel}
+      closable={false}>
+      {`Are you sure to unfriend ${selectedUser.displayName}?`}
+    </Modal>
   )
 }

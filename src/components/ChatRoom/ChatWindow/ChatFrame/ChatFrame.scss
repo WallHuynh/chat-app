@@ -264,6 +264,10 @@
         overflow-y: scroll;
         overflow-x: hidden;
 
+        @media (max-width: 800px) {
+          width: calc(100% - 45px);
+        }
+
         &::-webkit-scrollbar {
           width: 6px;
           background: rgba(0, 0, 0, 0);
@@ -298,6 +302,10 @@
         justify-content: flex-end;
         gap: 0.2em;
 
+        @media (max-width: 800px) {
+          width: 45px;
+        }
+
         .ant-btn-icon-only > * {
           font-size: 22px;
         }
@@ -305,6 +313,12 @@
         .btn-send {
           width: 40px;
           height: 40px;
+        }
+
+        .btn-open-emoji {
+          @media (max-width: 800px) {
+            display: none;
+          }
         }
       }
 

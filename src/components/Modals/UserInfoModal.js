@@ -177,124 +177,118 @@ export default memo(function UserInfoModal() {
   }
 
   return (
-    <div>
-      <Modal
-        className='user-info noselect'
-        centered
-        bodyStyle={{ padding: '0' }}
-        width={350}
-        footer={
-          <>
-            {selectedUser.uid === uid ? (
+    <Modal
+      className='user-info noselect'
+      centered
+      bodyStyle={{ padding: '0' }}
+      width={350}
+      footer={
+        <>
+          {selectedUser.uid === uid ? (
+            <Button
+              icon={<SettingOutlined />}
+              className='btn-primary'
+              onClick={handleOpenUserAccount}>
+              Modify my account info
+            </Button>
+          ) : showSendRequest ? (
+            <>
               <Button
-                icon={<SettingOutlined />}
+                icon={<ArrowLeftOutlined />}
                 className='btn-primary'
-                onClick={handleOpenUserAccount}>
-                Modify my account info
+                onClick={handleBackToPrevious}>
+                Back
               </Button>
-            ) : showSendRequest ? (
-              <>
-                <Button
-                  icon={<ArrowLeftOutlined />}
-                  className='btn-primary'
-                  onClick={handleBackToPrevious}>
-                  Back
-                </Button>
-                <Button
-                  icon={<SendOutlined />}
-                  className='btn-primary'
-                  onClick={handleSendRequest}>
-                  Send request
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button
-                  onClick={handleSendMess}
-                  icon={<MessageOutlined />}
-                  className='btn-primary'>
-                  Send message
-                </Button>
-                {isFriend ? (
-                  <Button
-                    onClick={() => setModalUnfiendVisible(true)}
-                    icon={<UserDeleteOutlined />}
-                    className='btn-primary'>
-                    Unfriend
-                  </Button>
-                ) : isRequested ? (
-                  <Button
-                    onClick={handleRevokeRequest}
-                    icon={<CloseOutlined />}
-                    className='btn-primary'>
-                    Revoke request
-                  </Button>
-                ) : selectedUser?.requestedTo?.includes(userInfo.uid) ? (
-                  <Button
-                    icon={<UserAddOutlined />}
-                    className='btn-primary'
-                    onClick={handleConfirmFriendRequest}>
-                    Accept
-                  </Button>
-                ) : (
-                  <Button
-                    icon={<UserAddOutlined />}
-                    className='btn-primary'
-                    onClick={handleShowSendRequest}>
-                    Add friend
-                  </Button>
-                )}
-              </>
-            )}
-          </>
-        }
-        title='User info'
-        visible={userInfoVisible}
-        onCancel={handleCancel}>
-        <div className='avt-wrapper'>
-          <Image
-            className='cover-photo'
-            src={selectedUser.coverPhotoURL}></Image>
-          <div className='circle-avt'>
-            {selectedUser.photoURL ? (
-              <Image
-                src={selectedUser.photoURL}
-                width={100}
-                rootClassName='image-avt'
-                className='noselect'
-              />
-            ) : (
-              <Avatar size='large' className='avatar noselect'>
-                {selectedUser.displayName?.charAt(0)?.toUpperCase()}
-              </Avatar>
-            )}
-          </div>
-        </div>
-        <div className='info'>
-          <p className='name'>{selectedUser.displayName}</p>
-          {showSendRequest ? (
-            <Form form={form} layout='vertical'>
-              <Form.Item
-                name='caption'
-                initialValue={`Hi, I am ${displayName}`}>
-                <Input.TextArea
-                  size='small'
-                  autoSize={true}
-                  className='input-send-request'
-                  maxLength={300}
-                  showCount={true}
-                  value={`Hi, I am ${displayName}`}
-                />
-              </Form.Item>
-            </Form>
+              <Button
+                icon={<SendOutlined />}
+                className='btn-primary'
+                onClick={handleSendRequest}>
+                Send request
+              </Button>
+            </>
           ) : (
-            <p className='email'>
-              <span className='tag'>Email: </span>
-              {selectedUser.email}
-            </p>
+            <>
+              <Button
+                onClick={handleSendMess}
+                icon={<MessageOutlined />}
+                className='btn-primary'>
+                Send message
+              </Button>
+              {isFriend ? (
+                <Button
+                  onClick={() => setModalUnfiendVisible(true)}
+                  icon={<UserDeleteOutlined />}
+                  className='btn-primary'>
+                  Unfriend
+                </Button>
+              ) : isRequested ? (
+                <Button
+                  onClick={handleRevokeRequest}
+                  icon={<CloseOutlined />}
+                  className='btn-primary'>
+                  Revoke request
+                </Button>
+              ) : selectedUser?.requestedTo?.includes(userInfo.uid) ? (
+                <Button
+                  icon={<UserAddOutlined />}
+                  className='btn-primary'
+                  onClick={handleConfirmFriendRequest}>
+                  Accept
+                </Button>
+              ) : (
+                <Button
+                  icon={<UserAddOutlined />}
+                  className='btn-primary'
+                  onClick={handleShowSendRequest}>
+                  Add friend
+                </Button>
+              )}
+            </>
+          )}
+        </>
+      }
+      title='User info'
+      visible={userInfoVisible}
+      onCancel={handleCancel}>
+      <div className='avt-wrapper'>
+        <Image className='cover-photo' src={selectedUser.coverPhotoURL}></Image>
+        <div className='circle-avt'>
+          {selectedUser.photoURL ? (
+            <Image
+              src={selectedUser.photoURL}
+              width={100}
+              rootClassName='image-avt'
+              className='noselect'
+            />
+          ) : (
+            <Avatar size='large' className='avatar noselect'>
+              {selectedUser.displayName?.charAt(0)?.toUpperCase()}
+            </Avatar>
           )}
         </div>
-      </Modal>
-    </div>
+      </div>
+      <div className='info'>
+        <p className='name'>{selectedUser.displayName}</p>
+        {showSendRequest ? (
+          <Form form={form} layout='vertical'>
+            <Form.Item name='caption' initialValue={`Hi, I am ${displayName}`}>
+              <Input.TextArea
+                size='small'
+                autoSize={true}
+                className='input-send-request'
+                maxLength={300}
+                showCount={true}
+                value={`Hi, I am ${displayName}`}
+              />
+            </Form.Item>
+          </Form>
+        ) : (
+          <p className='email'>
+            <span className='tag'>Email: </span>
+            {selectedUser.email}
+          </p>
+        )}
+      </div>
+    </Modal>
   )
 })

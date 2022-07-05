@@ -30,25 +30,24 @@ export default function ModalConfirmLeaveRoom() {
     setSelectedRoomLeave({})
   }
   return (
-    <div>
-      <Modal
-        centered
-        visible={modalConfirmLeaveVisible}
-        placement='bottom'
-        title={
-          <>
-            <ExclamationCircleTwoTone twoToneColor='#ff5500' />
-            {` Warning`}
-          </>
-        }
-        width={400}
-        okText='Yes'
-        cancelText='No'
-        onOk={handleLeaveRoom}
-        onCancel={modalConfirmCancel}
-        closable={false}>
-        {`Are you sure to leave ${selectedRoomLeave.name}?`}
-      </Modal>
-    </div>
+    <Modal
+      className='noselect'
+      centered
+      visible={modalConfirmLeaveVisible}
+      placement='bottom'
+      title={
+        <>
+          <ExclamationCircleTwoTone twoToneColor='#ff5500' />
+          {` Warning`}
+        </>
+      }
+      width={400}
+      okText='Yes'
+      cancelText='No'
+      onOk={handleLeaveRoom}
+      onCancel={modalConfirmCancel}
+      closable={false}>
+      {`Are you sure to leave ${selectedRoomLeave.name}?`}
+    </Modal>
   )
 }

@@ -11,7 +11,7 @@ import Picker from 'emoji-picker-react'
 import useMeasure from 'react-use-measure'
 
 export default function MessageContent() {
-  const { selectedRoom, members, userInfo } = useContext(AppContext)
+  const { selectedRoom, members, userInfo, viewWidth } = useContext(AppContext)
   const {
     user: { uid, photoURL, displayName },
   } = useContext(AuthContext)
@@ -35,15 +35,24 @@ export default function MessageContent() {
     }
   }
 
-  const handleClickOutsideEmojiPicker = e => {
+  const handleClickOutsideInsideEmojiPicker = e => {
     if (!emojiContainRef?.current?.contains(e.target)) {
       setEmojiPickerVisible(false)
+    } else {
+      if (inputRef?.current) {
+        setTimeout(() => {
+          inputRef.current.focus()
+        })
+      }
     }
   }
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutsideEmojiPicker)
+    document.addEventListener('mousedown', handleClickOutsideInsideEmojiPicker)
     return () =>
-      document.removeEventListener('mousedown', handleClickOutsideEmojiPicker)
+      document.removeEventListener(
+        'mousedown',
+        handleClickOutsideInsideEmojiPicker
+      )
   })
 
   useEffect(() => {
@@ -52,11 +61,6 @@ export default function MessageContent() {
 
   const onEmojiClick = (event, emojiObject) => {
     setInputValue(`${inputValue} ${emojiObject?.emoji}`)
-    if (inputRef?.current) {
-      setTimeout(() => {
-        inputRef.current.focus()
-      })
-    }
   }
 
   const handleInputChange = e => {
@@ -333,7 +337,7 @@ export default function MessageContent() {
       {emojiPickerVisible ? (
         <div
           ref={emojiContainRef}
-          className='emojis-container'
+          className='emojis-container noselect'
           style={{
             bottom: `${inputHeight + 12}px`,
           }}>
