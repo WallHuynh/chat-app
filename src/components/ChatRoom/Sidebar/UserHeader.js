@@ -5,7 +5,7 @@ import { AuthContext } from '../../../context/AuthProvider'
 import {
   BellOutlined,
   LogoutOutlined,
-  UserAddOutlined,
+  SearchOutlined,
   UsergroupAddOutlined,
   UserOutlined,
 } from '@ant-design/icons'
@@ -124,7 +124,7 @@ export default function UserHeader() {
           color='#b8a3f5'>
           <Button
             type='text'
-            icon={<UserAddOutlined />}
+            icon={<SearchOutlined />}
             onClick={handleAddFriend}
           />
         </Tooltip>

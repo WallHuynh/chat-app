@@ -56,13 +56,13 @@
       }
     }
     .info {
-      padding: 10px 0 0 10px;
-      height: 200px;
+      padding: 0.5em 0 0.5em 0.5em;
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: space-around;
+      gap: 1em;
       .avatar-group {
         @include Sidebar.avatar-generator;
       }

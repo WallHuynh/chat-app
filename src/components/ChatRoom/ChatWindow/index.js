@@ -5,7 +5,7 @@ import ChatFrame from './ChatFrame/ChatFrame'
 import RoomInfo from './RoomInfo/RoomInfo'
 
 export default function ChatWindow() {
-  const { selectedRoom, openGroupInfo, userInfo } = useContext(AppContext)
+  const { selectedRoom, openGroupInfo } = useContext(AppContext)
 
   return (
     <>

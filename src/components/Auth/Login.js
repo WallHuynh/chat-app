@@ -19,6 +19,7 @@ import {
   signInWithEmailAndPassword,
   setPersistence,
   browserSessionPersistence,
+  signInWithRedirect,
 } from 'firebase/auth'
 import { AppContext } from '../../context/AppProvider'
 import './Login.scss'
@@ -36,8 +37,12 @@ const AlertStyled = styled(Alert)`
 `
 export default function Login() {
   const [form] = Form.useForm()
-  const { setIsRegisterVisible, setEmailRegister, setIsForgotPassVisible } =
-    useContext(AppContext)
+  const {
+    setIsRegisterVisible,
+    setEmailRegister,
+    setIsForgotPassVisible,
+    viewWidth,
+  } = useContext(AppContext)
   const errInitState = {
     errorCode: null,
     errorMessage: null,
@@ -45,8 +50,13 @@ export default function Login() {
   }
   const [err, setErr] = useState(errInitState)
   const handleLoginWithProvider = async provider => {
-    const { user } = await signInWithPopup(auth, provider)
-    userRegister(user)
+    if (viewWidth > 600) {
+      const { user } = await signInWithPopup(auth, provider)
+      userRegister(user)
+    } else {
+      const { user } = await signInWithRedirect(auth, provider)
+      userRegister(user)
+    }
   }
 
   const handleRegister = () => {

@@ -12,8 +12,10 @@ export default function ChatRoom() {
 
   useEffect(() => {
     setViewWidth(bounds.width)
-    if (bounds.width <= 600 && bounds.width !== 0) {
+    if (bounds.width <= 800 && bounds.width !== 0) {
       setOpenGroupInfo(false)
+    } else {
+      setOpenGroupInfo(true)
     }
   }, [bounds])
 

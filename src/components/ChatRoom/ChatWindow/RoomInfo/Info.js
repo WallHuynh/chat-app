@@ -6,8 +6,14 @@ import { AuthContext } from '../../../../context/AuthProvider'
 import { openNotification } from '../../../Modals/FindFriendModal'
 
 export default function Info() {
-  const { selectedRoom, userInfo, setChangeRoomNameVisible } =
-    useContext(AppContext)
+  const {
+    selectedRoom,
+    userInfo,
+    setChangeRoomNameVisible,
+    members,
+    setUserInfoVisible,
+    setSelectedUser,
+  } = useContext(AppContext)
   const {
     user: { uid },
   } = useContext(AuthContext)
@@ -16,8 +22,17 @@ export default function Info() {
     navigator.clipboard.writeText(selectedRoom.id)
     openNotification('right', 'Copied room ID to clipboard')
   }
+
+  const handleClickUser = () => {
+    if (!selectedRoom.isAGroup) {
+      setUserInfoVisible(true)
+      setSelectedUser(
+        members.filter(mem => mem?.displayName !== userInfo?.displayName)[0]
+      )
+    } else return
+  }
   return (
-    <div className='info noselect'>
+    <div className='info noselect' onClick={handleClickUser}>
       <div className='avatar-group'>
         {selectedRoom.standByPhoto.lastThreeMembers.length === 2 ? (
           <>
@@ -90,26 +105,30 @@ export default function Info() {
         <p className='title'>
           {selectedRoom.isAGroup
             ? selectedRoom.name
-            : selectedRoom?.standByPhoto?.lastThreeMembers?.filter(
+            : members?.filter(
                 mem => mem?.displayName !== userInfo?.displayName
               )[0]?.displayName}
         </p>
-        <Button
-          className='btn-edit'
-          onClick={() => setChangeRoomNameVisible(true)}
-          icon={<EditOutlined />}
-          type='text'></Button>
+        {selectedRoom.isAGroup && (
+          <Button
+            className='btn-edit'
+            onClick={() => setChangeRoomNameVisible(true)}
+            icon={<EditOutlined />}
+            type='text'></Button>
+        )}
       </div>
-      <div className='group-id'>
-        <p>
-          <span>Room ID:</span> {selectedRoom.id}
-        </p>
-        <Button
-          className='btn-edit'
-          onClick={handleCopy}
-          icon={<CopyOutlined />}
-          type='text'></Button>
-      </div>
+      {selectedRoom.isAGroup && (
+        <div className='group-id'>
+          <p>
+            <span>Room ID:</span> {selectedRoom.id}
+          </p>
+          <Button
+            className='btn-edit'
+            onClick={handleCopy}
+            icon={<CopyOutlined />}
+            type='text'></Button>
+        </div>
+      )}
     </div>
   )
 }

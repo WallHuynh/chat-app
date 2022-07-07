@@ -37,12 +37,14 @@ export default function RoomInfo() {
             <CaretRightOutlined rotate={isActive ? 90 : 0} />
           )}
           className='site-collapse-custom-collapse'>
-          <Panel
-            header='Members'
-            key='1'
-            className='site-collapse-custom-panel'>
-            <RoomMembers />
-          </Panel>
+          {selectedRoom.isAGroup && (
+            <Panel
+              header='Members'
+              key='1'
+              className='site-collapse-custom-panel'>
+              <RoomMembers />
+            </Panel>
+          )}
           <Panel
             header='Settings'
             key='2'

@@ -11,6 +11,7 @@ import {
 } from '@ant-design/icons'
 import { updateDocument } from '../../../firebase/services'
 import { arrayRemove, arrayUnion } from 'firebase/firestore'
+import { isEmpty } from 'lodash'
 
 const formatNSecondsToSevaralSeconds = timeLineSeconds => {
   let formatTime = formatDistanceToNowStrict(new Date(timeLineSeconds * 1000))
@@ -46,7 +47,6 @@ export default function RoomList() {
       )
       setRoomData(pinnedRooms.concat(sortedNormalRooms))
     }
-
     sortPinRoomsByTimeStamp()
   }, [rooms, userInfo])
 
@@ -65,10 +65,28 @@ export default function RoomList() {
     setModalConfirmLeaveVisible(true)
     setSelectedRoomLeave(room)
   }
+  if (!userInfo.uid) return null
 
   return (
     <div className='room-list noselect'>
-      {roomsData.length > 0 ? (
+      {isEmpty(roomsData) ? (
+        <div className='guide-wrapper'>
+          <p className='title'>
+            Hello <span>{`${userInfo.displayName}`}</span> !
+          </p>
+          <p className='title'>You haven't join any room yet</p>
+          <p className='description'>
+            Choose
+            <Button type='text' icon={<UserAddOutlined />}></Button>
+            button to find your friends
+          </p>
+          <p className='description'>
+            Choose
+            <Button type='text' icon={<UsergroupAddOutlined />}></Button>
+            button to join or create your own room
+          </p>
+        </div>
+      ) : (
         roomsData.map(room => (
           <Dropdown
             key={room.id}
@@ -349,23 +367,6 @@ export default function RoomList() {
             </div>
           </Dropdown>
         ))
-      ) : (
-        <div className='guide-wrapper'>
-          <p className='title'>
-            Hello <span>{`${userInfo.displayName}`}</span>!
-          </p>
-          <p className='title'>You haven't join any room yet</p>
-          <p className='description'>
-            Choose
-            <Button type='text' icon={<UserAddOutlined />}></Button>
-            button to find your friends
-          </p>
-          <p className='description'>
-            Choose
-            <Button type='text' icon={<UsergroupAddOutlined />}></Button>
-            button to join or create your own room
-          </p>
-        </div>
       )}
     </div>
   )

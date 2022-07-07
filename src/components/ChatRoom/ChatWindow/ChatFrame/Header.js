@@ -116,13 +116,15 @@ export default function Header() {
             <p className='description'>{`${selectedRoom.members.length} members`}</p>
           </>
         ) : (
-          <p className='title'>
-            {
-              selectedRoom?.standByPhoto?.lastThreeMembers?.filter(
-                mem => mem?.displayName !== userInfo?.displayName
-              )[0]?.displayName
-            }
-          </p>
+          <div className='title-wrapper'>
+            <p className='title'>
+              {
+                selectedRoom?.standByPhoto?.lastThreeMembers?.filter(
+                  mem => mem?.displayName !== userInfo?.displayName
+                )[0]?.displayName
+              }
+            </p>
+          </div>
         )}
       </div>
 

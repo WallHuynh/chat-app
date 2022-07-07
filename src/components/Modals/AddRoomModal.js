@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Form, Modal, Input, Button, Segmented, Select, Avatar } from 'antd'
+import { Form, Modal, Input, Segmented, Select, Avatar } from 'antd'
 import { AppContext } from '../../context/AppProvider'
 import { addDocument, updateDocument } from '../../firebase/services'
 import { AuthContext } from '../../context/AuthProvider'
@@ -14,13 +14,14 @@ import {
 } from 'firebase/firestore'
 
 import { db } from '../../firebase/config'
-import { async } from '@firebase/util'
+import { isEmpty } from 'lodash'
 
 export default function AddRoomModal() {
   const { isAddRoomVisible, setIsAddRoomVisible, setSelectedRoomId, userInfo } =
     useContext(AppContext)
   const [segmentValue, setSegmentValue] = useState('create')
   const [friendOptions, setFriendOptions] = useState([])
+  const [selectedFriends, setSelectedFriends] = useState([])
   const {
     user: { uid, displayName, photoURL },
   } = useContext(AuthContext)
@@ -34,7 +35,7 @@ export default function AddRoomModal() {
     if (form?.getFieldsValue()?.name) {
       const roomRef = await addDocument('rooms', {
         ...form.getFieldsValue(),
-        members: [uid],
+        members: isEmpty(selectedFriends) ? [uid] : [uid, ...selectedFriends],
         isAGroup: true,
         typing: {
           user1: { uid: null, name: null, isTyping: false },
@@ -60,7 +61,6 @@ export default function AddRoomModal() {
   }
 
   const joinRoom = async () => {
-    console.log(form.getFieldValue().id)
     if (form?.getFieldsValue()?.id) {
       const q = query(
         collection(db, 'rooms'),
@@ -97,10 +97,15 @@ export default function AddRoomModal() {
   const handleCancel = () => {
     form.resetFields()
     setIsAddRoomVisible(false)
+    setSelectedFriends([])
   }
 
   const handleChangeSelect = value => {
-    console.log(`Selected: ${value}`)
+    const arr = []
+    value.forEach(element => {
+      arr.push(element.value)
+    })
+    setSelectedFriends(arr)
   }
 
   const handleFocusSelect = async () => {
@@ -110,7 +115,6 @@ export default function AddRoomModal() {
         where('uid', 'in', userInfo.friends)
       )
       const querySnapshot = await getDocs(q)
-      console.log(querySnapshot)
 
       if (!querySnapshot.empty) {
         const documents = querySnapshot.docs.map(doc => ({
@@ -160,21 +164,30 @@ export default function AddRoomModal() {
               />
             </Form.Item>
             <Select
+              labelInValue
               onFocus={handleFocusSelect}
               mode='multiple'
+              value={selectedFriends}
+              notFoundContent={'You have no friend'}
               placeholder='Choose your friends'
-              defaultValue={[]}
               onChange={handleChangeSelect}
               style={{
                 width: '100%',
               }}>
               {friendOptions.map(opt => {
-                ;<Select.Option key={opt.uid} value={opt.uid} title={opt.name}>
-                  <Avatar size='small' src={opt.photoURL}>
-                    {opt.photoURL ? '' : opt.name?.charAt(0)?.toUpperCase()}
-                  </Avatar>
-                  {` ${opt.name}`}
-                </Select.Option>
+                return (
+                  <Select.Option
+                    key={opt.uid}
+                    value={opt.uid}
+                    title={opt.displayName}>
+                    <Avatar size='small' src={opt.photoURL}>
+                      {opt.photoURL
+                        ? ''
+                        : opt.displayName?.charAt(0)?.toUpperCase()}
+                    </Avatar>
+                    {` ${opt.displayName}`}
+                  </Select.Option>
+                )
               })}
             </Select>
           </>
@@ -182,7 +195,7 @@ export default function AddRoomModal() {
           <Form.Item name='id'>
             <Input
               onPressEnter={handleOk}
-              placeholder="Your room's ID"
+              placeholder="Room's ID"
               maxLength={40}
             />
           </Form.Item>
