@@ -18,6 +18,7 @@ export default function Header() {
     openGroupInfo,
     setOpenGroupInfo,
     setChangeRoomNameVisible,
+    members,
   } = useContext(AppContext)
 
   const handleExit = () => {
@@ -119,9 +120,8 @@ export default function Header() {
           <div className='title-wrapper'>
             <p className='title'>
               {
-                selectedRoom?.standByPhoto?.lastThreeMembers?.filter(
-                  mem => mem?.displayName !== userInfo?.displayName
-                )[0]?.displayName
+                members?.filter(mem => mem?.uid !== userInfo?.uid)[0]
+                  ?.displayName
               }
             </p>
           </div>
