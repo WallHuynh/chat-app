@@ -65,7 +65,6 @@ export const addDocument = async (oneCollection, data) => {
 }
 
 export const userRegister = async user => {
-  console.log('register', user)
   const queryUser = query(
     collection(db, 'users'),
     where('email', '==', user.email)

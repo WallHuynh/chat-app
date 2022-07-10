@@ -308,29 +308,28 @@ export default function MessageContent() {
           />
         ))}
       </div>
-      <div
-        className='typing'
-        style={{
-          bottom: `${inputHeight + 22}px`,
-        }}>
-        {selectedRoom.typing.user1.isTyping &&
-        selectedRoom.typing.user1.uid !== uid ? (
-          <p className='typing-text'>
-            {`${selectedRoom.typing.user1.name} is tyiping...`}
-          </p>
-        ) : (
-          ''
-        )}
+      {selectedRoom.typing.user1.isTyping ||
+        (selectedRoom.typing.user2.isTyping && (
+          <div
+            className='typing'
+            style={{
+              bottom: `${inputHeight + 22}px`,
+            }}>
+            {selectedRoom.typing.user1.isTyping &&
+            selectedRoom.typing.user1.uid !== uid ? (
+              <p className='typing-text'>
+                {`${selectedRoom.typing.user1.name} is tyiping...`}
+              </p>
+            ) : null}
 
-        {selectedRoom.typing.user2.isTyping &&
-        selectedRoom.typing.user2.uid !== uid ? (
-          <p className='typing-text'>
-            {`${selectedRoom.typing.user2.name} is tyiping...`}
-          </p>
-        ) : (
-          ''
-        )}
-      </div>
+            {selectedRoom.typing.user2.isTyping &&
+            selectedRoom.typing.user2.uid !== uid ? (
+              <p className='typing-text'>
+                {`${selectedRoom.typing.user2.name} is tyiping...`}
+              </p>
+            ) : null}
+          </div>
+        ))}
 
       {emojiPickerVisible ? (
         <div

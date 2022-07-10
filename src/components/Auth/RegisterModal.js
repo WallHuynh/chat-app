@@ -6,6 +6,7 @@ import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { auth } from '../../firebase/config'
 import { userRegister } from '../../firebase/services'
+import useMeasure from 'react-use-measure'
 
 const AlertStyled = styled(Alert)`
   margin-bottom: 10px;

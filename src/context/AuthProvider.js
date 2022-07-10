@@ -2,6 +2,7 @@ import { Spin } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { auth } from '../firebase/config'
+import { userRegister } from '../firebase/services'
 
 export const AuthContext = React.createContext()
 
@@ -13,6 +14,7 @@ export default function AuthProvider({ children }) {
   useEffect(() => {
     const unsubscibed = auth.onAuthStateChanged(user => {
       if (user) {
+        userRegister(user)
         const { uid, photoURL, displayName, email } = user
         setUser({
           uid,

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Form, Input, Button, Checkbox, Typography, Alert } from 'antd'
 import {
   UserOutlined,
@@ -23,6 +23,7 @@ import {
 } from 'firebase/auth'
 import { AppContext } from '../../context/AppProvider'
 import './Login.scss'
+import useMeasure from 'react-use-measure'
 
 const { Title } = Typography
 
@@ -42,6 +43,7 @@ export default function Login() {
     setEmailRegister,
     setIsForgotPassVisible,
     viewWidth,
+    setViewWidth,
   } = useContext(AppContext)
   const errInitState = {
     errorCode: null,
@@ -49,13 +51,18 @@ export default function Login() {
     email: '',
   }
   const [err, setErr] = useState(errInitState)
+
+  const [ref, bounds] = useMeasure()
+
+  useEffect(() => {
+    setViewWidth(bounds.width)
+  }, [bounds])
+
   const handleLoginWithProvider = async provider => {
     if (viewWidth > 600) {
-      const { user } = await signInWithPopup(auth, provider)
-      userRegister(user)
+      await signInWithPopup(auth, provider)
     } else {
-      const { user } = await signInWithRedirect(auth, provider)
-      userRegister(user)
+      await signInWithRedirect(auth, provider)
     }
   }
 
@@ -79,7 +86,7 @@ export default function Login() {
       signInWithEmailAndPassword(auth, values.email, values.password)
         .then(userCredential => {
           // Signed in
-          // const user = userCredential.user
+          const user = userCredential.user
           // ...
         })
         .catch(error => {
@@ -99,7 +106,7 @@ export default function Login() {
   }
 
   return (
-    <>
+    <div ref={ref}>
       <TitleStyled style={{ textAlign: 'center' }} level={1}>
         Chat App
       </TitleStyled>
@@ -202,6 +209,6 @@ export default function Login() {
           </Button>
         </Form>
       </div>
-    </>
+    </div>
   )
 }
