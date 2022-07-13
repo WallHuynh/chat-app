@@ -6,7 +6,7 @@ import { AuthContext } from '../../../context/AuthProvider'
 import {
   MoreOutlined,
   PushpinFilled,
-  UserAddOutlined,
+  SearchOutlined,
   UsergroupAddOutlined,
 } from '@ant-design/icons'
 import { updateDocument } from '../../../firebase/services'
@@ -77,7 +77,7 @@ export default function RoomList() {
           <p className='title'>You haven't join any room yet</p>
           <p className='description'>
             Choose
-            <Button type='text' icon={<UserAddOutlined />}></Button>
+            <Button type='text' icon={<SearchOutlined />}></Button>
             button to find your friends
           </p>
           <p className='description'>
