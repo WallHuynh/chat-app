@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { Form, Modal, Input, notification } from 'antd'
-import { AppContext } from '../../context/AppProvider'
+import { ACTIONS, AppContext } from '../../context/AppProvider'
 import { collection, query, where, getDocs } from 'firebase/firestore'
 import { db } from '../../firebase/config'
 
@@ -12,12 +12,7 @@ export const openNotification = (placement, msg, describe) => {
   })
 }
 export default function FindFriendModal() {
-  const {
-    isFindFriendVisible,
-    setIsFindFriendVisible,
-    setSelectedUser,
-    setUserInfoVisible,
-  } = useContext(AppContext)
+  const { state, dispatch } = useContext(AppContext)
 
   const [form] = Form.useForm()
 
@@ -38,15 +33,14 @@ export default function FindFriendModal() {
         where('email', '==', form?.getFieldsValue()?.email)
       )
       const querySnapshot = await getDocs(q)
-      console.log(querySnapshot)
 
       if (!querySnapshot.empty) {
         const documents = querySnapshot.docs.map(doc => ({
           ...doc.data(),
           id: doc.id,
         }))[0]
-        setSelectedUser(documents)
-        setUserInfoVisible(true)
+        dispatch({ type: ACTIONS.SELECTED_USER, payload: documents })
+        dispatch({ type: ACTIONS.TG_USER_INFO, payload: true })
       } else {
         openNotification('bottom', 'User not found', '')
       }
@@ -57,7 +51,7 @@ export default function FindFriendModal() {
 
   const handleCancel = () => {
     form.resetFields()
-    setIsFindFriendVisible(false)
+    dispatch({ type: ACTIONS.TG_FIND_FRIEND, payload: false })
   }
 
   return (
@@ -65,7 +59,7 @@ export default function FindFriendModal() {
       className='noselect'
       centered
       title='Find a friend'
-      visible={isFindFriendVisible}
+      visible={state.isFindFriendVisible}
       onOk={handleOk}
       onCancel={handleCancel}
       width={350}

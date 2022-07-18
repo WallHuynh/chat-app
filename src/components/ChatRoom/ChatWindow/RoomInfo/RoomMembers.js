@@ -1,10 +1,9 @@
 import { Avatar } from 'antd'
 import React, { useContext } from 'react'
-import { AppContext } from '../../../../context/AppProvider'
+import { ACTIONS, AppContext } from '../../../../context/AppProvider'
 
 export default function RoomMembers() {
-  const { members, selectedRoom, setUserInfoVisible, setSelectedUser } =
-    useContext(AppContext)
+  const { members, dispatch } = useContext(AppContext)
 
   return (
     <div className='members'>
@@ -14,8 +13,8 @@ export default function RoomMembers() {
           className='member'
           src={member.photoURL}
           onClick={() => {
-            setUserInfoVisible(true)
-            setSelectedUser(member)
+            dispatch({ type: ACTIONS.TG_USER_INFO, payload: true })
+            dispatch({ type: ACTIONS.SELECTED_USER, payload: member })
           }}>
           <Avatar className='avt' size='large' src={member.photoURL}>
             {member.photoURL

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { AppContext } from '../../../../context/AppProvider'
+import { ACTIONS, AppContext } from '../../../../context/AppProvider'
 import Info from './Info'
 import RoomMembers from './RoomMembers'
 import { Button, Collapse } from 'antd'
@@ -8,11 +8,11 @@ import './RoomInfo.scss'
 import SettingOptions from './SettingOptions'
 
 export default function RoomInfo() {
-  const { selectedRoom, setOpenGroupInfo } = useContext(AppContext)
+  const { selectedRoom, dispatch } = useContext(AppContext)
   const { Panel } = Collapse
 
   const handleLeave = () => {
-    setOpenGroupInfo(false)
+    dispatch({ type: ACTIONS.TG_GROUP_INFOR, payload: false })
   }
   return (
     <div className='graper-group noselect'>

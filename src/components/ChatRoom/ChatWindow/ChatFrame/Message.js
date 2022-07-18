@@ -1,8 +1,7 @@
 import React, { useContext } from 'react'
 import { Avatar } from 'antd'
 import { formatRelative } from 'date-fns/esm'
-import { AuthContext } from '../../../../context/AuthProvider'
-import { AppContext } from '../../../../context/AppProvider'
+import { ACTIONS, AppContext } from '../../../../context/AppProvider'
 
 function formatDate(seconds) {
   let formattedDate = ''
@@ -24,16 +23,12 @@ export default function Message({
   createdAt,
   photoURL,
 }) {
-  const {
-    user: { uid },
-  } = useContext(AuthContext)
-  const { members, setUserInfoVisible, setSelectedUser } =
-    useContext(AppContext)
+  const { members, state, dispatch, userInfo } = useContext(AppContext)
 
   const member = members.filter(member => member.uid === id)[0]
   return (
     <>
-      {uid === id ? (
+      {userInfo.uid === id ? (
         <div className='graper-right-content'>
           <div className='contents right'>
             <p className='message'>{text}</p>
@@ -47,8 +42,8 @@ export default function Message({
             src={photoURL}
             className='mess-avt noselect'
             onClick={() => {
-              setUserInfoVisible(true)
-              setSelectedUser(member)
+              dispatch({ type: ACTIONS.TG_USER_INFO, payload: true })
+              dispatch({ type: ACTIONS.SELECTED_USER, payload: member })
             }}>
             {photoURL ? '' : displayName?.charAt(0)?.toUpperCase()}
           </Avatar>
@@ -60,8 +55,8 @@ export default function Message({
             src={photoURL}
             className='mess-avt noselect'
             onClick={() => {
-              setUserInfoVisible(true)
-              setSelectedUser(member)
+              dispatch({ type: ACTIONS.TG_USER_INFO, payload: true })
+              dispatch({ type: ACTIONS.SELECTED_USER, payload: member })
             }}>
             {photoURL ? '' : displayName?.charAt(0)?.toUpperCase()}
           </Avatar>

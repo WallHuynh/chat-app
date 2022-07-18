@@ -3,16 +3,11 @@ import { Modal } from 'antd'
 import { ExclamationCircleTwoTone } from '@ant-design/icons'
 import { updateDocument } from '../../firebase/services'
 import { arrayRemove } from 'firebase/firestore'
-import { AppContext } from '../../context/AppProvider'
+import { ACTIONS, AppContext } from '../../context/AppProvider'
 import { openNotification } from './FindFriendModal'
 
 export default function UnfriendConfirmModal() {
-  const {
-    modalUnfiendVisible,
-    setModalUnfiendVisible,
-    selectedUser,
-    userInfo,
-  } = useContext(AppContext)
+  const { state, dispatch, userInfo } = useContext(AppContext)
 
   const handleUnfriend = () => {
     updateDocument('users', userInfo.uid, {
@@ -26,13 +21,13 @@ export default function UnfriendConfirmModal() {
   }
 
   const modalConfirmCancel = () => {
-    setModalUnfiendVisible(false)
+    dispatch({ type: ACTIONS.TG_UNFRIEND, payload: false })
   }
   return (
     <Modal
       className='noselect'
       centered
-      visible={modalUnfiendVisible}
+      visible={state.modalUnfiendVisible}
       placement='bottom'
       title={
         <>
@@ -46,7 +41,7 @@ export default function UnfriendConfirmModal() {
       onOk={handleUnfriend}
       onCancel={modalConfirmCancel}
       closable={false}>
-      {`Are you sure to unfriend ${selectedUser.displayName}?`}
+      {`Are you sure to unfriend ${state.selectedUser.displayName}?`}
     </Modal>
   )
 }

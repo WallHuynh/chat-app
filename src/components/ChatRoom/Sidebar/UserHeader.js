@@ -1,7 +1,6 @@
 import { Avatar, Badge, Button, Dropdown, Menu, Tooltip } from 'antd'
 import React, { useContext } from 'react'
-import { AppContext } from '../../../context/AppProvider'
-import { AuthContext } from '../../../context/AuthProvider'
+import { ACTIONS, AppContext } from '../../../context/AppProvider'
 import {
   BellOutlined,
   LogoutOutlined,
@@ -12,34 +11,22 @@ import {
 import { auth } from '../../../firebase/config'
 
 export default function UserHeader() {
-  const {
-    clearState,
-    setIsAddRoomVisible,
-    setIsFindFriendVisible,
-    setUserAccountVisible,
-    setShowUserStatus,
-    status,
-    viewWidth,
-    userInfo,
-  } = React.useContext(AppContext)
-
-  const {
-    user: { displayName, photoURL },
-  } = useContext(AuthContext)
+  const { clearState, dispatch, status, state, userInfo } =
+    useContext(AppContext)
 
   const handleAddRoom = () => {
-    setIsAddRoomVisible(true)
+    dispatch({ type: ACTIONS.TG_ADDROOM, payload: true })
   }
 
   const handleAddFriend = () => {
-    setIsFindFriendVisible(true)
+    dispatch({ type: ACTIONS.TG_FIND_FRIEND, payload: true })
   }
 
   const handleUserAccountVisible = () => {
-    setUserAccountVisible(true)
+    dispatch({ type: ACTIONS.TG_ACCOUNT, payload: true })
   }
   const handleShowStatus = () => {
-    setShowUserStatus(true)
+    dispatch({ type: ACTIONS.TG_STATUS, payload: true })
   }
   const handleLogOut = () => {
     clearState()
@@ -130,7 +117,7 @@ export default function UserHeader() {
         </Tooltip>
         <Tooltip
           className='addroom'
-          placement={viewWidth < 800 ? 'bottomRight' : 'bottom'}
+          placement={state.viewWidth < 800 ? 'bottomRight' : 'bottom'}
           title='Create a chat room'
           color='#b8a3f5'>
           <Button

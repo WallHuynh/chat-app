@@ -1,21 +1,16 @@
 import React, { useContext, useState } from 'react'
 import { Modal, Form, Input, Button } from 'antd'
-import { AppContext } from '../../context/AppProvider'
+import { ACTIONS, AppContext } from '../../context/AppProvider'
 import './Modals.scss'
 import { updateDocument } from '../../firebase/services'
 
 export default function ChangeRoomNameModal() {
-  const {
-    userInfo,
-    changeRoomNameVisible,
-    setChangeRoomNameVisible,
-    selectedRoom,
-  } = useContext(AppContext)
+  const { state, dispatch, selectedRoom } = useContext(AppContext)
   const [form] = Form.useForm()
   const [isFieldChange, setIsFieldChange] = useState(false)
 
   const handleCancel = () => {
-    setChangeRoomNameVisible(false)
+    dispatch({ type: ACTIONS.TG_CHANGE_ROOM_NAME, payload: false })
     form.resetFields()
     setIsFieldChange(false)
   }
@@ -48,7 +43,7 @@ export default function ChangeRoomNameModal() {
       centered
       width={350}
       title='Update room name'
-      visible={changeRoomNameVisible}
+      visible={state.changeRoomNameVisible}
       onCancel={handleCancel}>
       <Form form={form} layout='vertical'>
         <Form.Item

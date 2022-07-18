@@ -7,22 +7,14 @@ import {
 } from '@ant-design/icons'
 import React, { useContext } from 'react'
 import { Button, Tooltip, Avatar } from 'antd'
-import { AppContext } from '../../../../context/AppProvider'
+import { AppContext, ACTIONS } from '../../../../context/AppProvider'
 
 export default function Header() {
-  const {
-    selectedRoom,
-    setIsInviteMemberVisible,
-    setSelectedRoomId,
-    userInfo,
-    openGroupInfo,
-    setOpenGroupInfo,
-    setChangeRoomNameVisible,
-    members,
-  } = useContext(AppContext)
+  const { selectedRoom, userInfo, members, state, dispatch } =
+    useContext(AppContext)
 
   const handleExit = () => {
-    setSelectedRoomId('')
+    dispatch({ type: ACTIONS.SELECTED_ROOM_ID, payload: '' })
   }
   return (
     <div className='noselect header-wrapper'>
@@ -136,7 +128,7 @@ export default function Header() {
             type='text'
             onClick={() => setIsInviteMemberVisible(true)}></Button>
         </Tooltip>
-        {openGroupInfo ? (
+        {state.openGroupInfo ? (
           <Tooltip
             mouseEnterDelay={1}
             placement='bottomRight'
@@ -147,7 +139,10 @@ export default function Header() {
               icon={<MenuUnfoldOutlined />}
               type='text'
               onClick={() =>
-                setOpenGroupInfo(prevState => !prevState)
+                dispatch({
+                  type: ACTIONS.TG_GROUP_INFOR,
+                  payload: !state.openGroupInfo,
+                })
               }></Button>
           </Tooltip>
         ) : (
@@ -155,7 +150,12 @@ export default function Header() {
             className='btn-open-group-info'
             icon={<MenuFoldOutlined />}
             type='text'
-            onClick={() => setOpenGroupInfo(prevState => !prevState)}></Button>
+            onClick={() =>
+              dispatch({
+                type: ACTIONS.TG_GROUP_INFOR,
+                payload: !state.openGroupInfo,
+              })
+            }></Button>
         )}
       </div>
     </div>

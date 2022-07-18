@@ -7,22 +7,16 @@ import {
 } from '@ant-design/icons'
 import React, { useContext } from 'react'
 import { Button } from 'antd'
-import { AppContext } from '../../../../context/AppProvider'
+import { ACTIONS, AppContext } from '../../../../context/AppProvider'
 import { updateDocument } from '../../../../firebase/services'
 import { arrayRemove, arrayUnion } from 'firebase/firestore'
 
 export default function SettingOptions() {
-  const {
-    selectedRoom,
-    setModalConfirmLeaveVisible,
-    setSelectedRoomLeave,
-    userInfo,
-    setIsInviteMemberVisible,
-  } = useContext(AppContext)
+  const { selectedRoom, userInfo, dispatch } = useContext(AppContext)
 
   const openModalConfirm = () => {
-    setModalConfirmLeaveVisible(true)
-    setSelectedRoomLeave(selectedRoom)
+    dispatch({ type: ACTIONS.TG_COMFIRM_LEAVE, payload: true })
+    dispatch({ type: ACTIONS.SELECTED_ROOM_LEAVE, payload: selectedRoom })
   }
   const handlePin = () => {
     updateDocument('users', userInfo.uid, {
@@ -36,7 +30,9 @@ export default function SettingOptions() {
   }
   return (
     <>
-      <div className='btn' onClick={() => setIsInviteMemberVisible(true)}>
+      <div
+        className='btn'
+        onClick={() => dispatch({ type: ACTIONS.TG_INVITE, payload: true })}>
         <Button icon={<PlusCircleOutlined />} type='text'>
           Invite friend
         </Button>

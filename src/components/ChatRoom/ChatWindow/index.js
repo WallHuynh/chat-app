@@ -5,17 +5,17 @@ import ChatFrame from './ChatFrame/ChatFrame'
 import RoomInfo from './RoomInfo/RoomInfo'
 
 export default function ChatWindow() {
-  const { selectedRoom, openGroupInfo } = useContext(AppContext)
+  const { selectedRoom, state } = useContext(AppContext)
 
   return (
     <>
       {selectedRoom.id ? (
         <>
           <Row>
-            <Col span={openGroupInfo ? 16 : 24}>
+            <Col span={state.openGroupInfo ? 16 : 24}>
               <ChatFrame />
             </Col>
-            <Col span={openGroupInfo ? 8 : 0}>
+            <Col span={state.openGroupInfo ? 8 : 0}>
               <RoomInfo />
             </Col>
           </Row>

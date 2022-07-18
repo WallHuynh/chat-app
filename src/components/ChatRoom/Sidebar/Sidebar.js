@@ -6,11 +6,11 @@ import './Sidebar.scss'
 import UserHeader from './UserHeader'
 
 export default function Sidebar() {
-  const { showUserStatus } = useContext(AppContext)
+  const { state } = useContext(AppContext)
   return (
     <div className='sidebar'>
       <UserHeader />
-      {showUserStatus ? <FriendRequest /> : <RoomList />}
+      {state.showUserStatus ? <FriendRequest /> : <RoomList />}
     </div>
   )
 }

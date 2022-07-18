@@ -2,20 +2,19 @@ import React, { useContext, useEffect } from 'react'
 import { Row, Col } from 'antd'
 import Sidebar from './Sidebar/Sidebar'
 import ChatWindow from './ChatWindow'
-import { AppContext } from '../../context/AppProvider'
+import { ACTIONS, AppContext } from '../../context/AppProvider'
 import useMeasure from 'react-use-measure'
 
 export default function ChatRoom() {
-  const { selectedRoomId, setOpenGroupInfo, setViewWidth } =
-    useContext(AppContext)
+  const { state, dispatch } = useContext(AppContext)
   const [ref, bounds] = useMeasure()
 
   useEffect(() => {
     setViewWidth(bounds.width)
     if (bounds.width <= 800 && bounds.width !== 0) {
-      setOpenGroupInfo(false)
+      dispatch({ type: ACTIONS.TG_GROUP_INFOR, payload: false })
     } else {
-      setOpenGroupInfo(true)
+      dispatch({ type: ACTIONS.TG_GROUP_INFOR, payload: true })
     }
   }, [bounds])
 
@@ -24,7 +23,7 @@ export default function ChatRoom() {
       <Row>
         <Col
           className={
-            selectedRoomId
+            state.selectedRoomId
               ? 'room-list-responsive-close'
               : 'room-list-responsive-open'
           }
@@ -33,7 +32,7 @@ export default function ChatRoom() {
         </Col>
         <Col
           className={
-            selectedRoomId
+            state.selectedRoomId
               ? 'chat-window-responsive-open'
               : 'chat-window-responsive-close'
           }

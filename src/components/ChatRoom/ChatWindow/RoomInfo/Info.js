@@ -1,19 +1,12 @@
 import { CopyOutlined, EditOutlined } from '@ant-design/icons'
 import { Avatar, Button } from 'antd'
 import React, { useContext } from 'react'
-import { AppContext } from '../../../../context/AppProvider'
+import { ACTIONS, AppContext } from '../../../../context/AppProvider'
 import { AuthContext } from '../../../../context/AuthProvider'
 import { openNotification } from '../../../Modals/FindFriendModal'
 
 export default function Info() {
-  const {
-    selectedRoom,
-    userInfo,
-    setChangeRoomNameVisible,
-    members,
-    setUserInfoVisible,
-    setSelectedUser,
-  } = useContext(AppContext)
+  const { selectedRoom, userInfo, members, dispatch } = useContext(AppContext)
   const {
     user: { uid },
   } = useContext(AuthContext)
@@ -26,9 +19,13 @@ export default function Info() {
   const handleClickUser = () => {
     if (!selectedRoom.isAGroup) {
       setUserInfoVisible(true)
-      setSelectedUser(
-        members.filter(mem => mem?.displayName !== userInfo?.displayName)[0]
-      )
+      dispatch({ type: ACTIONS.TG_USER_INFO, payload: true })
+      dispatch({
+        type: ACTIONS.SELECTED_USER,
+        payload: members.filter(
+          mem => mem?.displayName !== userInfo?.displayName
+        )[0],
+      })
     } else return
   }
   return (

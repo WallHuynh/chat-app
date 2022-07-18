@@ -1,8 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { Form, Modal, Input, Segmented, Select, Avatar } from 'antd'
-import { AppContext } from '../../context/AppProvider'
+import { ACTIONS, AppContext } from '../../context/AppProvider'
 import { addDocument, updateDocument } from '../../firebase/services'
-import { AuthContext } from '../../context/AuthProvider'
 import { openNotification } from './FindFriendModal'
 import {
   collection,
@@ -17,14 +16,11 @@ import { db } from '../../firebase/config'
 import { isEmpty } from 'lodash'
 
 export default function AddRoomModal() {
-  const { isAddRoomVisible, setIsAddRoomVisible, setSelectedRoomId, userInfo } =
-    useContext(AppContext)
+  const { state, dispatch, userInfo } = useContext(AppContext)
   const [segmentValue, setSegmentValue] = useState('create')
   const [friendOptions, setFriendOptions] = useState([])
   const [selectedFriends, setSelectedFriends] = useState([])
-  const {
-    user: { uid, displayName, photoURL },
-  } = useContext(AuthContext)
+
   const [form] = Form.useForm()
 
   const onSegmentChange = value => {
@@ -35,7 +31,9 @@ export default function AddRoomModal() {
     if (form?.getFieldsValue()?.name) {
       const roomRef = await addDocument('rooms', {
         ...form.getFieldsValue(),
-        members: isEmpty(selectedFriends) ? [uid] : [uid, ...selectedFriends],
+        members: isEmpty(selectedFriends)
+          ? [userInfo.uid]
+          : [userInfo.uid, ...selectedFriends],
         isAGroup: true,
         typing: {
           user1: { uid: null, name: null, isTyping: false },
@@ -46,14 +44,14 @@ export default function AddRoomModal() {
         standByPhoto: {
           lastThreeMembers: [
             {
-              displayName: displayName,
-              photoURL: photoURL || null,
+              displayName: userInfo.displayName,
+              photoURL: userInfo.photoURL || null,
             },
           ],
           groupLengthRest: null,
         },
       })
-      setSelectedRoomId(roomRef.id)
+      dispatch({ type: ACTIONS.SELECTED_ROOM_ID, payload: roomRef.id })
       handleCancel()
     } else {
       return
@@ -76,7 +74,7 @@ export default function AddRoomModal() {
         updateDocument('rooms', document.id, {
           members: arrayUnion(userInfo.uid),
         })
-        setSelectedRoomId(document.id)
+        dispatch({type: ACTIONS.SELECTED_ROOM_ID, payload: document.id})
         handleCancel()
       } else {
         openNotification('top', 'Room not found', '')
@@ -96,8 +94,8 @@ export default function AddRoomModal() {
 
   const handleCancel = () => {
     form.resetFields()
-    setIsAddRoomVisible(false)
     setSelectedFriends([])
+    dispatch({ type: ACTIONS.TG_ADDROOM, payload: false })
   }
 
   const handleChangeSelect = value => {
@@ -148,7 +146,7 @@ export default function AddRoomModal() {
           ]}
         />
       }
-      visible={isAddRoomVisible}
+      visible={state.isAddRoomVisible}
       onOk={handleOk}
       onCancel={handleCancel}
       width={400}

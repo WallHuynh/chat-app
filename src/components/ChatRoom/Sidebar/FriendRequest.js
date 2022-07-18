@@ -1,7 +1,7 @@
 import { CheckOutlined, DeleteOutlined, LeftOutlined } from '@ant-design/icons'
 import { Avatar, Button, Tooltip } from 'antd'
 import React, { useContext, useEffect, useState } from 'react'
-import { AppContext } from '../../../context/AppProvider'
+import { ACTIONS, AppContext } from '../../../context/AppProvider'
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict'
 import { deleteDocument, updateDocument } from '../../../firebase/services'
 import { AuthContext } from '../../../context/AuthProvider'
@@ -19,13 +19,7 @@ const formatNSecondsToSevaralSeconds = timeLineSeconds => {
 }
 
 export default function FriendRequest() {
-  const {
-    setShowUserStatus,
-    status,
-    setSelectedUser,
-    setUserInfoVisible,
-    userInfo,
-  } = React.useContext(AppContext)
+  const { status, dispatch, userInfo } = React.useContext(AppContext)
   const {
     user: { uid },
   } = useContext(AuthContext)
@@ -41,7 +35,7 @@ export default function FriendRequest() {
   }, [status])
 
   const handleCancelStatus = () => {
-    setShowUserStatus(false)
+    dispatch({ type: ACTIONS.TG_STATUS, payload: false })
   }
 
   const handleClick = async uid => {
@@ -53,8 +47,8 @@ export default function FriendRequest() {
         ...doc.data(),
         id: doc.id,
       }))[0]
-      setSelectedUser(documents)
-      setUserInfoVisible(true)
+      dispatch({ type: ACTIONS.SELECTED_USER, payload: documents })
+      dispatch({ type: ACTIONS.TG_USER_INFO, payload: true })
     } else {
       openNotification('bottom', 'User not found', '')
     }

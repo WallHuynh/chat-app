@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { Form, Modal, Select, Spin, Avatar } from 'antd'
-import { AppContext } from '../../context/AppProvider'
+import { ACTIONS, AppContext } from '../../context/AppProvider'
 import { debounce } from 'lodash'
 import { db } from '../../firebase/config'
 import {
@@ -122,12 +122,7 @@ async function fetchUserList(search, curMembers) {
 }
 
 export default function InviteMemberModal() {
-  const {
-    isInviteMemberVisible,
-    setIsInviteMemberVisible,
-    selectedRoomId,
-    selectedRoom,
-  } = useContext(AppContext)
+  const { state, dispatch, selectedRoom } = useContext(AppContext)
   const [value, setValue] = useState([])
   const [form] = Form.useForm()
 
@@ -139,7 +134,7 @@ export default function InviteMemberModal() {
       updateDocument('rooms', selectedRoomId, {
         members: [...selectedRoom.members, ...value.map(val => val.value)],
       })
-      setIsInviteMemberVisible(false)
+      dispatch({ type: ACTIONS.TG_INVITE, payload: false })
     } else {
       return
     }
@@ -149,7 +144,7 @@ export default function InviteMemberModal() {
     // reset form value
     form.resetFields()
     setValue([])
-    setIsInviteMemberVisible(false)
+    dispatch({ type: ACTIONS.TG_INVITE, payload: false })
   }
 
   return (
@@ -158,7 +153,7 @@ export default function InviteMemberModal() {
       centered
       okText='Invite'
       title='Invite members'
-      visible={isInviteMemberVisible}
+      visible={state.isInviteMemberVisible}
       onOk={handleOk}
       onCancel={handleCancel}
       destroyOnClose={true}>

@@ -1,8 +1,6 @@
 import React, { useContext, memo, useState, useEffect } from 'react'
 import { Modal, Image, Avatar, Form, Input, Button } from 'antd'
-import { AppContext } from '../../context/AppProvider'
-import { AuthContext } from '../../context/AuthProvider'
-import styled from 'styled-components'
+import { ACTIONS, AppContext } from '../../context/AppProvider'
 import {
   UserDeleteOutlined,
   MessageOutlined,
@@ -25,27 +23,13 @@ import './Modals.scss'
 
 export default memo(function UserInfoModal() {
   const [form] = Form.useForm()
-  const {
-    setOpenGroupInfo,
-    viewWidth,
-    userInfoVisible,
-    setUserInfoVisible,
-    selectedUser,
-    setSelectedUser,
-    setUserAccountVisible,
-    userInfo,
-    setModalUnfiendVisible,
-    setSelectedRoomId,
-  } = useContext(AppContext)
-  const {
-    user: { uid, displayName, photoURL },
-  } = useContext(AuthContext)
-
+  const { userInfo, state, dispatch } = useContext(AppContext)
   const [showSendRequest, setShowSendRequest] = useState(false)
   const initialIsRequested = userInfo?.requestedTo?.includes(selectedUser.uid)
   const [isRequested, setIsRequested] = useState(initialIsRequested)
   const initialIsFriend = userInfo?.friends?.includes(selectedUser.uid)
   const [isFriend, setIsFriend] = useState(initialIsFriend)
+
   useEffect(() => {
     setIsRequested(initialIsRequested)
   }, [initialIsRequested, selectedUser])
@@ -55,8 +39,8 @@ export default memo(function UserInfoModal() {
   }, [initialIsFriend, selectedUser])
 
   const handleCancel = () => {
-    setUserInfoVisible(false)
-    setSelectedUser({})
+    dispatch({ type: ACTIONS.TG_USER_INFO, payload: false })
+    dispatch({ type: ACTIONS.SELECTED_USER, payload: {} })
     form.resetFields()
     setShowSendRequest(false)
     setIsRequested(false)
@@ -95,15 +79,18 @@ export default memo(function UserInfoModal() {
 
   const handleSendRequest = () => {
     const caption = form.getFieldValue().caption.trim()
-    console.log(caption)
     addDocument('status', {
       type: 'friend-request',
       receiveUid: selectedUser.uid,
-      requestUser: { photoURL: photoURL, displayName: displayName, uid: uid },
+      requestUser: {
+        photoURL: userInfo.photoURL,
+        displayName: userInfo.displayName,
+        uid: userInfo.uid,
+      },
       caption: caption,
       seen: false,
     })
-    updateDocument('users', uid, {
+    updateDocument('users', userInfo.uid, {
       requestedTo: arrayUnion(selectedUser.uid),
     })
     setIsRequested(true)
@@ -112,7 +99,7 @@ export default memo(function UserInfoModal() {
   }
 
   const handleRevokeRequest = () => {
-    updateDocument('users', uid, {
+    updateDocument('users', userInfo.uid, {
       requestedTo: arrayRemove(selectedUser.uid),
     })
     deleteDocument('status', `${userInfo.uid}-${selectedUser.uid}`)
@@ -134,7 +121,7 @@ export default memo(function UserInfoModal() {
         ...doc.data(),
         id: doc.id,
       }))[0]
-      setSelectedRoomId(documents.id)
+      dispatch({ type: ACTIONS.SELECTED_ROOM_ID, payload: documents.id })
       handleCancel()
     } else {
       const roomRef = await addDocument('rooms', {
@@ -149,17 +136,17 @@ export default memo(function UserInfoModal() {
         standByPhoto: {
           lastThreeMembers: [
             {
-              displayName: displayName,
-              photoURL: photoURL || null,
+              displayName: userInfo.displayName,
+              photoURL: userInfo.photoURL || null,
             },
           ],
           groupLengthRest: null,
         },
       })
-      setSelectedRoomId(roomRef.id)
+      dispatch({ type: ACTIONS.SELECTED_ROOM_ID, payload: roomRef.id })
     }
-    if (viewWidth < 600 && viewWidth !== 0) {
-      setOpenGroupInfo(false)
+    if (state.viewWidth < 600 && state.viewWidth !== 0) {
+      dispatch({ type: ACTIONS.TG_GROUP_INFOR, payload: false })
     }
   }
 
@@ -173,7 +160,7 @@ export default memo(function UserInfoModal() {
 
   const handleOpenUserAccount = () => {
     handleCancel()
-    setUserAccountVisible(true)
+    dispatch({ type: ACTIONS.TG_ACCOUNT, payload: true })
   }
 
   return (
@@ -184,7 +171,7 @@ export default memo(function UserInfoModal() {
       width={350}
       footer={
         <>
-          {selectedUser.uid === uid ? (
+          {state.selectedUser.uid === userInfo.uid ? (
             <Button
               icon={<SettingOutlined />}
               className='btn-primary'
@@ -228,7 +215,7 @@ export default memo(function UserInfoModal() {
                   className='btn-primary'>
                   Revoke request
                 </Button>
-              ) : selectedUser?.requestedTo?.includes(userInfo.uid) ? (
+              ) : state.selectedUser?.requestedTo?.includes(userInfo.uid) ? (
                 <Button
                   icon={<UserAddOutlined />}
                   className='btn-primary'
@@ -248,44 +235,48 @@ export default memo(function UserInfoModal() {
         </>
       }
       title='User info'
-      visible={userInfoVisible}
+      visible={state.userInfoVisible}
       onCancel={handleCancel}>
       <div className='avt-wrapper'>
-        <Image className='cover-photo' src={selectedUser.coverPhotoURL}></Image>
+        <Image
+          className='cover-photo'
+          src={state.selectedUser.coverPhotoURL}></Image>
         <div className='circle-avt'>
-          {selectedUser.photoURL ? (
+          {state.selectedUser.photoURL ? (
             <Image
-              src={selectedUser.photoURL}
+              src={state.selectedUser.photoURL}
               width={100}
               rootClassName='image-avt'
               className='noselect'
             />
           ) : (
             <Avatar size='large' className='avatar noselect'>
-              {selectedUser.displayName?.charAt(0)?.toUpperCase()}
+              {state.selectedUser.displayName?.charAt(0)?.toUpperCase()}
             </Avatar>
           )}
         </div>
       </div>
       <div className='info'>
-        <p className='name'>{selectedUser.displayName}</p>
+        <p className='name'>{state.selectedUser.displayName}</p>
         {showSendRequest ? (
           <Form form={form} layout='vertical'>
-            <Form.Item name='caption' initialValue={`Hi, I am ${displayName}`}>
+            <Form.Item
+              name='caption'
+              initialValue={`Hi, I am ${userInfo.displayName}`}>
               <Input.TextArea
                 size='small'
                 autoSize={true}
                 className='input-send-request'
                 maxLength={300}
                 showCount={true}
-                value={`Hi, I am ${displayName}`}
+                value={`Hi, I am ${userInfo.displayName}`}
               />
             </Form.Item>
           </Form>
         ) : (
           <p className='email'>
             <span className='tag'>Email: </span>
-            {selectedUser.email}
+            {state.selectedUser.email}
           </p>
         )}
       </div>

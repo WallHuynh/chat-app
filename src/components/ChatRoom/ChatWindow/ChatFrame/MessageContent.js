@@ -4,17 +4,14 @@ import { Button, Input } from 'antd'
 import Message from './Message'
 import { AppContext } from '../../../../context/AppProvider'
 import { addDocument, updateDocument } from '../../../../firebase/services'
-import { AuthContext } from '../../../../context/AuthProvider'
 import useFirestore from '../../../../hooks/useFirestore'
 import { serverTimestamp } from 'firebase/firestore'
 import Picker from 'emoji-picker-react'
 import useMeasure from 'react-use-measure'
 
 export default function MessageContent() {
-  const { selectedRoom, members, userInfo, viewWidth } = useContext(AppContext)
-  const {
-    user: { uid, photoURL, displayName },
-  } = useContext(AuthContext)
+  const { selectedRoom, members, userInfo, state } = useContext(AppContext)
+
   const [inputValue, setInputValue] = useState('')
   const [isTyping, setIsTyping] = useState(false)
   const [userQueue, setUserQueue] = useState(true)
@@ -75,8 +72,8 @@ export default function MessageContent() {
         case selectedRoom.typing.user1.isTyping === false:
           updateDocument('rooms', selectedRoom.id, {
             'typing.user1.isTyping': true,
-            'typing.user1.uid': uid,
-            'typing.user1.name': displayName,
+            'typing.user1.uid': userInfo.uid,
+            'typing.user1.name': userInfo.displayName,
           })
           inputTimeout = setTimeout(() => {
             updateDocument('rooms', selectedRoom.id, {
@@ -92,8 +89,8 @@ export default function MessageContent() {
           setUserQueue(false)
           updateDocument('rooms', selectedRoom.id, {
             'typing.user2.isTyping': true,
-            'typing.user2.uid': uid,
-            'typing.user2.name': displayName,
+            'typing.user2.uid': userInfo.uid,
+            'typing.user2.name': userInfo.displayName,
           })
           inputTimeout = setTimeout(() => {
             updateDocument('rooms', selectedRoom.id, {
@@ -107,8 +104,8 @@ export default function MessageContent() {
         default:
           updateDocument('rooms', selectedRoom.id, {
             'typing.user1.isTyping': true,
-            'typing.user1.uid': uid,
-            'typing.user1.name': displayName,
+            'typing.user1.uid': userInfo.uid,
+            'typing.user1.name': userInfo.displayName,
           })
           inputTimeout = setTimeout(() => {
             updateDocument('rooms', selectedRoom.id, {
@@ -172,21 +169,21 @@ export default function MessageContent() {
     }
     addDocument('messages', {
       text: inputValue,
-      uid,
-      photoURL,
+      uid: userInfo.uid,
+      photoURL: userInfo.photoURL,
       roomId: selectedRoom.id,
-      displayName,
+      displayName: userInfo.displayName,
     })
     updateDocument('rooms', selectedRoom.id, {
       'newestMess.createdAt': serverTimestamp(),
-      'newestMess.displayName': displayName,
+      'newestMess.displayName': userInfo.displayName,
       'newestMess.text': inputValue,
     })
     setInputValue('')
     setIsTyping(false)
     setEmojiPickerVisible(false)
     // focus to input again after submit
-    if (viewWidth > 800) {
+    if (state.viewWidth > 800) {
       setTimeout(() => {
         inputRef.current.focus()
       })
@@ -316,14 +313,14 @@ export default function MessageContent() {
               bottom: `${inputHeight + 22}px`,
             }}>
             {selectedRoom.typing.user1.isTyping &&
-            selectedRoom.typing.user1.uid !== uid ? (
+            selectedRoom.typing.user1.uid !== userInfo.uid ? (
               <p className='typing-text'>
                 {`${selectedRoom.typing.user1.name} is tyiping...`}
               </p>
             ) : null}
 
             {selectedRoom.typing.user2.isTyping &&
-            selectedRoom.typing.user2.uid !== uid ? (
+            selectedRoom.typing.user2.uid !== userInfo.uid ? (
               <p className='typing-text'>
                 {`${selectedRoom.typing.user2.name} is tyiping...`}
               </p>

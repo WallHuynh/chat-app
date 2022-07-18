@@ -1,28 +1,84 @@
-import React, { createContext, useContext, useMemo, useState } from 'react'
+import React, {
+  createContext,
+  useContext,
+  useMemo,
+  useReducer,
+  useState,
+} from 'react'
 import useFirestore from '../hooks/useFirestore'
 import { AuthContext } from './AuthProvider'
+
+const initialState = {
+  isRegisterVisible: false,
+  isAddRoomVisible: false,
+  isInviteMemberVisible: false,
+  selectedRoomId: '',
+  userInfoVisible: false,
+  selectedUser: {},
+  isFindFriendVisible: false,
+  userAccountVisible: false,
+  showUserStatus: false,
+  emailRegister: {},
+  isForgotPassVisible: false,
+  modalConfirmLeaveVisible: false,
+  modalUnfiendVisible: false,
+  selectedRoomLeave: {},
+  openGroupInfo: true,
+  viewWidth: null,
+  changeRoomNameVisible: false,
+}
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case ACTIONS.CLEAR_STATE:
+      return initialState
+    default:
+      return { ...state, [action.type]: action.payload }
+  }
+}
+
+export const ACTIONS = {
+  TG_REGISTER: 'isRegisterVisible',
+  TG_ADDROOM: 'isAddRoomVisible',
+  TG_INVITE: 'isInviteMemberVisible',
+  SELECTED_ROOM_ID: 'selectedRoomId',
+  TG_USER_INFO: 'userInfoVisible',
+  SELECTED_USER: 'selectedUser',
+  TG_FIND_FRIEND: 'isFindFriendVisible',
+  TG_ACCOUNT: 'userAccountVisible',
+  TG_STATUS: 'showUserStatus',
+  EMAIL: 'emailRegister',
+  TG_FORGOT_PASS: 'isForgotPassVisible',
+  TG_COMFIRM_LEAVE: 'modalConfirmLeaveVisible',
+  TG_UNFRIEND: 'modalUnfiendVisible',
+  SELECTED_ROOM_LEAVE: 'selectedRoomLeave',
+  TG_GROUP_INFOR: 'openGroupInfo',
+  VIEWWIDTH: 'viewWidth',
+  TG_CHANGE_ROOM_NAME: 'changeRoomNameVisible',
+  CLEAR_STATE: 'clearState',
+}
 
 export const AppContext = createContext()
 
 export default function AppProvider({ children }) {
-  const [isRegisterVisible, setIsRegisterVisible] = useState(false)
-  const [isAddRoomVisible, setIsAddRoomVisible] = useState(false)
-  const [isInviteMemberVisible, setIsInviteMemberVisible] = useState(false)
-  const [selectedRoomId, setSelectedRoomId] = useState('')
-  const [userInfoVisible, setUserInfoVisible] = useState(false)
-  const [selectedUser, setSelectedUser] = useState({})
-  const [isFindFriendVisible, setIsFindFriendVisible] = useState(false)
-  const [userAccountVisible, setUserAccountVisible] = useState(false)
-  const [showUserStatus, setShowUserStatus] = useState(false)
-  const [emailRegister, setEmailRegister] = useState({})
-  const [isForgotPassVisible, setIsForgotPassVisible] = useState(false)
-  const [modalConfirmLeaveVisible, setModalConfirmLeaveVisible] =
-    useState(false)
-  const [modalUnfiendVisible, setModalUnfiendVisible] = useState(false)
-  const [selectedRoomLeave, setSelectedRoomLeave] = useState({})
-  const [openGroupInfo, setOpenGroupInfo] = useState(true)
-  const [viewWidth, setViewWidth] = useState(null)
-  const [changeRoomNameVisible, setChangeRoomNameVisible] = useState(false)
+  const [state, dispatch] = useReducer(reducer, initialState)
+  // const [isAddRoomVisible, setIsAddRoomVisible] = useState(false)
+  // const [isInviteMemberVisible, setIsInviteMemberVisible] = useState(false)
+  // const [selectedRoomId, setSelectedRoomId] = useState('')
+  // const [userInfoVisible, setUserInfoVisible] = useState(false)
+  // const [selectedUser, setSelectedUser] = useState({})
+  // const [isFindFriendVisible, setIsFindFriendVisible] = useState(false)
+  // const [userAccountVisible, setUserAccountVisible] = useState(false)
+  // const [showUserStatus, setShowUserStatus] = useState(false)
+  // const [emailRegister, setEmailRegister] = useState({})
+  // const [isForgotPassVisible, setIsForgotPassVisible] = useState(false)
+  // const [modalConfirmLeaveVisible, setModalConfirmLeaveVisible] =
+  //   useState(false)
+  // const [modalUnfiendVisible, setModalUnfiendVisible] = useState(false)
+  // const [selectedRoomLeave, setSelectedRoomLeave] = useState({})
+  // const [openGroupInfo, setOpenGroupInfo] = useState(true)
+  // const [viewWidth, setViewWidth] = useState(null)
+  // const [changeRoomNameVisible, setChangeRoomNameVisible] = useState(false)
 
   const {
     user: { uid },
@@ -72,68 +128,20 @@ export default function AppProvider({ children }) {
   )
 
   const clearState = () => {
-    setSelectedRoomId('')
-    setIsAddRoomVisible(false)
-    setIsInviteMemberVisible(false)
-    setUserInfoVisible(false)
-    setIsRegisterVisible(false)
-    setSelectedUser({})
-    setUserAccountVisible(false)
-    setIsFindFriendVisible(false)
-    setShowUserStatus(false)
-    setEmailRegister('')
-    setIsForgotPassVisible(false)
-    setModalConfirmLeaveVisible(false)
-    setSelectedRoomLeave({})
-    setOpenGroupInfo(true)
-    setModalUnfiendVisible(false)
-    setViewWidth(null)
-    setChangeRoomNameVisible(false)
+    dispatch({ type: ACTIONS.CLEAR_STATE })
   }
 
   return (
     <AppContext.Provider
       value={{
-        changeRoomNameVisible,
-        setChangeRoomNameVisible,
-        viewWidth,
-        setViewWidth,
-        modalUnfiendVisible,
-        setModalUnfiendVisible,
-        openGroupInfo,
-        setOpenGroupInfo,
-        modalConfirmLeaveVisible,
-        setModalConfirmLeaveVisible,
-        selectedRoomLeave,
-        setSelectedRoomLeave,
+        selectedRoom,
         userInfo,
-        isForgotPassVisible,
-        setIsForgotPassVisible,
-        emailRegister,
-        setEmailRegister,
-        showUserStatus,
-        setShowUserStatus,
-        userAccountVisible,
-        setUserAccountVisible,
-        isFindFriendVisible,
-        setIsFindFriendVisible,
-        selectedUser,
-        setSelectedUser,
-        userInfoVisible,
-        setUserInfoVisible,
-        isRegisterVisible,
-        setIsRegisterVisible,
         status,
         rooms,
         members,
-        selectedRoom,
-        isAddRoomVisible,
-        setIsAddRoomVisible,
-        isInviteMemberVisible,
-        setIsInviteMemberVisible,
-        selectedRoomId,
-        setSelectedRoomId,
         clearState,
+        state,
+        dispatch,
       }}>
       {children}
     </AppContext.Provider>

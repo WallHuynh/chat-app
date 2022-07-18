@@ -1,24 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Form, Modal, Input, Button, Alert } from 'antd'
-import { AppContext } from '../../context/AppProvider'
+import { AppContext, ACTIONS } from '../../context/AppProvider'
 import styled from 'styled-components'
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { auth } from '../../firebase/config'
 import { userRegister } from '../../firebase/services'
-import useMeasure from 'react-use-measure'
 
 const AlertStyled = styled(Alert)`
   margin-bottom: 10px;
 `
 
 export default function RegisterModal() {
-  const {
-    isRegisterVisible,
-    setIsRegisterVisible,
-    emailRegister,
-    setEmailRegister,
-  } = useContext(AppContext)
+  const { state, dispatch } = useContext(AppContext)
   const errInitState = {
     email: '',
     passwords: '',
@@ -29,24 +23,26 @@ export default function RegisterModal() {
   const [err, setErr] = useState(errInitState)
   const [email, setEmail] = useState('')
 
-  useEffect(() => {setEmail(emailRegister)}, [emailRegister])
+  useEffect(() => {
+    setEmail(state.emailRegister)
+  }, [state.emailRegister])
 
   const [form] = Form.useForm()
 
   const handleCancel = () => {
     if (err.isSuccess) {
       form.resetFields()
-      setEmailRegister('')
       setErr(errInitState)
-      setIsRegisterVisible(false)
+      dispatch({ type: ACTIONS.EMAIL, payload: '' })
+      dispatch({ type: ACTIONS.TG_REGISTER, payload: false })
       setTimeout(() => {
         window.location.reload()
       }, 1000)
     } else {
       form.resetFields()
-      setEmailRegister('')
       setErr(errInitState)
-      setIsRegisterVisible(false)
+      dispatch({ type: ACTIONS.EMAIL, payload: '' })
+      dispatch({ type: ACTIONS.TG_REGISTER, payload: false })
     }
   }
 
@@ -75,7 +71,6 @@ export default function RegisterModal() {
       .then(userCredential => {
         // Signed in
         const user = userCredential.user
-        console.log(user)
         if (user) {
           updateProfile(auth.currentUser, {
             displayName: `${firstname} ${lastname}`,
@@ -101,10 +96,10 @@ export default function RegisterModal() {
         centered
         footer={null}
         title='Chat App Register'
-        visible={isRegisterVisible}
+        visible={state.isRegisterVisible}
         onCancel={handleCancel}>
         <Form
-          initialValues={{ email: emailRegister }}
+          initialValues={{ email: state.emailRegister }}
           form={form}
           layout='vertical'
           style={{ textAlign: 'center' }}
@@ -130,7 +125,7 @@ export default function RegisterModal() {
               closable
             />
           )}
-      
+
           {err.isSuccess && (
             <AlertStyled
               message='Sign up successfully! Now you can close this tab'

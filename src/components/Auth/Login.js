@@ -11,7 +11,6 @@ import {
 } from '@ant-design/icons'
 import styled from 'styled-components'
 import { auth } from '../../firebase/config'
-import { userRegister } from '../../firebase/services'
 import {
   signInWithPopup,
   GoogleAuthProvider,
@@ -21,7 +20,7 @@ import {
   browserSessionPersistence,
   signInWithRedirect,
 } from 'firebase/auth'
-import { AppContext } from '../../context/AppProvider'
+import { AppContext, ACTIONS } from '../../context/AppProvider'
 import './Login.scss'
 import useMeasure from 'react-use-measure'
 
@@ -38,13 +37,7 @@ const AlertStyled = styled(Alert)`
 `
 export default function Login() {
   const [form] = Form.useForm()
-  const {
-    setIsRegisterVisible,
-    setEmailRegister,
-    setIsForgotPassVisible,
-    viewWidth,
-    setViewWidth,
-  } = useContext(AppContext)
+  const { dispatch } = useContext(AppContext)
   const errInitState = {
     errorCode: null,
     errorMessage: null,
@@ -67,13 +60,13 @@ export default function Login() {
   }
 
   const handleRegister = () => {
-    setEmailRegister(form.getFieldValue().email)
-    setIsRegisterVisible(true)
+    dispatch({ type: ACTIONS.EMAIL, payload: form.getFieldValue().email })
+    dispatch({ type: ACTIONS.TG_REGISTER, payload: true })
   }
 
   const handleForgotPassword = () => {
-    setIsForgotPassVisible(true)
-    setEmailRegister(form.getFieldValue().email)
+    dispatch({ type: ACTIONS.TG_FORGOT_PASS, payload: true })
+    dispatch({ type: ACTIONS.EMAIL, payload: form.getFieldValue().email })
   }
 
   const onFinish = values => {

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Avatar, Button, Dropdown, Menu } from 'antd'
-import { AppContext } from '../../../context/AppProvider'
+import { ACTIONS, AppContext } from '../../../context/AppProvider'
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict'
 import { AuthContext } from '../../../context/AuthProvider'
 import {
@@ -22,14 +22,7 @@ const formatNSecondsToSevaralSeconds = timeLineSeconds => {
 }
 
 export default function RoomList() {
-  const {
-    rooms,
-    setSelectedRoomId,
-    selectedRoom,
-    userInfo,
-    setModalConfirmLeaveVisible,
-    setSelectedRoomLeave,
-  } = useContext(AppContext)
+  const { rooms, selectedRoom, userInfo, dispatch } = useContext(AppContext)
   const {
     user: { uid },
   } = useContext(AuthContext)
@@ -62,8 +55,8 @@ export default function RoomList() {
   }
 
   const openModalConfirm = room => {
-    setModalConfirmLeaveVisible(true)
-    setSelectedRoomLeave(room)
+    dispatch({ type: ACTIONS.TG_COMFIRM_LEAVE, payload: true })
+    dispatch({ type: ACTIONS.SELECTED_ROOM_LEAVE, payload: room })
   }
   if (!userInfo.uid) return null
 

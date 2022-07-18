@@ -10,8 +10,7 @@ import {
   message,
   Button,
 } from 'antd'
-import { AppContext } from '../../context/AppProvider'
-import { AuthContext } from '../../context/AuthProvider'
+import { ACTIONS, AppContext } from '../../context/AppProvider'
 import styled from 'styled-components'
 import {
   CameraFilled,
@@ -45,11 +44,7 @@ const beforeUpload = file => {
 }
 
 export default function UserAccountModal() {
-  const {
-    user: { uid },
-  } = useContext(AuthContext)
-  const { userAccountVisible, setUserAccountVisible, userInfo } =
-    useContext(AppContext)
+  const { state, dispatch, userInfo } = useContext(AppContext)
   const [form] = Form.useForm()
   const [isFieldChange, setIsFieldChange] = useState(false)
   const [popConfirmVisivle, setPopConfirmVisible] = useState(false)
@@ -87,6 +82,7 @@ export default function UserAccountModal() {
     setPopConfirmVisible(false)
     form.resetFields()
     setUserAccountVisible(false)
+    dispatch({ type: ACTIONS.TG_ACCOUNT, payload: false })
   }
 
   const handleCropOk = file => {
@@ -100,7 +96,7 @@ export default function UserAccountModal() {
       console.log(name)
       if (name.trim() !== userInfo.displayName) {
         const newName = name.trim()
-        updateDocument('users', uid, {
+        updateDocument('users', userInfo.uid, {
           displayName: newName,
           keywords: generateKeywords(newName),
         })
@@ -126,7 +122,7 @@ export default function UserAccountModal() {
       const storageRef = getStorage()
       const userAvatarRef = ref(
         storageRef,
-        `user-avatars/${uid}/${photo.file.name}`
+        `user-avatars/${userInfo.uid}/${photo.file.name}`
       )
       const uploadTask = uploadBytesResumable(userAvatarRef, photo.file)
       uploadTask.on(
@@ -134,10 +130,10 @@ export default function UserAccountModal() {
         snapshot => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          console.log('Upload is ' + progress + '% done')
+          openNotification('topLeft', 'Upload is ' + progress + '% done', '')
         },
         error => {
-          console.log(error)
+          openNotification('topLeft', 'Upload error', error)
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
@@ -145,7 +141,7 @@ export default function UserAccountModal() {
             updateProfile(auth.currentUser, {
               photoURL: downloadURL,
             })
-            updateDocument('users', uid, {
+            updateDocument('users', userInfo.uid, {
               photoURL: downloadURL,
             })
             openNotification('topLeft', 'Update complete!', '')
@@ -196,7 +192,7 @@ export default function UserAccountModal() {
       bodyStyle={{ padding: '0' }}
       width={350}
       title='User account setting'
-      visible={userAccountVisible}
+      visible={state.userAccountVisible}
       onCancel={handleCancel}>
       <div className='avt-wrapper'>
         <Image className='cover-photo' src={userInfo.coverPhotoURL}></Image>

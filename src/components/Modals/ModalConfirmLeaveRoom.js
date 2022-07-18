@@ -3,16 +3,10 @@ import { Modal } from 'antd'
 import { ExclamationCircleTwoTone } from '@ant-design/icons'
 import { updateDocument } from '../../firebase/services'
 import { arrayRemove } from 'firebase/firestore'
-import { AppContext } from '../../context/AppProvider'
+import { ACTIONS, AppContext } from '../../context/AppProvider'
 
 export default function ModalConfirmLeaveRoom() {
-  const {
-    modalConfirmLeaveVisible,
-    setModalConfirmLeaveVisible,
-    selectedRoomLeave,
-    setSelectedRoomLeave,
-    userInfo,
-  } = useContext(AppContext)
+  const { state, dispatch, userInfo } = useContext(AppContext)
 
   const handleLeaveRoom = () => {
     // setSelectedRoomId('')
@@ -26,14 +20,14 @@ export default function ModalConfirmLeaveRoom() {
   }
 
   const modalConfirmCancel = () => {
-    setModalConfirmLeaveVisible(false)
-    setSelectedRoomLeave({})
+    dispatch({ type: ACTIONS.TG_COMFIRM_LEAVE, payload: false })
+    dispatch({ type: ACTIONS.SELECTED_ROOM_LEAVE, payload: {} })
   }
   return (
     <Modal
       className='noselect'
       centered
-      visible={modalConfirmLeaveVisible}
+      visible={state.modalConfirmLeaveVisible}
       placement='bottom'
       title={
         <>
@@ -47,7 +41,7 @@ export default function ModalConfirmLeaveRoom() {
       onOk={handleLeaveRoom}
       onCancel={modalConfirmCancel}
       closable={false}>
-      {`Are you sure to leave ${selectedRoomLeave.name}?`}
+      {`Are you sure to leave ${state.selectedRoomLeave.name}?`}
     </Modal>
   )
 }

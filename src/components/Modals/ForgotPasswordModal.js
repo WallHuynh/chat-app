@@ -1,19 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { Form, Modal, Input, notification } from 'antd'
-import { AppContext } from '../../context/AppProvider'
-import styledComponents from 'styled-components'
+import { ACTIONS, AppContext } from '../../context/AppProvider'
 import { db } from '../../firebase/config'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 
-const ModalStyled = styledComponents(Modal)``
-
 export default function ForgotPasswordModal() {
-  const {
-    isForgotPassVisible,
-    setIsForgotPassVisible,
-    emailRegister,
-    setEmailRegister,
-  } = useContext(AppContext)
+  const { state, dispatch } = useContext(AppContext)
 
   const [form] = Form.useForm()
 
@@ -42,7 +34,6 @@ export default function ForgotPasswordModal() {
         where('email', '==', form?.getFieldsValue()?.email)
       )
       const querySnapshot = await getDocs(q)
-      console.log(querySnapshot)
       if (!querySnapshot.empty) {
         const documents = querySnapshot.docs.map(doc => ({
           ...doc.data(),
@@ -62,26 +53,26 @@ export default function ForgotPasswordModal() {
   }
 
   const handleCancel = () => {
-    setEmailRegister('')
     form.resetFields()
-    setIsForgotPassVisible(false)
+    dispatch({ type: ACTIONS.EMAIL, payload: '' })
+    dispatch({ type: ACTIONS.TG_FORGOT_PASS, payload: false })
   }
 
   return (
-    <ModalStyled
+    <Modal
       className='noselect'
       centered
       title='Recover password'
-      visible={isForgotPassVisible}
+      visible={state.isForgotPassVisible}
       onOk={handleOk}
       onCancel={handleCancel}
       width={350}
       okText='Find'>
       <Form form={form} layout='vertical'>
-        <Form.Item name='email' initialValue={emailRegister}>
+        <Form.Item name='email' initialValue={state.emailRegister}>
           <Input placeholder='Your email' maxLength={40} />
         </Form.Item>
       </Form>
-    </ModalStyled>
+    </Modal>
   )
 }
