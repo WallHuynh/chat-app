@@ -103,8 +103,8 @@ export default function AppProvider({ children }) {
   const rooms = useFirestore('rooms', roomsCondition)
 
   const selectedRoom = useMemo(
-    () => rooms.find(room => room.id === selectedRoomId) || {},
-    [rooms, selectedRoomId]
+    () => rooms.find(room => room.id === state.selectedRoomId) || {},
+    [rooms, state.selectedRoomId]
   )
   const usersCondition = useMemo(() => {
     if (selectedRoom?.members) {

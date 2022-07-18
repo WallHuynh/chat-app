@@ -10,7 +10,8 @@ export default function ChatRoom() {
   const [ref, bounds] = useMeasure()
 
   useEffect(() => {
-    setViewWidth(bounds.width)
+    dispatch({ type: ACTIONS.VIEWWIDTH, payload: bounds.width })
+
     if (bounds.width <= 800 && bounds.width !== 0) {
       dispatch({ type: ACTIONS.TG_GROUP_INFOR, payload: false })
     } else {

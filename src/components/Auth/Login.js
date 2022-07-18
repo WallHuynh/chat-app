@@ -37,7 +37,7 @@ const AlertStyled = styled(Alert)`
 `
 export default function Login() {
   const [form] = Form.useForm()
-  const { dispatch } = useContext(AppContext)
+  const { dispatch, state } = useContext(AppContext)
   const errInitState = {
     errorCode: null,
     errorMessage: null,
@@ -48,11 +48,11 @@ export default function Login() {
   const [ref, bounds] = useMeasure()
 
   useEffect(() => {
-    setViewWidth(bounds.width)
+    dispatch({ type: ACTIONS.VIEWWIDTH, payload: bounds.width })
   }, [bounds])
 
   const handleLoginWithProvider = async provider => {
-    if (viewWidth > 600) {
+    if (state.viewWidth > 600) {
       await signInWithPopup(auth, provider)
     } else {
       await signInWithRedirect(auth, provider)

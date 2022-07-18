@@ -81,7 +81,6 @@ export default function UserAccountModal() {
     setIsFieldChange(false)
     setPopConfirmVisible(false)
     form.resetFields()
-    setUserAccountVisible(false)
     dispatch({ type: ACTIONS.TG_ACCOUNT, payload: false })
   }
 

@@ -18,7 +18,6 @@ export default function Info() {
 
   const handleClickUser = () => {
     if (!selectedRoom.isAGroup) {
-      setUserInfoVisible(true)
       dispatch({ type: ACTIONS.TG_USER_INFO, payload: true })
       dispatch({
         type: ACTIONS.SELECTED_USER,
@@ -109,7 +108,9 @@ export default function Info() {
         {selectedRoom.isAGroup && (
           <Button
             className='btn-edit'
-            onClick={() => setChangeRoomNameVisible(true)}
+            onClick={() =>
+              dispatch({ type: ACTIONS.TG_CHANGE_ROOM_NAME, payload: true })
+            }
             icon={<EditOutlined />}
             type='text'></Button>
         )}

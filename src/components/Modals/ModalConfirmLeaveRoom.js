@@ -10,11 +10,11 @@ export default function ModalConfirmLeaveRoom() {
 
   const handleLeaveRoom = () => {
     // setSelectedRoomId('')
-    updateDocument('rooms', selectedRoomLeave.id, {
+    updateDocument('rooms', state.selectedRoomLeave.id, {
       members: arrayRemove(userInfo.uid),
     })
     updateDocument('users', userInfo.uid, {
-      pinnedRoomsId: arrayRemove(selectedRoomLeave.id),
+      pinnedRoomsId: arrayRemove(state.selectedRoomLeave.id),
     })
     modalConfirmCancel()
   }

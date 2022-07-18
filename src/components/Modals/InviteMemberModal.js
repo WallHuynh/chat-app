@@ -131,7 +131,7 @@ export default function InviteMemberModal() {
       form.resetFields()
       setValue([])
       // update members in current room
-      updateDocument('rooms', selectedRoomId, {
+      updateDocument('rooms', state.selectedRoomId, {
         members: [...selectedRoom.members, ...value.map(val => val.value)],
       })
       dispatch({ type: ACTIONS.TG_INVITE, payload: false })

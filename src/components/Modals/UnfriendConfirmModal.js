@@ -7,7 +7,7 @@ import { ACTIONS, AppContext } from '../../context/AppProvider'
 import { openNotification } from './FindFriendModal'
 
 export default function UnfriendConfirmModal() {
-  const { state, dispatch, userInfo } = useContext(AppContext)
+  const { state, dispatch, userInfo, selectedUser } = useContext(AppContext)
 
   const handleUnfriend = () => {
     updateDocument('users', userInfo.uid, {

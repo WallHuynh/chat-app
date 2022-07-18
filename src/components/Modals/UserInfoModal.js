@@ -23,11 +23,11 @@ import './Modals.scss'
 
 export default memo(function UserInfoModal() {
   const [form] = Form.useForm()
-  const { userInfo, state, dispatch } = useContext(AppContext)
+  const { userInfo, state, dispatch, selectedUser } = useContext(AppContext)
   const [showSendRequest, setShowSendRequest] = useState(false)
-  const initialIsRequested = userInfo?.requestedTo?.includes(selectedUser.uid)
+  const initialIsRequested = userInfo?.requestedTo?.includes(selectedUser?.uid)
   const [isRequested, setIsRequested] = useState(initialIsRequested)
-  const initialIsFriend = userInfo?.friends?.includes(selectedUser.uid)
+  const initialIsFriend = userInfo?.friends?.includes(selectedUser?.uid)
   const [isFriend, setIsFriend] = useState(initialIsFriend)
 
   useEffect(() => {
@@ -203,7 +203,9 @@ export default memo(function UserInfoModal() {
               </Button>
               {isFriend ? (
                 <Button
-                  onClick={() => setModalUnfiendVisible(true)}
+                  onClick={() =>
+                    dispatch({ type: ACTIONS.TG_UNFRIEND, payload: true })
+                  }
                   icon={<UserDeleteOutlined />}
                   className='btn-primary'>
                   Unfriend

@@ -102,7 +102,9 @@ export default function Header() {
               <p className='title'>{selectedRoom.name}</p>
               <Button
                 className='btn-edit'
-                onClick={() => setChangeRoomNameVisible(true)}
+                onClick={() =>
+                  dispatch({ type: ACTIONS.TG_CHANGE_ROOM_NAME, payload: true })
+                }
                 icon={<EditOutlined />}
                 type='text'></Button>
             </div>
@@ -126,7 +128,9 @@ export default function Header() {
             className='add-member-btn'
             icon={<PlusCircleOutlined />}
             type='text'
-            onClick={() => setIsInviteMemberVisible(true)}></Button>
+            onClick={() =>
+              dispatch({ type: ACTIONS.TG_INVITE, payload: true })
+            }></Button>
         </Tooltip>
         {state.openGroupInfo ? (
           <Tooltip

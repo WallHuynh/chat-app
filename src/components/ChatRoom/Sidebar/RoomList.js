@@ -153,7 +153,9 @@ export default function RoomList() {
                   ? { backgroundColor: 'rgb(4, 67, 97)', color: 'white' }
                   : null
               }
-              onClick={() => setSelectedRoomId(room.id)}>
+              onClick={() =>
+                dispatch({ type: ACTIONS.SELECTED_ROOM_ID, payload: room.id })
+              }>
               <div className='avt-graper'>
                 <div className='avatar-group'>
                   {room.standByPhoto.lastThreeMembers.length === 2 ? (
