@@ -14,6 +14,7 @@
     "firebase": "^9.6.11",
     "firebase-functions": "^3.21.2",
     "lodash": "^4.17.21",
+    "netlify-cli": "^10.10.2",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-router-dom": "^6.3.0",

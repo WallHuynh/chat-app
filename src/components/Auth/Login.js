@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Form, Input, Button, Checkbox, Typography, Alert } from 'antd'
+import { Form, Input, Button, Checkbox, Alert } from 'antd'
 import {
   UserOutlined,
   LockOutlined,
@@ -24,14 +24,9 @@ import { AppContext, ACTIONS } from '../../context/AppProvider'
 import './Login.scss'
 import useMeasure from 'react-use-measure'
 
-const { Title } = Typography
-
 const googleProvider = new GoogleAuthProvider()
 const fbProvider = new FacebookAuthProvider()
 
-const TitleStyled = styled(Title)`
-  margin-top: 0.5em;
-`
 const AlertStyled = styled(Alert)`
   margin-bottom: 10px;
 `
@@ -99,10 +94,9 @@ export default function Login() {
   }
 
   return (
-    <div ref={ref}>
-      <TitleStyled style={{ textAlign: 'center' }} level={1}>
-        Chat App
-      </TitleStyled>
+    <div className='login-container' ref={ref}>
+      <h1 style={{ textAlign: 'center' }}>Chat App</h1>
+      <p className='subtitle'>Let's chat with your friends</p>
       <div className='login-graper'>
         <Form
           form={form}
@@ -205,4 +199,3 @@ export default function Login() {
     </div>
   )
 }
-

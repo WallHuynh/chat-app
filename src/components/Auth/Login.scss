@@ -1,257 +1,333 @@
 @use '/src/theme/variables';
 
-.login-graper {
-  width: 45%;
-  padding: 2em 3em 2em 3em;
-  box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
-    rgba(17, 17, 26, 0.1) 0px 0px 8px;
-  margin: 0 auto;
-  @media (max-width: 1000px) {
-    width: 70%;
-  }
-  @media (max-width: 800px) {
-    width: 80%;
-  }
-  @media (max-width: 600px) {
-    width: 100%;
-    box-shadow: none;
-    padding: 1em 1.5em 1em 1.5em;
-  }
-  @media (max-width: 300px) {
-    width: 100%;
-    box-shadow: none;
-    padding: 0.3em 0.5em 0.3em 0.5em;
-  }
+:root {
+  --bg-color: hsl(49 37% 94%);
+  --typewriterSpeed: 1.5s;
+  --typewriterCharacters: 8;
+}
 
-  .ant-input-affix-wrapper {
-    border: 1px solid #16576b77;
-  }
-  .check-box {
-    margin-bottom: 10px;
-    .ant-checkbox-inner {
-      background-color: #093f50;
-      border: 1px solid #093f50;
-    }
-  }
-
-  .ant-btn:hover,
-  .ant-btn:focus {
-    background: #f6f9fe;
-    color: variables.$btnHover;
-  }
-  .button-82-pushable {
-    position: relative;
-    border: none;
-    background: transparent;
+.login-container {
+  margin: 0;
+  padding: 0.5em 0 2em 0;
+  text-align: center;
+  background: var(--bg-color);
+  h1 {
+    margin: 0 auto 0 auto;
     padding: 0;
-    cursor: pointer;
-    outline-offset: 4px;
-    transition: filter 250ms;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-  }
-
-  .button-82-shadow {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 12px;
-    background: hsl(0deg 0% 0% / 0.25);
-    will-change: transform;
-    transform: translateY(2px);
-    transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
-  }
-
-  .button-82-edge {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 12px;
-    background: linear-gradient(
-      to left,
-      variables.$btnHover 0%,
-      variables.$primaryColor 8%,
-      variables.$primaryColor 8%,
-      variables.$btnHover 0%
-    );
-  }
-
-  .button-82-front {
-    display: block;
+    font-size: clamp(1rem, 3vw + 1rem, 4rem);
     position: relative;
-    padding: 12px 27px;
-    border-radius: 12px;
-    font-size: 1.1rem;
-    color: variables.$lightText;
-    background: variables.$primaryColor;
-    will-change: transform;
-    transform: translateY(-4px);
-    transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
+    font-family: 'Source Code Pro', monospace;
+    position: relative;
+    width: max-content;
   }
 
-  @media (min-width: 768px) {
-    .button-82-front {
-      font-size: 1.25rem;
-      padding: 12px 42px;
+  h1::before,
+  h1::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  h1::before {
+    background: var(--bg-color);
+    animation: typewriter var(--typewriterSpeed)
+      steps(var(--typewriterCharacters)) 1s forwards;
+  }
+
+  h1::after {
+    width: 0.125em;
+    background: black;
+    animation: typewriter var(--typewriterSpeed)
+        steps(var(--typewriterCharacters)) 1s forwards,
+      blink 750ms steps(var(--typewriterCharacters)) infinite;
+  }
+
+  .subtitle {
+    margin: 0 0 1em 0;
+    color: hsl(0 0% 0% / 0.7);
+    font-size: 1rem;
+    font-weight: 400;
+    opacity: 0;
+    transform: translateY(1rem);
+    animation: fadeInUp 1s ease calc(var(--typewriterSpeed) + 1s) forwards;
+  }
+
+  @keyframes typewriter {
+    to {
+      left: 100%;
     }
   }
 
-  .button-82-pushable:hover {
-    filter: brightness(200%);
-    -webkit-filter: brightness(110%);
+  @keyframes blink {
+    to {
+      background: transparent;
+    }
   }
 
-  .button-82-pushable:hover .button-82-front {
-    transform: translateY(-6px);
-    transition: transform 250ms cubic-bezier(0.3, 0.7, 0.4, 1.5);
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
-  .button-82-pushable:active .button-82-front {
-    transform: translateY(-2px);
-    transition: transform 34ms;
-  }
-
-  .button-82-pushable:hover .button-82-shadow {
-    transform: translateY(4px);
-    transition: transform 250ms cubic-bezier(0.3, 0.7, 0.4, 1.5);
-  }
-
-  .button-82-pushable:active .button-82-shadow {
-    transform: translateY(1px);
-    transition: transform 34ms;
-  }
-
-  .button-82-pushable:focus:not(:focus-visible) {
-    outline: none;
-  }
-
-  /* button google facebook */
-  .button-83 {
-    margin: 10px 10px 0 0;
-    appearance: button;
-    background-color: transparent;
-    background-image: linear-gradient(to bottom, #fff, #f8eedb);
-    border: 0 solid #e5e7eb;
-    border-radius: 0.5rem;
-    box-sizing: border-box;
-    color: #093f50;
-    column-gap: 1rem;
-    cursor: pointer;
-    font-family: ui-sans-serif, system-ui, -apple-system, system-ui, 'Segoe UI',
-      Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
-      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-      'Noto Color Emoji';
-    font-size: 100%;
-    font-weight: 700;
-    line-height: 24px;
-
-    outline: 2px solid transparent;
-
-    text-transform: none;
-    transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    box-shadow: -6px 8px 10px rgba(81, 41, 10, 0.1),
-      0px 2px 2px rgba(81, 41, 10, 0.2);
-  }
-
-  .button-83:active {
-    background-color: #f3f4f6;
-    box-shadow: -1px 2px 5px rgba(81, 41, 10, 0.15),
-      0px 1px 1px rgba(81, 41, 10, 0.15);
-    transform: translateY(0.125rem);
-  }
-
-  .button-83:focus {
-    box-shadow: rgba(72, 35, 7, 0.46) 0 0 0 4px,
-      -6px 8px 10px rgba(81, 41, 10, 0.1), 0px 2px 2px rgba(81, 41, 10, 0.2);
-  }
-
-  .button-17 {
-    align-items: center;
-    appearance: none;
-    background-color: #fff;
-    border-radius: 1em;
-    border-style: none;
-    box-shadow: rgba(0, 0, 0, 0.2) 0 3px 5px -1px,
-      rgba(0, 0, 0, 0.14) 0 6px 10px 0, rgba(0, 0, 0, 0.12) 0 1px 18px 0;
-    box-sizing: border-box;
-    color: #3c4043;
-    cursor: pointer;
-    display: inline-flex;
-    fill: currentcolor;
-    font-family: 'Google Sans', Roboto, Arial, sans-serif;
-    font-size: 0.85rem;
-    font-weight: 500;
-    height: 3em;
-    justify-content: center;
-    letter-spacing: 0.25px;
-    line-height: normal;
-    overflow: visible;
-    padding: 0.1em 1em;
+  .login-graper {
+    background-color: #ffffff;
+    width: 45%;
+    padding: 2em 3em 2em 3em;
+    box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
+      rgba(17, 17, 26, 0.1) 0px 0px 8px;
     margin: 0 auto;
-    position: relative;
-    text-align: center;
-    text-transform: none;
-    transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1),
-      opacity 15ms linear 30ms, transform 270ms cubic-bezier(0, 0, 0.2, 1) 0ms;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    width: 24em;
-    will-change: transform, opacity;
-    z-index: 0;
-
-    @media (max-width: 1100px) {
-      width: 20em;
+    @media (max-width: 1000px) {
+      width: 70%;
+    }
+    @media (max-width: 800px) {
+      width: 80%;
     }
     @media (max-width: 600px) {
-      width: 18em;
+      width: 100%;
+      box-shadow: none;
+      padding: 1em 1.5em 1em 1.5em;
     }
     @media (max-width: 300px) {
-      width: 90%;
+      width: 100%;
+      box-shadow: none;
+      padding: 0.3em 0.5em 0.3em 0.5em;
     }
 
-    .button-17:hover {
+    .ant-input-affix-wrapper {
+      border: 1px solid #16576b77;
+    }
+    .check-box {
+      margin-bottom: 10px;
+      .ant-checkbox-inner {
+        background-color: #093f50;
+        border: 1px solid #093f50;
+      }
+    }
+
+    .ant-btn:hover,
+    .ant-btn:focus {
       background: #f6f9fe;
-      color: #174ea6;
+      color: variables.$btnHover;
+    }
+    .button-82-pushable {
+      position: relative;
+      border: none;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+      outline-offset: 4px;
+      transition: filter 250ms;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
     }
 
-    .button-17:active {
-      box-shadow: 0 4px 4px 0 rgb(60 64 67 / 30%),
-        0 8px 12px 6px rgb(60 64 67 / 15%);
+    .button-82-shadow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      background: hsl(0deg 0% 0% / 0.25);
+      will-change: transform;
+      transform: translateY(2px);
+      transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
+    }
+
+    .button-82-edge {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      background: linear-gradient(
+        to left,
+        variables.$btnHover 0%,
+        variables.$primaryColor 8%,
+        variables.$primaryColor 8%,
+        variables.$btnHover 0%
+      );
+    }
+
+    .button-82-front {
+      display: block;
+      position: relative;
+      padding: 12px 27px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      color: variables.$lightText;
+      background: variables.$primaryColor;
+      will-change: transform;
+      transform: translateY(-4px);
+      transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
+    }
+
+    @media (min-width: 768px) {
+      .button-82-front {
+        font-size: 1.25rem;
+        padding: 12px 42px;
+      }
+    }
+
+    .button-82-pushable:hover {
+      filter: brightness(200%);
+      -webkit-filter: brightness(110%);
+    }
+
+    .button-82-pushable:hover .button-82-front {
+      transform: translateY(-6px);
+      transition: transform 250ms cubic-bezier(0.3, 0.7, 0.4, 1.5);
+    }
+
+    .button-82-pushable:active .button-82-front {
+      transform: translateY(-2px);
+      transition: transform 34ms;
+    }
+
+    .button-82-pushable:hover .button-82-shadow {
+      transform: translateY(4px);
+      transition: transform 250ms cubic-bezier(0.3, 0.7, 0.4, 1.5);
+    }
+
+    .button-82-pushable:active .button-82-shadow {
+      transform: translateY(1px);
+      transition: transform 34ms;
+    }
+
+    .button-82-pushable:focus:not(:focus-visible) {
       outline: none;
     }
 
-    .button-17:not(:disabled) {
-      box-shadow: rgba(60, 64, 67, 0.3) 0 1px 3px 0,
-        rgba(60, 64, 67, 0.15) 0 4px 8px 3px;
+    /* button google facebook */
+    .button-83 {
+      margin: 10px 10px 0 0;
+      appearance: button;
+      background-color: transparent;
+      background-image: linear-gradient(to bottom, #fff, #f8eedb);
+      border: 0 solid #e5e7eb;
+      border-radius: 0.5rem;
+      box-sizing: border-box;
+      color: #093f50;
+      column-gap: 1rem;
+      cursor: pointer;
+      font-family: ui-sans-serif, system-ui, -apple-system, system-ui,
+        'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+        'Noto Color Emoji';
+      font-size: 100%;
+      font-weight: 700;
+      line-height: 24px;
+
+      outline: 2px solid transparent;
+
+      text-transform: none;
+      transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      box-shadow: -6px 8px 10px rgba(81, 41, 10, 0.1),
+        0px 2px 2px rgba(81, 41, 10, 0.2);
     }
 
-    .button-17:not(:disabled):hover {
-      box-shadow: rgba(60, 64, 67, 0.3) 0 2px 3px 0,
-        rgba(60, 64, 67, 0.15) 0 6px 10px 4px;
+    .button-83:active {
+      background-color: #f3f4f6;
+      box-shadow: -1px 2px 5px rgba(81, 41, 10, 0.15),
+        0px 1px 1px rgba(81, 41, 10, 0.15);
+      transform: translateY(0.125rem);
     }
 
-    .button-17:not(:disabled):focus {
-      box-shadow: rgba(60, 64, 67, 0.3) 0 1px 3px 0,
-        rgba(60, 64, 67, 0.15) 0 4px 8px 3px;
+    .button-83:focus {
+      box-shadow: rgba(72, 35, 7, 0.46) 0 0 0 4px,
+        -6px 8px 10px rgba(81, 41, 10, 0.1), 0px 2px 2px rgba(81, 41, 10, 0.2);
     }
 
-    .button-17:not(:disabled):active {
-      box-shadow: rgba(60, 64, 67, 0.3) 0 4px 4px 0,
-        rgba(60, 64, 67, 0.15) 0 8px 12px 6px;
-    }
+    .button-17 {
+      align-items: center;
+      appearance: none;
+      background-color: #fff;
+      border-radius: 1em;
+      border-style: none;
+      box-shadow: rgba(0, 0, 0, 0.2) 0 3px 5px -1px,
+        rgba(0, 0, 0, 0.14) 0 6px 10px 0, rgba(0, 0, 0, 0.12) 0 1px 18px 0;
+      box-sizing: border-box;
+      color: #3c4043;
+      cursor: pointer;
+      display: inline-flex;
+      fill: currentcolor;
+      font-family: 'Google Sans', Roboto, Arial, sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      height: 3em;
+      justify-content: center;
+      letter-spacing: 0.25px;
+      line-height: normal;
+      overflow: visible;
+      padding: 0.1em 1em;
+      margin: 0 auto;
+      position: relative;
+      text-align: center;
+      text-transform: none;
+      transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 15ms linear 30ms, transform 270ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      width: 24em;
+      will-change: transform, opacity;
+      z-index: 0;
 
-    .button-17:disabled {
-      box-shadow: rgba(60, 64, 67, 0.3) 0 1px 3px 0,
-        rgba(60, 64, 67, 0.15) 0 4px 8px 3px;
+      @media (max-width: 1100px) {
+        width: 20em;
+      }
+      @media (max-width: 600px) {
+        width: 18em;
+      }
+      @media (max-width: 300px) {
+        width: 90%;
+      }
+
+      .button-17:hover {
+        background: #f6f9fe;
+        color: #174ea6;
+      }
+
+      .button-17:active {
+        box-shadow: 0 4px 4px 0 rgb(60 64 67 / 30%),
+          0 8px 12px 6px rgb(60 64 67 / 15%);
+        outline: none;
+      }
+
+      .button-17:not(:disabled) {
+        box-shadow: rgba(60, 64, 67, 0.3) 0 1px 3px 0,
+          rgba(60, 64, 67, 0.15) 0 4px 8px 3px;
+      }
+
+      .button-17:not(:disabled):hover {
+        box-shadow: rgba(60, 64, 67, 0.3) 0 2px 3px 0,
+          rgba(60, 64, 67, 0.15) 0 6px 10px 4px;
+      }
+
+      .button-17:not(:disabled):focus {
+        box-shadow: rgba(60, 64, 67, 0.3) 0 1px 3px 0,
+          rgba(60, 64, 67, 0.15) 0 4px 8px 3px;
+      }
+
+      .button-17:not(:disabled):active {
+        box-shadow: rgba(60, 64, 67, 0.3) 0 4px 4px 0,
+          rgba(60, 64, 67, 0.15) 0 8px 12px 6px;
+      }
+
+      .button-17:disabled {
+        box-shadow: rgba(60, 64, 67, 0.3) 0 1px 3px 0,
+          rgba(60, 64, 67, 0.15) 0 4px 8px 3px;
+      }
     }
   }
 }
