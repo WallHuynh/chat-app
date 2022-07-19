@@ -55,20 +55,22 @@ export default function FindFriendModal() {
   }
 
   return (
-    <Modal
-      className='noselect'
-      centered
-      title='Find a friend'
-      visible={state.isFindFriendVisible}
-      onOk={handleOk}
-      onCancel={handleCancel}
-      width={350}
-      okText='Find'>
-      <Form form={form} layout='vertical'>
-        <Form.Item name='email'>
-          <Input placeholder="Your friend's email" maxLength={40} />
-        </Form.Item>
-      </Form>
-    </Modal>
+    <div>
+      <Modal
+        className='noselect'
+        centered
+        title='Find a friend'
+        visible={state.isFindFriendVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        width={350}
+        okText='Find'>
+        <Form form={form} layout='vertical'>
+          <Form.Item name='email'>
+            <Input placeholder="Your friend's email" maxLength={40} />
+          </Form.Item>
+        </Form>
+      </Modal>
+    </div>
   )
 }

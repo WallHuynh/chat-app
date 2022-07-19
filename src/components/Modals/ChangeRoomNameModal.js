@@ -24,35 +24,37 @@ export default function ChangeRoomNameModal() {
     }
   }
   return (
-    <Modal
-      className='change-room-name noselect'
-      footer={
-        <>
-          <Button className='btn-primary ' onClick={handleCancel}>
-            Cancel
-          </Button>
+    <div>
+      <Modal
+        className='change-room-name noselect'
+        footer={
+          <>
+            <Button className='btn-primary ' onClick={handleCancel}>
+              Cancel
+            </Button>
 
-          <Button
-            className={isFieldChange ? 'confirm-btn' : 'disabled-btn'}
-            disabled={!isFieldChange}
-            onClick={handleUpdateRoomName}>
-            Update
-          </Button>
-        </>
-      }
-      centered
-      width={350}
-      title='Update room name'
-      visible={state.changeRoomNameVisible}
-      onCancel={handleCancel}>
-      <Form form={form} layout='vertical'>
-        <Form.Item
-          label='New room name will be displayed to all members'
-          name='name'
-          initialValue={selectedRoom.name}>
-          <Input maxLength={40} onChange={() => setIsFieldChange(true)} />
-        </Form.Item>
-      </Form>
-    </Modal>
+            <Button
+              className={isFieldChange ? 'confirm-btn' : 'disabled-btn'}
+              disabled={!isFieldChange}
+              onClick={handleUpdateRoomName}>
+              Update
+            </Button>
+          </>
+        }
+        centered
+        width={350}
+        title='Update room name'
+        visible={state.changeRoomNameVisible}
+        onCancel={handleCancel}>
+        <Form form={form} layout='vertical'>
+          <Form.Item
+            label='New room name will be displayed to all members'
+            name='name'
+            initialValue={selectedRoom.name}>
+            <Input maxLength={40} onChange={() => setIsFieldChange(true)} />
+          </Form.Item>
+        </Form>
+      </Modal>
+    </div>
   )
 }

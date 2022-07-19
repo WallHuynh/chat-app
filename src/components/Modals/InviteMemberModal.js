@@ -148,27 +148,29 @@ export default function InviteMemberModal() {
   }
 
   return (
-    <ModalStyled
-      className='noselect'
-      centered
-      okText='Invite'
-      title='Invite members'
-      visible={state.isInviteMemberVisible}
-      onOk={handleOk}
-      onCancel={handleCancel}
-      destroyOnClose={true}>
-      <Form form={form} layout='vertical'>
-        <DebounceSelect
-          mode='multiple'
-          name='search-user'
-          value={value}
-          placeholder="Member's name"
-          fetchOptions={fetchUserList}
-          onChange={newValue => setValue(newValue)}
-          style={{ width: '100%' }}
-          curMembers={selectedRoom.members}
-        />
-      </Form>
-    </ModalStyled>
+    <div>
+      <ModalStyled
+        className='noselect'
+        centered
+        okText='Invite'
+        title='Invite members'
+        visible={state.isInviteMemberVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        destroyOnClose={true}>
+        <Form form={form} layout='vertical'>
+          <DebounceSelect
+            mode='multiple'
+            name='search-user'
+            value={value}
+            placeholder="Member's name"
+            fetchOptions={fetchUserList}
+            onChange={newValue => setValue(newValue)}
+            style={{ width: '100%' }}
+            curMembers={selectedRoom.members}
+          />
+        </Form>
+      </ModalStyled>
+    </div>
   )
 }

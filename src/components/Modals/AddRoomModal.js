@@ -74,7 +74,7 @@ export default function AddRoomModal() {
         updateDocument('rooms', document.id, {
           members: arrayUnion(userInfo.uid),
         })
-        dispatch({type: ACTIONS.SELECTED_ROOM_ID, payload: document.id})
+        dispatch({ type: ACTIONS.SELECTED_ROOM_ID, payload: document.id })
         handleCancel()
       } else {
         openNotification('top', 'Room not found', '')
@@ -127,78 +127,80 @@ export default function AddRoomModal() {
   }
 
   return (
-    <Modal
-      className='noselect'
-      centered
-      title={
-        <Segmented
-          value={segmentValue}
-          onChange={onSegmentChange}
-          options={[
-            {
-              label: 'Create room',
-              value: 'create',
-            },
-            {
-              label: 'Join room',
-              value: 'join',
-            },
-          ]}
-        />
-      }
-      visible={state.isAddRoomVisible}
-      onOk={handleOk}
-      onCancel={handleCancel}
-      width={400}
-      okText={segmentValue === 'create' ? 'Create' : 'Join'}>
-      <Form form={form} layout='vertical'>
-        {segmentValue === 'create' ? (
-          <>
-            <Form.Item name='name'>
+    <div>
+      <Modal
+        className='noselect'
+        centered
+        title={
+          <Segmented
+            value={segmentValue}
+            onChange={onSegmentChange}
+            options={[
+              {
+                label: 'Create room',
+                value: 'create',
+              },
+              {
+                label: 'Join room',
+                value: 'join',
+              },
+            ]}
+          />
+        }
+        visible={state.isAddRoomVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        width={400}
+        okText={segmentValue === 'create' ? 'Create' : 'Join'}>
+        <Form form={form} layout='vertical'>
+          {segmentValue === 'create' ? (
+            <>
+              <Form.Item name='name'>
+                <Input
+                  onPressEnter={handleOk}
+                  placeholder="Your room's name"
+                  maxLength={40}
+                />
+              </Form.Item>
+              <Select
+                labelInValue
+                onFocus={handleFocusSelect}
+                mode='multiple'
+                value={selectedFriends}
+                notFoundContent={'You have no friend'}
+                placeholder='Choose your friends'
+                onChange={handleChangeSelect}
+                style={{
+                  width: '100%',
+                }}>
+                {friendOptions.map(opt => {
+                  return (
+                    <Select.Option
+                      key={opt.uid}
+                      value={opt.uid}
+                      title={opt.displayName}>
+                      <Avatar size='small' src={opt.photoURL}>
+                        {opt.photoURL
+                          ? ''
+                          : opt.displayName?.charAt(0)?.toUpperCase()}
+                      </Avatar>
+                      {` ${opt.displayName}`}
+                    </Select.Option>
+                  )
+                })}
+              </Select>
+            </>
+          ) : (
+            <Form.Item name='id'>
               <Input
                 onPressEnter={handleOk}
-                placeholder="Your room's name"
+                placeholder="Room's ID"
                 maxLength={40}
               />
             </Form.Item>
-            <Select
-              labelInValue
-              onFocus={handleFocusSelect}
-              mode='multiple'
-              value={selectedFriends}
-              notFoundContent={'You have no friend'}
-              placeholder='Choose your friends'
-              onChange={handleChangeSelect}
-              style={{
-                width: '100%',
-              }}>
-              {friendOptions.map(opt => {
-                return (
-                  <Select.Option
-                    key={opt.uid}
-                    value={opt.uid}
-                    title={opt.displayName}>
-                    <Avatar size='small' src={opt.photoURL}>
-                      {opt.photoURL
-                        ? ''
-                        : opt.displayName?.charAt(0)?.toUpperCase()}
-                    </Avatar>
-                    {` ${opt.displayName}`}
-                  </Select.Option>
-                )
-              })}
-            </Select>
-          </>
-        ) : (
-          <Form.Item name='id'>
-            <Input
-              onPressEnter={handleOk}
-              placeholder="Room's ID"
-              maxLength={40}
-            />
-          </Form.Item>
-        )}
-      </Form>
-    </Modal>
+          )}
+        </Form>
+      </Modal>
+    </div>
   )
 }

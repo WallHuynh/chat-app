@@ -24,24 +24,26 @@ export default function ModalConfirmLeaveRoom() {
     dispatch({ type: ACTIONS.SELECTED_ROOM_LEAVE, payload: {} })
   }
   return (
-    <Modal
-      className='noselect'
-      centered
-      visible={state.modalConfirmLeaveVisible}
-      placement='bottom'
-      title={
-        <>
-          <ExclamationCircleTwoTone twoToneColor='#ff5500' />
-          {` Warning`}
-        </>
-      }
-      width={400}
-      okText='Yes'
-      cancelText='No'
-      onOk={handleLeaveRoom}
-      onCancel={modalConfirmCancel}
-      closable={false}>
-      {`Are you sure to leave ${state.selectedRoomLeave.name}?`}
-    </Modal>
+    <div>
+      <Modal
+        className='noselect'
+        centered
+        visible={state.modalConfirmLeaveVisible}
+        placement='bottom'
+        title={
+          <>
+            <ExclamationCircleTwoTone twoToneColor='#ff5500' />
+            {` Warning`}
+          </>
+        }
+        width={400}
+        okText='Yes'
+        cancelText='No'
+        onOk={handleLeaveRoom}
+        onCancel={modalConfirmCancel}
+        closable={false}>
+        {`Are you sure to leave ${state.selectedRoomLeave.name}?`}
+      </Modal>
+    </div>
   )
 }

@@ -168,101 +168,103 @@ export default function UserAccountModal() {
   }
 
   return (
-    <Modal
-      className='user-account noselect'
-      centered
-      footer={
-        isFieldChange ? (
-          <Button
-            className='confirm-btn noselect'
-            disabled={!isFieldChange}
-            onClick={showPopConfirm}>
-            <CheckOutlined /> Update
-          </Button>
-        ) : (
-          <Button
-            className={'disabled-btn'}
-            disabled={!isFieldChange}
-            onClick={showPopConfirm}>
-            <CheckOutlined /> Update
-          </Button>
-        )
-      }
-      bodyStyle={{ padding: '0' }}
-      width={350}
-      title='User account setting'
-      visible={state.userAccountVisible}
-      onCancel={handleCancel}>
-      <div className='avt-wrapper'>
-        <Image className='cover-photo' src={userInfo.coverPhotoURL}></Image>
-        {photo.photoURL ? (
-          <div className='circle-avt'>
-            <Image
-              src={photo.photoURL}
-              width={100}
-              rootClassName='image-avt'
-              className='noselect'
-            />
-            <ImgCrop rotate onModalOk={handleCropOk}>
-              <Upload
-                name='avatar'
-                listType='picture-card'
-                showUploadList={false}
-                beforeUpload={beforeUpload}
-                onChange={handleChange}>
-                {<CameraFilled />}
-              </Upload>
-            </ImgCrop>
-          </div>
-        ) : (
-          <div className='circle-avt'>
-            <Avatar size='large' className='avatar noselect'>
-              {userInfo?.displayName?.charAt(0)?.toUpperCase()}
-            </Avatar>
-
-            <ImgCrop rotate onModalOk={handleCropOk}>
-              <Upload
-                name='avatar'
-                listType='picture-card'
-                showUploadList={false}
-                beforeUpload={beforeUpload}
-                onChange={handleChange}>
-                {<CameraFilled />}
-              </Upload>
-            </ImgCrop>
-          </div>
-        )}
-      </div>
-
-      <div className='info'>
-        <Form form={form} layout='vertical'>
-          <Form.Item
-            label='Name'
-            name='name'
-            initialValue={userInfo.displayName}>
-            <Input maxLength={40} onChange={() => setIsFieldChange(true)} />
-          </Form.Item>
-          <Form.Item label='Email' name='email' initialValue={userInfo.email}>
-            <Input disabled />
-          </Form.Item>
-        </Form>
-      </div>
-      <ModalConfirmStyled
-        visible={popConfirmVisivle}
-        placement='topLeft'
-        onOk={handleUpdateAccount}
-        onCancel={popConfirmCancel}
+    <div>
+      <Modal
+        className='user-account noselect'
         centered
-        title={
-          <>
-            <ExclamationCircleTwoTone twoToneColor='#ff5500' />{' '}
-            {'Are you sure to update your profile?'}
-          </>
+        footer={
+          isFieldChange ? (
+            <Button
+              className='confirm-btn noselect'
+              disabled={!isFieldChange}
+              onClick={showPopConfirm}>
+              <CheckOutlined /> Update
+            </Button>
+          ) : (
+            <Button
+              className={'disabled-btn'}
+              disabled={!isFieldChange}
+              onClick={showPopConfirm}>
+              <CheckOutlined /> Update
+            </Button>
+          )
         }
-        width={300}
-        okText='Yes'
-        cancelText='No'
-        closable={false}></ModalConfirmStyled>
-    </Modal>
+        bodyStyle={{ padding: '0' }}
+        width={350}
+        title='User account setting'
+        visible={state.userAccountVisible}
+        onCancel={handleCancel}>
+        <div className='avt-wrapper'>
+          <Image className='cover-photo' src={userInfo.coverPhotoURL}></Image>
+          {photo.photoURL ? (
+            <div className='circle-avt'>
+              <Image
+                src={photo.photoURL}
+                width={100}
+                rootClassName='image-avt'
+                className='noselect'
+              />
+              <ImgCrop rotate onModalOk={handleCropOk}>
+                <Upload
+                  name='avatar'
+                  listType='picture-card'
+                  showUploadList={false}
+                  beforeUpload={beforeUpload}
+                  onChange={handleChange}>
+                  {<CameraFilled />}
+                </Upload>
+              </ImgCrop>
+            </div>
+          ) : (
+            <div className='circle-avt'>
+              <Avatar size='large' className='avatar noselect'>
+                {userInfo?.displayName?.charAt(0)?.toUpperCase()}
+              </Avatar>
+
+              <ImgCrop rotate onModalOk={handleCropOk}>
+                <Upload
+                  name='avatar'
+                  listType='picture-card'
+                  showUploadList={false}
+                  beforeUpload={beforeUpload}
+                  onChange={handleChange}>
+                  {<CameraFilled />}
+                </Upload>
+              </ImgCrop>
+            </div>
+          )}
+        </div>
+
+        <div className='info'>
+          <Form form={form} layout='vertical'>
+            <Form.Item
+              label='Name'
+              name='name'
+              initialValue={userInfo.displayName}>
+              <Input maxLength={40} onChange={() => setIsFieldChange(true)} />
+            </Form.Item>
+            <Form.Item label='Email' name='email' initialValue={userInfo.email}>
+              <Input disabled />
+            </Form.Item>
+          </Form>
+        </div>
+        <ModalConfirmStyled
+          visible={popConfirmVisivle}
+          placement='topLeft'
+          onOk={handleUpdateAccount}
+          onCancel={popConfirmCancel}
+          centered
+          title={
+            <>
+              <ExclamationCircleTwoTone twoToneColor='#ff5500' />{' '}
+              {'Are you sure to update your profile?'}
+            </>
+          }
+          width={300}
+          okText='Yes'
+          cancelText='No'
+          closable={false}></ModalConfirmStyled>
+      </Modal>
+    </div>
   )
 }
