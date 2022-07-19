@@ -3,7 +3,6 @@ import React, {
   useContext,
   useMemo,
   useReducer,
-  useState,
 } from 'react'
 import useFirestore from '../hooks/useFirestore'
 import { AuthContext } from './AuthProvider'

@@ -23,20 +23,22 @@ import './Modals.scss'
 
 export default memo(function UserInfoModal() {
   const [form] = Form.useForm()
-  const { userInfo, state, dispatch, selectedUser } = useContext(AppContext)
+  const { userInfo, state, dispatch } = useContext(AppContext)
   const [showSendRequest, setShowSendRequest] = useState(false)
-  const initialIsRequested = userInfo?.requestedTo?.includes(selectedUser?.uid)
+  const initialIsRequested = userInfo?.requestedTo?.includes(
+    state.selectedUser?.uid
+  )
   const [isRequested, setIsRequested] = useState(initialIsRequested)
-  const initialIsFriend = userInfo?.friends?.includes(selectedUser?.uid)
+  const initialIsFriend = userInfo?.friends?.includes(state.selectedUser?.uid)
   const [isFriend, setIsFriend] = useState(initialIsFriend)
 
   useEffect(() => {
     setIsRequested(initialIsRequested)
-  }, [initialIsRequested, selectedUser])
+  }, [initialIsRequested, state.selectedUser])
 
   useEffect(() => {
     setIsFriend(initialIsFriend)
-  }, [initialIsFriend, selectedUser])
+  }, [initialIsFriend, state.selectedUser])
 
   const handleCancel = () => {
     dispatch({ type: ACTIONS.TG_USER_INFO, payload: false })
@@ -48,7 +50,7 @@ export default memo(function UserInfoModal() {
 
   const handleConfirmFriendRequest = () => {
     updateDocument('users', userInfo.uid, {
-      friends: arrayUnion(selectedUser.uid),
+      friends: arrayUnion(state.selectedUser.uid),
     })
 
     //Cloud Functions without credit card below :(
@@ -60,7 +62,7 @@ export default memo(function UserInfoModal() {
     //   })
     //   .then(() => console.log(`User ${newFriend} was updated`))
     //   .catch(error => console.log(`Update error:`, error))
-    updateDocument('users', selectedUser.uid, {
+    updateDocument('users', state.selectedUser.uid, {
       requestedTo: arrayRemove(userInfo.uid),
       friends: arrayUnion(userInfo.uid),
     })
@@ -70,10 +72,10 @@ export default memo(function UserInfoModal() {
     //   .delete()
     //   .then(() => console.log(`Status ${newFriend} was deleted`))
     //   .catch(error => console.error('Error removing document: ', error))
-    deleteDocument('status', `${selectedUser.uid}-${userInfo.uid}`)
+    deleteDocument('status', `${state.selectedUser.uid}-${userInfo.uid}`)
     openNotification(
       'top',
-      `You and ${selectedUser.displayName} are friends now`
+      `You and ${state.selectedUser.displayName} are friends now`
     )
   }
 
@@ -81,7 +83,7 @@ export default memo(function UserInfoModal() {
     const caption = form.getFieldValue().caption.trim()
     addDocument('status', {
       type: 'friend-request',
-      receiveUid: selectedUser.uid,
+      receiveUid: state.selectedUser.uid,
       requestUser: {
         photoURL: userInfo.photoURL,
         displayName: userInfo.displayName,
@@ -91,21 +93,24 @@ export default memo(function UserInfoModal() {
       seen: false,
     })
     updateDocument('users', userInfo.uid, {
-      requestedTo: arrayUnion(selectedUser.uid),
+      requestedTo: arrayUnion(state.selectedUser.uid),
     })
     setIsRequested(true)
     setShowSendRequest(false)
-    openNotification('top', `Request was sent to ${selectedUser.displayName}`)
+    openNotification(
+      'top',
+      `Request was sent to ${state.selectedUser.displayName}`
+    )
   }
 
   const handleRevokeRequest = () => {
     updateDocument('users', userInfo.uid, {
-      requestedTo: arrayRemove(selectedUser.uid),
+      requestedTo: arrayRemove(state.selectedUser.uid),
     })
-    deleteDocument('status', `${userInfo.uid}-${selectedUser.uid}`)
+    deleteDocument('status', `${userInfo.uid}-${state.selectedUser.uid}`)
     openNotification(
       'top',
-      `Request to ${selectedUser.displayName} was revoked`
+      `Request to ${state.selectedUser.displayName} was revoked`
     )
   }
 
@@ -113,7 +118,7 @@ export default memo(function UserInfoModal() {
     const q = query(
       collection(db, 'rooms'),
       where('isAGroup', '==', false),
-      where('members', 'in', [[selectedUser.uid, userInfo.uid]])
+      where('members', 'in', [[state.selectedUser.uid, userInfo.uid]])
     )
     const querySnapshot = await getDocs(q)
     if (!querySnapshot.empty) {
@@ -125,7 +130,7 @@ export default memo(function UserInfoModal() {
       handleCancel()
     } else {
       const roomRef = await addDocument('rooms', {
-        members: [selectedUser.uid, userInfo.uid],
+        members: [state.selectedUser.uid, userInfo.uid],
         isAGroup: false,
         typing: {
           user1: { uid: null, name: null, isTyping: false },
