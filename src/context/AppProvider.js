@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useMemo,
-  useReducer,
-} from 'react'
+import React, { createContext, useContext, useMemo, useReducer } from 'react'
 import useFirestore from '../hooks/useFirestore'
 import { AuthContext } from './AuthProvider'
 
@@ -61,24 +56,6 @@ export const AppContext = createContext()
 
 export default function AppProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState)
-  // const [isAddRoomVisible, setIsAddRoomVisible] = useState(false)
-  // const [isInviteMemberVisible, setIsInviteMemberVisible] = useState(false)
-  // const [selectedRoomId, setSelectedRoomId] = useState('')
-  // const [userInfoVisible, setUserInfoVisible] = useState(false)
-  // const [selectedUser, setSelectedUser] = useState({})
-  // const [isFindFriendVisible, setIsFindFriendVisible] = useState(false)
-  // const [userAccountVisible, setUserAccountVisible] = useState(false)
-  // const [showUserStatus, setShowUserStatus] = useState(false)
-  // const [emailRegister, setEmailRegister] = useState({})
-  // const [isForgotPassVisible, setIsForgotPassVisible] = useState(false)
-  // const [modalConfirmLeaveVisible, setModalConfirmLeaveVisible] =
-  //   useState(false)
-  // const [modalUnfiendVisible, setModalUnfiendVisible] = useState(false)
-  // const [selectedRoomLeave, setSelectedRoomLeave] = useState({})
-  // const [openGroupInfo, setOpenGroupInfo] = useState(true)
-  // const [viewWidth, setViewWidth] = useState(null)
-  // const [changeRoomNameVisible, setChangeRoomNameVisible] = useState(false)
-
   const {
     user: { uid },
   } = useContext(AuthContext)
