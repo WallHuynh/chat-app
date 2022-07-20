@@ -39,7 +39,11 @@ export default function ForgotPasswordModal() {
           ...doc.data(),
           id: doc.id,
         }))[0]
-        console.log('password sent')
+        openNotification(
+          'bottom',
+          'Successfully',
+          `New password has been sent to your email ${email}, please check spams if you didn't find it`
+        )
       } else {
         openNotification(
           'bottom',
