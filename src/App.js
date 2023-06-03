@@ -14,6 +14,8 @@ import ForgotPasswordModal from './components/Modals/ForgotPasswordModal'
 import ModalConfirmLeaveRoom from './components/Modals/ModalConfirmLeaveRoom'
 import UnfriendConfirmModal from './components/Modals/UnfriendConfirmModal'
 import ChangeRoomNameModal from './components/Modals/ChangeRoomNameModal'
+import dotenv from 'dotenv'
+dotenv.config()
 
 function App() {
   return (
