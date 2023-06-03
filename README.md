@@ -1,15 +1,23 @@
 # About chat-app
-This project had been created by me, WallHuynh. 
+
+This project had been created by me, WallHuynh - HUYNHPHUCTUONG.
+
 ## What technologies and frameworks that I'm using in this project?
+
 - create-react-app
 - firebase: firestore, authentication, storage, cloud functions
 - antd for building UI, styled-components for styling and modify UI
+
 ## What about features?
+
 - Chat with friends
 - Register or login by gmail and facebook
 - Modify account, find-add-remove friends, etc...
-Some features are still be updating
+  Some features are still be updating
+
 # Thank you so much for reading my source code :)
+
+# Link my project's site: https://wallhuynh-chatapp.netlify.app/login
 
 # Getting Started with Create React App
 
